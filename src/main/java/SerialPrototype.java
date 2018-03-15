@@ -17,11 +17,11 @@ public class SerialPrototype {
 
 
     private static String sensorPorts[] = {
-            "COM3"
+            "COM4"
     };
 
     private static String actuatorPorts[] = {
-            "COM4"
+            "COM5"
     };
 
 
@@ -165,29 +165,28 @@ public class SerialPrototype {
 
     public static void main(String[] args) throws Exception {
         SerialPrototype test = new SerialPrototype();
-        String delayTimeActuator = "2000";
-        String delayTimeSensor = "1000";
+        String delayTimeActuator = "2000\n";
+        String delayTimeSensor = "1000\n";
 
         test.init();
 
         int i = 0;
 
         while (i <= 100) {
-            actuatorOutputStream.write(delayTimeActuator.getBytes());
+            sensorOutputStream.write(delayTimeActuator.getBytes());
             System.out.println(i + " -> Message envoyé : " + delayTimeActuator);
-
-            int readByte;
 
             int result = 0;
 
+            TimeUnit.SECONDS.sleep(2);
             while (sensorInputStream.available() > 0) {
-
                 result = Integer.parseInt(getStringFromInputStream(sensorInputStream));
+//                result = Integer.parseInt(Integer.toString(result).substring(1));
                 System.out.println(result);
             }
 
             System.out.println("Result : " + result);
-            actuatorOutputStream.write(result);
+            actuatorOutputStream.write((Integer.toString(result)+"\n").getBytes());
 
             i++;
             TimeUnit.SECONDS.sleep(2);
