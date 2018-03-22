@@ -25,7 +25,7 @@ void loop() {
       //Serial.println(value);
 
       //Turning the light on or off according to the received value
-      if (value > 750) {
+      if (value > 511) {
         digitalWrite(heaterLED, LOW);
         digitalWrite(coolingLED, HIGH);
       } else  {

@@ -167,31 +167,32 @@ public class SerialPrototype {
 
     public static void main(String[] args) throws Exception {
         SerialPrototype test = new SerialPrototype();
-        String delayTimeActuator = "2000\n";
-        String delayTimeSensor = "1000\n";
+        String delayTimeActuator = "100\n";
+        String delayTimeSensor = "100\n";
 
         test.init();
 
         int i = 0;
 
         while (i <= 100) {
-            sensorOutputStream.write(delayTimeActuator.getBytes());
-            System.out.println(i + " -> Message envoyé : " + delayTimeActuator);
 
             int result = 0;
 
-            TimeUnit.SECONDS.sleep(2);
-            while (sensorInputStream.available() > 0) {
-                result = Integer.parseInt(getStringFromInputStream(sensorInputStream));
-//                result = Integer.parseInt(Integer.toString(result).substring(1));
-                System.out.println(result);
+            while (sensorInputStream.available() == 0) {
+                //waiting to get the sensor value
             }
 
-            System.out.println("Result : " + result);
+            while (sensorInputStream.available() > 0) {
+                result = Integer.parseInt(getStringFromInputStream(sensorInputStream));
+                System.out.println("Result : " + result);
+            }
+
+            sensorOutputStream.write(delayTimeActuator.getBytes());
+            System.out.print(i + " -> Message envoyé : " + delayTimeActuator + "\n");
+
             actuatorOutputStream.write((Integer.toString(result)+"\n").getBytes());
 
             i++;
-            TimeUnit.SECONDS.sleep(2);
         }
 
         test.close();
