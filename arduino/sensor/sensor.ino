@@ -2,11 +2,13 @@ int potPin = 2;
 int potValue;
 int delayTime;
 bool valueSent;
+int value;
 
 void setup() {
   Serial.begin(9600);
   valueSent = false;
   potValue = 0;
+  value = 0;
 }
 
 void loop() {

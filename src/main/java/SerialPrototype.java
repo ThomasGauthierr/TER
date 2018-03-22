@@ -167,8 +167,8 @@ public class SerialPrototype {
 
     public static void main(String[] args) throws Exception {
         SerialPrototype test = new SerialPrototype();
-        String delayTimeActuator = "100\n";
-        String delayTimeSensor = "100\n";
+        String delayTimeActuator = "500\n";
+        String delayTimeSensor = "500\n";
 
         test.init();
 
