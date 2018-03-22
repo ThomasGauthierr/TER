@@ -1,10 +1,14 @@
 char * inputBuffer;
 int value;
+int heaterLED = 13;
+int coolingLED = 12;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
+  pinMode(heaterLED, OUTPUT);
+  pinMode(coolingLED, OUTPUT);
+  digitalWrite(heaterLED, LOW);
+  digitalWrite(coolingLED, LOW);
   value = 0;
   inputBuffer = malloc(sizeof(char) * 10);
 }
@@ -21,8 +25,13 @@ void loop() {
       //Serial.println(value);
 
       //Turning the light on or off according to the received value
-      if (value > 750) digitalWrite(LED_BUILTIN, HIGH);
-      else digitalWrite(LED_BUILTIN, LOW);
+      if (value > 750) {
+        digitalWrite(heaterLED, LOW);
+        digitalWrite(coolingLED, HIGH);
+      } else  {
+        digitalWrite(heaterLED, HIGH);
+        digitalWrite(coolingLED, LOW);
+      }
       value = 0;
     }
   }

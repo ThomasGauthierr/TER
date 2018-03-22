@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.*;
 
 import gnu.io.*;
@@ -17,11 +19,11 @@ public class SerialPrototype {
 
 
     private static String sensorPorts[] = {
-            "COM4"
+            "COM3"
     };
 
     private static String actuatorPorts[] = {
-            "COM5"
+            "COM4"
     };
 
 
