@@ -1,4 +1,3 @@
-char * inputBuffer;
 int value;
 int heaterLED = 13;
 int coolingLED = 12;
@@ -10,7 +9,6 @@ void setup() {
   digitalWrite(heaterLED, LOW);
   digitalWrite(coolingLED, LOW);
   value = 0;
-  inputBuffer = malloc(sizeof(char) * 10);
 }
 
 void loop() {

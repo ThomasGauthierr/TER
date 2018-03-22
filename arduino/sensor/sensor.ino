@@ -1,6 +1,5 @@
 int potPin = 2;
 int potValue;
-char inputBuffer[10];
 int delayTime;
 bool valueSent;
 
@@ -14,13 +13,28 @@ void loop() {
   if (!valueSent) {
     potValue = analogRead(potPin);
     Serial.println(potValue);
-    valueSent = true;    
+    valueSent = true;
   }
-  
-  if (Serial.available() > 0 && valueSent) {
-    Serial.readBytes(inputBuffer,10);
-    delayTime = atoi(inputBuffer);    
-    delay(delayTime);
-    valueSent = false;
+
+  if (Serial.available() > 0 && valueSent)
+  {
+    char ret = Serial.read();
+
+    //We read the buffer byte per byte until the end of the delay
+    if (ret != '\n') {
+     value = 10 * value + (ret - 48);
+
+    //The delay time has been fully received
+    } else {
+      delayTime = value;
+
+      //We transmit the potentiometer value then delay the card for the received time
+      potValue = analogRead(potPin);
+      Serial.println(potValue);
+      delay(delayTime);
+
+      value = 0;
+      valueSent = true;
+    }
   }
 }
