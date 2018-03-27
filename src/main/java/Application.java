@@ -18,7 +18,6 @@ import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
 
 public class Application {
-    private static ArrayList<IDevice> unrecognizedDevices = new ArrayList<>();
     private static ArrayList<ISensor> sensors = new ArrayList<>();
     private static ArrayList<IActuator> actuators = new ArrayList<>();
 
@@ -89,5 +88,21 @@ public class Application {
         Application application = new Application();
 
         application.init();
+
+        int result = 0;
+
+        while(true) {
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for (ISensor sensor : application.sensors) {
+                result = sensor.getValue();
+            }
+            for (IActuator actuator : application.actuators) {
+                actuator.sendValue(result);
+            }
+        }
     }
 }

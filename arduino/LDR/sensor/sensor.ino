@@ -1,5 +1,5 @@
-int potPin = 2;
-int potValue;
+int LDRPin = 3;
+int LDRValue;
 int delayTime;
 
 // CAUTION : The ID have to be different from 
@@ -8,18 +8,19 @@ const String ID = "sensorLDR1";
 
 void setup() {
   Serial.begin(9600);
-  potValue = 0;
+  LDRValue = 0;
 }
 
 void loop() {
+  
   if (Serial.available() > 0)
   {
     char read = Serial.read();
     
     //Sending the value if a 'v' is read
     if (read == 'v') {      
-      potValue = analogRead(potPin);
-      Serial.println(potValue);
+      LDRValue = analogRead(LDRPin);
+      Serial.println(LDRValue);
       
       //Send the ID if a 'i' is received
     } else if (read == 'i') {

@@ -19,7 +19,7 @@ public class Sensor extends Device implements ISensor {
 
     @Override
     public Integer getValue() {
-        Integer value = null;
+        Integer value = 0;
 
         try {
             outputStream.write("value\n".getBytes());

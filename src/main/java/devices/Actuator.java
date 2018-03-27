@@ -19,7 +19,7 @@ public class Actuator extends Device implements IActuator {
     @Override
     public void sendValue(int value) {
         try {
-            outputStream.write((Integer.toString(value) + "\n").getBytes());
+            outputStream.write(("v" + Integer.toString(value) + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
