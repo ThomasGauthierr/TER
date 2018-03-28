@@ -3,8 +3,11 @@ int redLED = 13;
 int blueLED = 12;
 bool receivingValue;
 
-// CAUTION : The ID have to be different from 
-//           one device to another
+// CAUTION : The IDs have to be different from
+//           one device to another.
+//           An actuator has to contains "actuator" somewhere in its name
+//           but not "sensor".
+
 const String ID = "actuatorLDR1";
 
 void setup() {

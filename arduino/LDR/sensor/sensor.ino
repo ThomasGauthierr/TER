@@ -2,8 +2,11 @@ int LDRPin = 3;
 int LDRValue;
 int delayTime;
 
-// CAUTION : The ID have to be different from 
-//           one device to another
+// CAUTION : The IDs have to be different from
+//           one device to another.
+//           A sensor has to contains "sensor" somewhere in its name
+//           but not "actuator".
+
 const String ID = "sensorLDR1";
 
 void setup() {

@@ -22,15 +22,16 @@ public class Sensor extends Device implements ISensor {
         Integer value = 0;
 
         try {
-            outputStream.write("value\n".getBytes());
+            //Asking the sensor to send the value
+            outputStream.write("v\n".getBytes());
 
-            while (inputStream.available() > 0) {
-                while (inputStream.available() == 0) {
-                    //waiting to get the sensor value
-                }
-                //Reading the value
-                value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
+            while (inputStream.available() == 0) {
+                //waiting the sensor to reply
             }
+
+            //Reading the value
+            value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
+
         } catch (IOException e) {
             e.printStackTrace();
         }

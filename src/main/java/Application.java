@@ -61,6 +61,7 @@ public class Application {
                     }
 
                     try {
+                        //Asking the device to get its ID
                         outputStream.write(IDMessage.getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -69,7 +70,8 @@ public class Application {
                     try {
                         int i = 0;
                         while (inputStream.available() == 0 && i < 10) {
-                            //waiting to get the sensor value
+                            //Waiting the device to reply every 100ms.
+                            //We consider the port not to be a device if it hasn't reply after 1 second
                             try {
                                 TimeUnit.MILLISECONDS.sleep(100);
                                 i++;
@@ -81,6 +83,7 @@ public class Application {
                             }
                         }
 
+                        //If the device has answered, we check if he's an actuator or a sensor
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
@@ -103,22 +106,43 @@ public class Application {
     public static void main(String[] args) {
         Application application = new Application();
 
+        //Initiating ports and devices
         application.init();
 
-        int result = 0;
+        int value = 0;
+        int i = 0;
 
-        while(true) {
+        //Getting the program working for about 1 minute
+        while(i < 240) {
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(250);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            //Getting the value from the sensor
             for (ISensor sensor : application.sensors) {
-                result = sensor.getValue();
+                value = sensor.getValue();
             }
+
+            //Sending the value to the actuator
             for (IActuator actuator : application.actuators) {
-                actuator.sendValue(result);
+                actuator.sendValue(value);
             }
+
+            i++;
         }
+
+        //Closing the sensors
+        for (ISensor sensor : sensors) {
+            sensor.close();
+        }
+
+        //Closing the actuators
+        for (IActuator actuator : actuators) {
+            actuator.close();
+        }
+
+        System.out.println("Ports closed");
     }
 }
