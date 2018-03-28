@@ -12,4 +12,7 @@ public interface IDevice {
     OutputStream getOutputStream();
     InputStream getInputStream();
     void close();
+
+    void writeString(String s);
+    void writeInt(int i);
 }

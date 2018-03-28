@@ -59,4 +59,18 @@ public abstract class Device implements IDevice {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void writeString(String s) {
+        try {
+            outputStream.write((s + "\n").getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void writeInt(int i) {
+        writeString(Integer.toString(i));
+    }
 }

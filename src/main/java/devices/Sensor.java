@@ -28,11 +28,8 @@ public class Sensor extends Device implements ISensor {
                 while (inputStream.available() == 0) {
                     //waiting to get the sensor value
                 }
-
-                //ToDo : Is the second while necessary ?
-                while (inputStream.available() > 0) {
-                    value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
-                }
+                //Reading the value
+                value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
             }
         } catch (IOException e) {
             e.printStackTrace();

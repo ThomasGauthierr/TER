@@ -24,10 +24,16 @@ public class Application {
     private static final String IDMessage = "i\n";
 
     private static final String portNames[] = {
-            //ToDo : Handle every port on all OS
+            "/dev/tty.usbserial-A9007UX1", // Mac OS X
+            "/dev/ttyACM0", // Raspberry Pi
+            "/dev/ttyUSB0", // Linux
+            // Windows ports
+            "COM1",
+            "COM2",
             "COM3",
             "COM4",
-            "COM5"
+            "COM5",
+            "COM6"
     };
 
     private void init() {
@@ -61,18 +67,28 @@ public class Application {
                     }
 
                     try {
-                        while (inputStream.available() == 0) {
+                        int i = 0;
+                        while (inputStream.available() == 0 && i < 10) {
                             //waiting to get the sensor value
+                            try {
+                                TimeUnit.MILLISECONDS.sleep(100);
+                                i++;
+                                if (i == 10) {
+                                    System.out.println("No device found on port " + currPortId.getName());
+                                }
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
                                 sensors.add(new Sensor(ID, currSerialPort, outputStream, inputStream));
-                                System.out.println("Adding sensor : " + ID);
+                                System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                             } else {
                                 actuators.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
-                                System.out.println("Adding actuator : " + ID);
+                                System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                             }
                         }
                     } catch (IOException e) {
