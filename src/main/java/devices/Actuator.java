@@ -8,21 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Actuator extends Device implements IActuator {
-    public Actuator() {
-        super();
-    }
 
-    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream) {
-        super(ID, serialPort, outputStream, inputStream);
+    public Actuator(String ID, SerialPort serialPort) {
+        super(ID, serialPort);
     }
 
     @Override
-    public void sendValue(int value) {
-        try {
-            //Sending the value to the actuator
-            outputStream.write(("v" + Integer.toString(value) + "\n").getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void sendValue(int value) throws IOException {
+
+        getOutputStream().write(("v" + Integer.toString(value) + "\n").getBytes());
+
     }
 }

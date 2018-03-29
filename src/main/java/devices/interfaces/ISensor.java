@@ -1,5 +1,7 @@
 package devices.interfaces;
 
+import java.io.IOException;
+
 public interface ISensor extends IDevice {
-    Integer getValue();
+    Integer getValue() throws IOException;
 }

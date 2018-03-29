@@ -9,7 +9,6 @@ import utils.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,8 @@ public class Application {
             "COM6"
     };
 
-    private void init() {
+    private static void init() {
+
         CommPortIdentifier portID;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -47,7 +47,7 @@ public class Application {
                     InputStream inputStream;
 
                     portID = currPortId;
-                    currSerialPort = Utils.initSerialPort(portID, this.getClass());
+                    currSerialPort = Utils.initSerialPort(portID, Application.class);
                     inputStream = Utils.openInputStreams(currSerialPort);
                     outputStream = Utils.openOutputStreams(currSerialPort);
 
@@ -84,12 +84,15 @@ public class Application {
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
-                                sensors.add(new Sensor(ID, currSerialPort, outputStream, inputStream));
+                                sensors.add(new Sensor(ID, currSerialPort));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                             } else {
-                                actuators.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
+                                actuators.add(new Actuator(ID, currSerialPort));
                                 System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                             }
+                            inputStream.close();
+                            outputStream.close();
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -101,16 +104,15 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        Application application = new Application();
 
         //Initiating ports and devices
-        application.init();
+        init();
 
         int value = 0;
         int i = 0;
 
         //Getting the program working for about 1 minute
-        while(i < 240) {
+        while (i < 240) {
             try {
                 TimeUnit.MILLISECONDS.sleep(250);
             } catch (InterruptedException e) {
@@ -118,26 +120,38 @@ public class Application {
             }
 
             //Getting the value from the sensor
-            for (ISensor sensor : application.sensors) {
-                value = sensor.getValue();
+            for (ISensor sensor : sensors) {
+                try {
+                    value = sensor.getValue();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             //Sending the value to the actuator
-            for (IActuator actuator : application.actuators) {
-                actuator.sendValue(value);
+            for (IActuator actuator : actuators) {
+                try {
+                    actuator.sendValue(value);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             i++;
         }
 
-        //Closing the sensors
-        for (ISensor sensor : sensors) {
-            sensor.close();
-        }
+        try {
+            //Closing the sensors
+            for (ISensor sensor : sensors) {
+                sensor.close();
+            }
 
-        //Closing the actuators
-        for (IActuator actuator : actuators) {
-            actuator.close();
+            //Closing the actuators
+            for (IActuator actuator : actuators) {
+                actuator.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Ports closed");

@@ -9,22 +9,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Sensor extends Device implements ISensor {
-    public Sensor() {
-        super();
-    }
 
-    public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream) {
-        super(ID, serialPort, outputStream, inputStream);
+    public Sensor(String ID, SerialPort serialPort) {
+        super(ID, serialPort);
     }
 
     @Override
-    public Integer getValue() {
+    public Integer getValue() throws IOException {
         Integer value = 0;
 
-        try {
             //Asking the sensor to send the value
-            outputStream.write("v\n".getBytes());
+            getOutputStream().write("v\n".getBytes());
 
+            InputStream inputStream = getInputStream();
             while (inputStream.available() == 0) {
                 //waiting the sensor to reply
             }
@@ -32,9 +29,6 @@ public class Sensor extends Device implements ISensor {
             //Reading the value
             value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return value;
     }
 
