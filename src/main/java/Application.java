@@ -1,5 +1,6 @@
 import com.google.common.collect.EvictingQueue;
 import core.strategy.IOscillatorStrategy;
+import core.strategy.OscillatorStrategyImpl;
 import devices.Actuator;
 import devices.Sensor;
 import devices.interfaces.IActuator;
@@ -120,6 +121,7 @@ public class Application {
 
         int initialWaitingTime = 250;
         int waitingTime = initialWaitingTime;
+        IOscillatorStrategy oscillatorStrategy = new OscillatorStrategyImpl();
 
         // CircularFIFOQueue
         Queue<IOscillatorStrategy.ValueTimeStamp> queue = EvictingQueue.create(30);
@@ -146,6 +148,8 @@ public class Application {
             for (IActuator actuator : actuators) {
                 actuator.sendValue(vt.getValue());
             }
+
+            System.out.println(oscillatorStrategy.isOscillating(new ArrayList<>(queue)));
         }
 
         //Closing the sensors
