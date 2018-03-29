@@ -124,7 +124,7 @@ public class Application {
         IOscillatorStrategy oscillatorStrategy = new OscillatorStrategyImpl();
 
         // CircularFIFOQueue
-        Queue<IOscillatorStrategy.ValueTimeStamp> queue = EvictingQueue.create(30);
+        Queue<IOscillatorStrategy.ValueTimeStamp> queue = EvictingQueue.create(15);
 
         //Getting the program working for about 1 minute
         while(shouldBeRunning) {
@@ -132,7 +132,7 @@ public class Application {
             IOscillatorStrategy.ValueTimeStamp vt = null;
 
             try {
-                TimeUnit.MILLISECONDS.sleep(250);
+                TimeUnit.MILLISECONDS.sleep(waitingTime);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -142,14 +142,23 @@ public class Application {
                 Integer[] values = sensor.getValues();
                 vt = new IOscillatorStrategy.ValueTimeStamp(values[0], values[1]);
                 queue.add(vt);
+                System.out.print("value : " + values[0] + " || timestamp : " + values[1] + " || ");
             }
+
 
             //Sending the value to the actuator
             for (IActuator actuator : actuators) {
                 actuator.sendValue(vt.getValue());
             }
 
-            System.out.println(oscillatorStrategy.isOscillating(new ArrayList<>(queue)));
+            if (oscillatorStrategy.isOscillating(new ArrayList<>(queue))) {
+                waitingTime = initialWaitingTime * 10;
+                System.out.println("Oscillating");
+            } else {
+                waitingTime = initialWaitingTime;
+                System.out.println("Not anymore");
+            }
+
         }
 
         //Closing the sensors

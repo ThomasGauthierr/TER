@@ -25,4 +25,14 @@ public class Actuator extends Device implements IActuator {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void close() {
+        try {
+            outputStream.write("c\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.close();
+    }
 }

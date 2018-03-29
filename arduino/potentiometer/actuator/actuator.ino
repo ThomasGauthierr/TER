@@ -53,6 +53,10 @@ void loop() {
     } else if (read == 'i') {
       Serial.println(ID.c_str());
 
+    } else if (read == 'c') {
+    digitalWrite(redLED, LOW);
+    digitalWrite(blueLED, LOW);
+
     } else {
       //Do nothing if anything else is received
     }

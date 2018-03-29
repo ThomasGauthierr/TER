@@ -1,6 +1,5 @@
 int value;
-int redLED = 13;
-int blueLED = 12;
+int LED = 12;
 bool receivingValue;
 
 // CAUTION : The IDs have to be different from
@@ -12,10 +11,8 @@ const String ID = "actuatorLDR1";
 
 void setup() {
   Serial.begin(9600);
-  pinMode(redLED, OUTPUT);
-  pinMode(blueLED, OUTPUT);
-  digitalWrite(redLED, LOW);
-  digitalWrite(blueLED, LOW);
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, LOW);
   value = 0;
   receivingValue = false;
 }
@@ -32,12 +29,10 @@ void loop() {
       //When we reach the end of the value, 
       //we light the corresponding LED.
       } else {
-        if (value > 500) {
-          digitalWrite(redLED, LOW);
-          digitalWrite(blueLED, HIGH);
+        if (value > 850) {
+          digitalWrite(LED, LOW);
         } else {
-          digitalWrite(redLED, HIGH);
-          digitalWrite(blueLED, LOW);
+          digitalWrite(LED, HIGH);
         }
         value = 0;
         receivingValue = false;
@@ -51,6 +46,9 @@ void loop() {
       //Send the ID if a 'i' is received
     } else if (read == 'i') {
       Serial.println(ID.c_str());
+
+    } else if (read == 'c') {
+      digitalWrite(LED, LOW);
       
     } else {
       //Do nothing if anything else is received
