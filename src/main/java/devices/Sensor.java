@@ -1,8 +1,8 @@
-package main.java.devices;
+package devices;
 
+import devices.interfaces.ISensor;
 import gnu.io.SerialPort;
-import main.java.devices.interfaces.ISensor;
-import main.java.utils.Utils;
+import utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;

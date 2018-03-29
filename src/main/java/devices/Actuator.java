@@ -1,7 +1,7 @@
-package main.java.devices;
+package devices;
 
+import devices.interfaces.IActuator;
 import gnu.io.SerialPort;
-import main.java.devices.interfaces.IActuator;
 
 import java.io.IOException;
 import java.io.InputStream;

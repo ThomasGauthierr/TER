@@ -1,4 +1,4 @@
-package main.java.devices.interfaces;
+package devices.interfaces;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;

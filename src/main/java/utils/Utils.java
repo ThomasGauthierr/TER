@@ -1,4 +1,4 @@
-package main.java.utils;
+package utils;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;

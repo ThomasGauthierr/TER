@@ -1,13 +1,10 @@
-package main.java;
-
+import devices.Actuator;
+import devices.Sensor;
+import devices.interfaces.IActuator;
+import devices.interfaces.ISensor;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-import main.java.devices.Actuator;
-import main.java.devices.Sensor;
-import main.java.devices.interfaces.IActuator;
-import main.java.devices.interfaces.IDevice;
-import main.java.devices.interfaces.ISensor;
-import main.java.utils.Utils;
+import utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;

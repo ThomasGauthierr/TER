@@ -1,4 +1,4 @@
-package main.java.devices.interfaces;
+package devices.interfaces;
 
 public interface ISensor extends IDevice {
     Integer getValue();

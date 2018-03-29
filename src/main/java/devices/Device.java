@@ -1,10 +1,7 @@
-package main.java.devices;
+package devices;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.PortInUseException;
+import devices.interfaces.IDevice;
 import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
-import main.java.devices.interfaces.IDevice;
 
 import java.io.IOException;
 import java.io.InputStream;
