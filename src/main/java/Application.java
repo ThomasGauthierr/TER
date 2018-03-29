@@ -1,3 +1,5 @@
+import com.google.common.collect.EvictingQueue;
+import core.strategy.IOscillatorStrategy;
 import devices.Actuator;
 import devices.Sensor;
 import devices.interfaces.IActuator;
@@ -10,8 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Application {
@@ -101,16 +102,33 @@ public class Application {
     }
 
     public static void main(String[] args) {
+
+        // CircularFIFOQueue
+        Queue<Integer> q = EvictingQueue.create(2);
+        q.add(1);
+        q.add(2);
+        q.add(3);
+        System.out.println(q.peek());
+
+
         Application application = new Application();
 
         //Initiating ports and devices
         application.init();
 
-        int value = 0;
-        int i = 0;
+        boolean shouldBeRunning = true;
+
+        int initialWaitingTime = 250;
+        int waitingTime = initialWaitingTime;
+
+        // CircularFIFOQueue
+        Queue<IOscillatorStrategy.ValueTimeStamp> queue = EvictingQueue.create(30);
 
         //Getting the program working for about 1 minute
-        while(i < 240) {
+        while(shouldBeRunning) {
+
+            IOscillatorStrategy.ValueTimeStamp vt = null;
+
             try {
                 TimeUnit.MILLISECONDS.sleep(250);
             } catch (InterruptedException e) {
@@ -118,16 +136,16 @@ public class Application {
             }
 
             //Getting the value from the sensor
-            for (ISensor sensor : application.sensors) {
-                value = sensor.getValue();
+            for (ISensor sensor : sensors) {
+                Integer[] values = sensor.getValues();
+                vt = new IOscillatorStrategy.ValueTimeStamp(values[0], values[1]);
+                queue.add(vt);
             }
 
             //Sending the value to the actuator
-            for (IActuator actuator : application.actuators) {
-                actuator.sendValue(value);
+            for (IActuator actuator : actuators) {
+                actuator.sendValue(vt.getValue());
             }
-
-            i++;
         }
 
         //Closing the sensors

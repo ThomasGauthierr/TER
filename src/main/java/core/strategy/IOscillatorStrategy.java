@@ -1,10 +1,10 @@
-package core.strategie;
+package core.strategy;
 
 import java.util.List;
 
-public interface IOcillatorStrategie {
+public interface IOscillatorStrategy {
 
-	public boolean isOcillating(List<ValueTimeStamp> l);
+	boolean isOscillating(List<ValueTimeStamp> l);
 	
 	
 	class ValueTimeStamp{
