@@ -148,7 +148,12 @@ public class Application {
 
             //Sending the value to the actuator
             for (IActuator actuator : actuators) {
-                actuator.sendValue(vt.getValue());
+                int value = vt.getValue();
+                if (value > 800) {
+                    actuator.sendValue(0);
+                } else {
+                    actuator.sendValue(1);
+                }
             }
 
             if (oscillatorStrategy.isOscillating(new ArrayList<>(queue))) {

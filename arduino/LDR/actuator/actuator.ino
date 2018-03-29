@@ -29,7 +29,7 @@ void loop() {
       //When we reach the end of the value, 
       //we light the corresponding LED.
       } else {
-        if (value > 850) {
+        if (value == 0) {
           digitalWrite(LED, LOW);
         } else {
           digitalWrite(LED, HIGH);
