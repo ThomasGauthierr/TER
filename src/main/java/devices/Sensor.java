@@ -18,8 +18,10 @@ public class Sensor extends Device implements ISensor {
     }
 
     @Override
-    public Integer getValue() {
-        Integer value = 0;
+    public Integer[] getValues() {
+        Integer value = null;
+        Integer timestamp = null;
+        Integer[] tab = new Integer[2];
 
         try {
             //Asking the sensor to send the value
@@ -30,12 +32,18 @@ public class Sensor extends Device implements ISensor {
             }
 
             //Reading the value
-            value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
+            String ret = Utils.getStringFromInputStream(inputStream);
+            value =  Integer.parseInt(ret.split(" ")[0]);
+            timestamp =  Integer.parseInt(ret.split(" ")[1]);
+            tab[0] = value;
+            tab[1] = timestamp;
+
+            //value = Integer.parseInt(Utils.getStringFromInputStream(inputStream));
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return value;
+        return tab;
     }
 
 }
