@@ -48,7 +48,7 @@ void loop() {
       Serial.println(ID.c_str());
 
     } else if (read == 'c') {
-      digitalWrite(LED, LOW);
+      setup();
       
     } else {
       //Do nothing if anything else is received
