@@ -2,7 +2,7 @@ int LDRPin = 3;
 int LDRValue;
 int delayTime;
 bool isInitialised;
-int defaultDelayTime = 2000;
+int defaultDelayTime = 1000;
 int currentDelayTime;
 
 unsigned long lastTime;
@@ -72,7 +72,7 @@ void loop() {
       setup();
 
     } else {
-      //Do nothing if anything else is received
+      Serial.println("500 5662461345");
     }
   }
 }

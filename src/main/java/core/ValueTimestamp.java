@@ -17,4 +17,11 @@ public class ValueTimestamp {
         return time;
     }
 
+    @Override
+    public String toString() {
+        return "ValueTimestamp{" +
+                "value=" + value +
+                ", time=" + time +
+                '}';
+    }
 }

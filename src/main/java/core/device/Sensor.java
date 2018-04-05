@@ -15,11 +15,8 @@ import java.util.TooManyListenersException;
 
 public class Sensor extends Device implements ISensor {
 
+    // Maybe change to FIFO because
     private CircularLIFOStack<ValueTimestamp> stack;
-
-    public Sensor() {
-        super();
-    }
 
     public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize) {
         super(ID, serialPort, outputStream, inputStream);
@@ -31,8 +28,11 @@ public class Sensor extends Device implements ISensor {
     public void collect() {
         String[] values = Utils.getStringFromInputStream(inputStream).split(",");
 
-        for(String strValueTimestamp : values){
+        if(values[0].length() == 0){
+            return;
+        }
 
+        for(String strValueTimestamp : values){
             stack.push(
                     new ValueTimestamp(
                             Integer.parseInt(strValueTimestamp.split(" ")[0]),
@@ -46,7 +46,5 @@ public class Sensor extends Device implements ISensor {
     public List<ValueTimestamp> getData() {
         return stack;
     }
-
-
 
 }

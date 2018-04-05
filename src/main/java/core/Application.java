@@ -28,38 +28,19 @@ public class Application {
         // retrieve values from sensors
         for (ISensor sensor : sensors) {
 
+            sensor.getSerialPort().notifyOnDataAvailable(true);
             sensor.getSerialPort().addEventListener(serialPortEvent -> {
                 switch (serialPortEvent.getEventType()) {
-
-                    case SerialPortEvent.DSR:
-                        // dataset ready
-                        break;
                     case SerialPortEvent.DATA_AVAILABLE:
                         // data is available !!!
                         sensor.collect();
-                        System.out.println(sensor.getData().toString());
+                        sensor.getData().forEach(System.out::println);
                         /*IGroup g = sensor.getGroup();
                         if(g.getContract().isRespected(sensor.getData())){
 
                         } else {
                             g.repair();
                         }*/
-                        break;
-
-                    case SerialPortEvent.CD:
-                        // carrier detect
-                        break;
-                    case SerialPortEvent.CTS:
-                        // clear to send
-                        break;
-                    case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
-                        break;
-                    case SerialPortEvent.BI:
-                    case SerialPortEvent.PE:
-                    case SerialPortEvent.FE:
-                    case SerialPortEvent.OE:
-                        break;
-                    case SerialPortEvent.RI:
                         break;
                     default:
                         break;
