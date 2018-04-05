@@ -1,10 +1,9 @@
-package utils;
+package core.utils;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
-import jdk.internal.util.xml.impl.Input;
 
 import java.io.*;
 

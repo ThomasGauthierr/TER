@@ -1,6 +1,5 @@
-package devices;
+package core.device;
 
-import devices.interfaces.IDevice;
 import gnu.io.SerialPort;
 
 import java.io.IOException;

@@ -1,5 +1,7 @@
 package core.strategy;
 
+import core.ValueTimestamp;
+
 import java.util.List;
 
 public class OscillatorStrategyImpl implements IOscillatorStrategy {
@@ -7,7 +9,7 @@ public class OscillatorStrategyImpl implements IOscillatorStrategy {
     public OscillatorStrategyImpl(){}
 
     @Override
-    public boolean isOscillating(List<ValueTimeStamp> l) {
+    public boolean isOscillating(List<ValueTimestamp> l) {
         /* Detect consecutive oscillations not periodic ones */
 
         if(l.size() < 3){

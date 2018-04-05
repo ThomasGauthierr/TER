@@ -1,4 +1,4 @@
-package devices.interfaces;
+package core.device;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;

@@ -1,24 +1,19 @@
 import com.google.common.collect.EvictingQueue;
+import core.Application;
+import core.device.*;
 import core.strategy.IOscillatorStrategy;
 import core.strategy.OscillatorStrategyImpl;
-import devices.Actuator;
-import devices.Sensor;
-import devices.interfaces.IActuator;
-import devices.interfaces.ISensor;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-import utils.Utils;
+import core.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-public class Application {
-    private static ArrayList<ISensor> sensors = new ArrayList<>();
-    private static ArrayList<IActuator> actuators = new ArrayList<>();
+public class Main {
 
     private static final String IDMessage = "i\n";
 
@@ -35,7 +30,7 @@ public class Application {
             "COM6"
     };
 
-    private void init() {
+    public List<IDevice> getDevices() {
         CommPortIdentifier portID;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -104,75 +99,38 @@ public class Application {
 
     public static void main(String[] args) {
 
-        // CircularFIFOQueue
-        Queue<Integer> q = EvictingQueue.create(2);
-        q.add(1);
-        q.add(2);
-        q.add(3);
-        System.out.println(q.peek());
+        Application app = new Application();
 
+        for(IDevice device : getDevices()){
+            if(device instanceof ISensor)
+                app.addSensor((ISensor) device);
+            if(device instanceof IActuator)
+                app.addActuator((IActuator) device);
+        }
 
-        Application application = new Application();
+        try {
+            app.init();
+        } catch (TooManyListenersException e) {
+            e.printStackTrace();
+        }
 
-        //Initiating ports and devices
-        application.init();
-
-        boolean shouldBeRunning = true;
-
-        int initialWaitingTime = 250;
-        int waitingTime = initialWaitingTime;
-        IOscillatorStrategy oscillatorStrategy = new OscillatorStrategyImpl();
-
-        // CircularFIFOQueue
-        Queue<IOscillatorStrategy.ValueTimeStamp> queue = EvictingQueue.create(15);
-
-        //Getting the program working for about 1 minute
-        while(shouldBeRunning) {
-
-            IOscillatorStrategy.ValueTimeStamp vt = null;
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(waitingTime);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //Getting the value from the sensor
-            for (ISensor sensor : sensors) {
-                Integer[] values = sensor.getValues();
-                vt = new IOscillatorStrategy.ValueTimeStamp(values[0], values[1]);
-                queue.add(vt);
-                System.out.print("value : " + values[0] + " || timestamp : " + values[1] + " || ");
-            }
-
-
-            //Sending the value to the actuator
-            for (IActuator actuator : actuators) {
-                int value = vt.getValue();
-                if (value > 800) {
-                    actuator.sendValue(0);
-                } else {
-                    actuator.sendValue(1);
-                }
-            }
-
-            if (oscillatorStrategy.isOscillating(new ArrayList<>(queue))) {
-                waitingTime = initialWaitingTime * 10;
-                System.out.println("Oscillating");
-            } else {
-                waitingTime = initialWaitingTime;
-                System.out.println("Not anymore");
-            }
-
+        try {
+            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         //Closing the sensors
-        for (ISensor sensor : sensors) {
+        for (ISensor sensor : app.getSensors()) {
             sensor.close();
         }
 
         //Closing the actuators
-        for (IActuator actuator : actuators) {
+        for (IActuator actuator : app.getActuators()) {
             actuator.close();
         }
 
