@@ -3,6 +3,7 @@ package core;
 import core.device.IActuator;
 import core.device.IGroup;
 import core.device.ISensor;
+import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 
 import javax.annotation.Nonnull;
@@ -28,8 +29,9 @@ public class Application {
         // retrieve values from sensors
         for (ISensor sensor : sensors) {
 
-            sensor.getSerialPort().notifyOnDataAvailable(true);
-            sensor.getSerialPort().addEventListener(serialPortEvent -> {
+            SerialPort sp = sensor.getSerialPort();
+            sp.notifyOnDataAvailable(true);
+            sp.addEventListener(serialPortEvent -> {
                 switch (serialPortEvent.getEventType()) {
                     case SerialPortEvent.DATA_AVAILABLE:
                         // data is available !!!

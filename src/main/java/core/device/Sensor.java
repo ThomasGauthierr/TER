@@ -26,7 +26,12 @@ public class Sensor extends Device implements ISensor {
 
     @Override
     public void collect() {
-        String[] values = Utils.getStringFromInputStream(inputStream).split(",");
+        String[] values = new String[0];
+        try {
+            values = Utils.getStringFromInputStream(this.getSerialPort().getInputStream()).split(",");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if(values[0].length() == 0){
             return;

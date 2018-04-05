@@ -86,9 +86,11 @@ public class Main {
                             if (ID.contains("sensor")) {
                                 devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 50));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
-                            } else {
+                            } else if(ID.contains("actuator")){
                                 devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
                                 System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
+                            } else {
+                                System.out.println("Found [" + ID + "] without any valid ID.");
                             }
                         }
                     } catch (IOException e) {
@@ -117,15 +119,8 @@ public class Main {
             e.printStackTrace();
         }
 
-        try {
-            TimeUnit.SECONDS.sleep(3);
-            TimeUnit.SECONDS.sleep(3);
-            TimeUnit.SECONDS.sleep(3);
-            TimeUnit.SECONDS.sleep(3);
-            TimeUnit.SECONDS.sleep(3);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
 
         //Closing the sensors
         for (ISensor sensor : app.getSensors()) {
