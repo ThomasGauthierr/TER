@@ -30,7 +30,10 @@ public class Main {
             "COM6"
     };
 
-    public List<IDevice> getDevices() {
+    private static List<IDevice> getDevices() {
+
+        List<IDevice> devices = new ArrayList<>();
+
         CommPortIdentifier portID;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -44,7 +47,7 @@ public class Main {
                     InputStream inputStream;
 
                     portID = currPortId;
-                    currSerialPort = Utils.initSerialPort(portID, this.getClass());
+                    currSerialPort = Utils.initSerialPort(portID, Main.class);
                     inputStream = Utils.openInputStreams(currSerialPort);
                     outputStream = Utils.openOutputStreams(currSerialPort);
 
@@ -81,20 +84,20 @@ public class Main {
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
-                                sensors.add(new Sensor(ID, currSerialPort, outputStream, inputStream));
+                                devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 50));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                             } else {
-                                actuators.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
+                                devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
                                 System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                             }
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
-                        return;
                     }
                 }
             }
         }
+        return devices;
     }
 
     public static void main(String[] args) {
