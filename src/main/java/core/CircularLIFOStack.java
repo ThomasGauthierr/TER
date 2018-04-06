@@ -25,7 +25,7 @@ public class CircularLIFOStack<T> extends Stack<T>{
     public T push(T item) {
         T ret = super.push(item);
         while (this.size() > this.maxSize) {
-            this.removeElementAt(this.size() - 1);
+            this.removeElementAt(this.size() - 2);
         }
         return ret;
     }
