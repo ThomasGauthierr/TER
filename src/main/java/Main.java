@@ -55,6 +55,9 @@ public class Main {
                     }
 
                     try {
+                        //Removing garbages which can be left on the input stream
+                        //by the arduino if it hasn't been stopped correctly
+                        Utils.getStringFromInputStream(inputStream);
                         //Asking the device to get its ID
                         outputStream.write(IDMessage.getBytes());
                     } catch (IOException e) {
