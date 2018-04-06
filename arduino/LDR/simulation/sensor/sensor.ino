@@ -1,4 +1,4 @@
-const String ID = "sensorLDR1";
+const String ID = "sensorSim1";
 
 bool started;
 bool DEBUG = false;
@@ -6,21 +6,18 @@ bool DEBUG = false;
 short defaultDelayTime = 1000;
 unsigned long currentDelayTime;
 
-int LDRPin = 3;
-int LDRValue;
-
-void setup() {  
+void setup() {
   Serial.begin(9600);
   started = false;
-  currentDelayTime = defaultDelayTime;  
+  currentDelayTime = defaultDelayTime;
 }
 
 void loop() {
-  
+
   if (Serial.available() > 0){
-    
+
     char read = Serial.read();
-    
+
     if (read == 'i') {
       Serial.println(ID.c_str());
       started = true;
@@ -35,9 +32,8 @@ void loop() {
   }
 
   if(started){
-    LDRValue = analogRead(LDRPin);
-    Serial.println(String(LDRValue) + " " + millis());
-    delay(currentDelayTime); 
+    Serial.println("10 " + String(millis()));
+    delay(currentDelayTime);
   }
 }
 
@@ -45,7 +41,7 @@ void receiveDelay() {
   currentDelayTime = 0;
 
   char read = Serial.read();
-  
+
   while (read != '\n') {
     if (DEBUG) {
       Serial.println("read : " + String(read - 48));

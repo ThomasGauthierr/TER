@@ -1,78 +1,65 @@
+const String ID = "sensorPot1";
+
+bool started;
+bool DEBUG = false;
+
+short defaultDelayTime = 1000;
+unsigned long currentDelayTime;
+
 int potPin = 2;
 int potValue;
-int delayTime;
-bool isInitialised;
-int defaultDelayTime = 2000;
-int currentDelayTime;
-
-unsigned long lastTime;
-unsigned long currentTime;
-unsigned long timestamp;
-
-// CAUTION : The IDs have to be different from
-//           one device to another.
-//           A sensor has to contains "sensor" somewhere in its name
-//           but not "actuator".
-
-const String ID = "sensorPot1";
 
 void setup() {
   Serial.begin(9600);
-  potValue = 0;
-  lastTime = 0;
-  isInitialised = false;
+  started = false;
   currentDelayTime = defaultDelayTime;
 }
 
 void loop() {
 
-  //If the sensor has been initialised, it will send a message
-  //during each iteration through the serial.
-  //The message is composed as follows :
-  //value *space* timestamp *comma*
-  //e.g :750 1000,500 1000,550 1000,
-  if (isInitialised) {
-      if (lastTime == 0) {
-        lastTime = millis();
-      }
+  if (Serial.available() > 0){
 
-      potValue = analogRead(potPin);
-
-      currentTime = millis();
-      timestamp = currentTime - lastTime;
-      lastTime = currentTime;
-      Serial.print(String(potValue) + " " + String(timestamp) + ",");
-      delay(currentDelayTime);
-  }
-
-  if (Serial.available() > 0)
-  {
     char read = Serial.read();
 
-    //If the sensor receives a 'i', it will transmit its ID
-    //and will start to send datas
     if (read == 'i') {
       Serial.println(ID.c_str());
-      isInitialised = true;
-
-    //If the sensor receives a 'd', it will read the
-    //the rest of the message to modify its delay time
-    } else if (read == 'd') {
-      currentDelayTime = 0;
-      read = Serial.read();
-
-      while (read != '\n') {
-        currentDelayTime = currentDelayTime * 10 + (read - 48);
-
-        read = Serial.read();
-      }
-
-    //If a 'c' is read, the sensor go back to the initial state
+      started = true;
+      delay(defaultDelayTime);
     } else if (read =='c') {
       setup();
-
+    } else if (read == 'd') {
+      receiveDelay();
     } else {
-      //Do nothing if anything else is received
+      //Do nothing
     }
+  }
+
+  if(started){
+    potValue = analogRead(potPin);
+    Serial.println(String(potValue) + " " + millis());
+    delay(currentDelayTime);
+  }
+}
+
+void receiveDelay() {
+  currentDelayTime = 0;
+
+  char read = Serial.read();
+
+  while (read != '\n') {
+    if (DEBUG) {
+      Serial.println("read : " + String(read - 48));
+      delay(1000);
+    }
+    currentDelayTime = currentDelayTime * 10 + (read - 48);
+    read = Serial.read();
+  }
+
+  if (currentDelayTime <= 0) {
+    currentDelayTime = defaultDelayTime;
+  }
+
+  if(DEBUG) {
+    Serial.println("delay : " + String(currentDelayTime));
   }
 }
