@@ -1,6 +1,5 @@
 package core.behavior;
 
-import core.ValueTimestamp;
 import core.device.IActuator;
 
 import java.util.List;

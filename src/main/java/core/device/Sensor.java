@@ -1,26 +1,24 @@
 package core.device;
 
-import core.CircularLIFOStack;
+import com.google.common.collect.EvictingQueue;
 import core.ValueTimestamp;
-import gnu.io.SerialPort;
 import core.utils.Utils;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
+import gnu.io.SerialPort;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.TooManyListenersException;
+import java.util.Queue;
 
 public class Sensor extends Device implements ISensor {
 
-    // Maybe change to FIFO because
-    private CircularLIFOStack<ValueTimestamp> stack;
+    private Queue<ValueTimestamp> queue;
 
     public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize) {
         super(ID, serialPort, outputStream, inputStream);
-        stack = new CircularLIFOStack<>(bufferSize);
+        queue = EvictingQueue.create(bufferSize);
     }
 
 
@@ -38,7 +36,7 @@ public class Sensor extends Device implements ISensor {
         }
 
         for(String strValueTimestamp : values){
-            stack.push(
+            queue.add(
                     new ValueTimestamp(
                             Integer.parseInt(strValueTimestamp.split(" ")[0]),
                             Long.parseLong(strValueTimestamp.split(" ")[1])
@@ -49,7 +47,7 @@ public class Sensor extends Device implements ISensor {
 
     @Override
     public List<ValueTimestamp> getData() {
-        return stack;
+        return new ArrayList<>(queue);
     }
 
 }

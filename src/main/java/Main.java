@@ -1,11 +1,8 @@
-import com.google.common.collect.EvictingQueue;
 import core.Application;
 import core.device.*;
-import core.strategy.IOscillatorStrategy;
-import core.strategy.OscillatorStrategyImpl;
+import core.utils.Utils;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-import core.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,7 +81,7 @@ public class Main {
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
-                                devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 50));
+                                devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                             } else if(ID.contains("actuator")){
                                 devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
