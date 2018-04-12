@@ -1,6 +1,6 @@
 package core.behavior;
 
-import core.device.IActuator;
+import core.device.actuator.IActuator;
 
 import java.util.List;
 

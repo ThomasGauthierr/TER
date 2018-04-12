@@ -3,6 +3,8 @@ package core.device;
 import core.Message;
 import core.behavior.IContract;
 import core.behavior.IRepair;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
 
 import java.util.List;
 

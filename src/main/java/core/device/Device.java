@@ -5,8 +5,9 @@ import gnu.io.SerialPort;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Observable;
 
-public abstract class Device implements IDevice {
+public abstract class Device extends Observable implements IDevice {
     protected String ID;
     protected SerialPort serialPort;
     protected OutputStream outputStream;

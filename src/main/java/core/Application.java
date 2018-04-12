@@ -1,8 +1,9 @@
 package core;
 
-import core.device.IActuator;
-import core.device.IGroup;
-import core.device.ISensor;
+import core.behavior.Manager;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
+import core.device.sensor.Sensor;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 
@@ -13,35 +14,33 @@ import java.util.stream.Collectors;
 
 public class Application {
 
-    private List<ISensor> sensors;
+    private List<Manager> managers;
+    private List<Sensor> sensors;
     private List<IActuator> actuators;
-    private List<IGroup> groups;
 
     public Application() {
         sensors = new ArrayList<>();
         actuators = new ArrayList<>();
-        groups = new ArrayList<>();
+        managers = new ArrayList<>();
+
+        // BASIC IMPL WITH 1 MANAGER
+        managers.add(new Manager());
     }
 
     public void init() throws TooManyListenersException {
 
         // retrieve values from sensors
-        for (ISensor sensor : sensors) {
+        for (Sensor sensor : sensors) {
+
+            // The sensor is observed by the manager
+            sensor.addObserver(managers.get(0));
 
             SerialPort sp = sensor.getSerialPort();
             sp.notifyOnDataAvailable(true);
             sp.addEventListener(serialPortEvent -> {
                 switch (serialPortEvent.getEventType()) {
                     case SerialPortEvent.DATA_AVAILABLE:
-                        // data is available !!!
                         sensor.collect();
-
-                        /*IGroup g = sensor.getGroup();
-                        if(g.getContract().isRespected(sensor.getData())){
-
-                        } else {
-                            g.repair();
-                        }*/
                         break;
                     default:
                         break;
@@ -49,19 +48,16 @@ public class Application {
             });
         }
 
-        // contracts
-
-        // repair (optional)
-
-        // update actuators
-
+        for (IActuator actuator : actuators) {
+            managers.get(0).addUnrespectedContractListener(actuator);
+        }
     }
 
-    public void addSensor(ISensor sensor) {
+    public void addSensor(Sensor sensor) {
         sensors.add(sensor);
     }
 
-    public List<ISensor> getSensors() {
+    public List<Sensor> getSensors() {
         return sensors;
     }
 
@@ -81,11 +77,11 @@ public class Application {
         return actuators.stream().filter(a -> a.getID().equals(groupId)).collect(Collectors.toList());
     }
 
-    public void addGroup(IGroup group) {
-        groups.add(group);
+    public void addManager(Manager manager) {
+        managers.add(manager);
     }
 
-    public List<IGroup> getGroups() {
-        return groups;
+    public List<Manager> getManagers() {
+        return managers;
     }
 }

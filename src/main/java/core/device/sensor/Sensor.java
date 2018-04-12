@@ -1,7 +1,8 @@
-package core.device;
+package core.device.sensor;
 
 import com.google.common.collect.EvictingQueue;
 import core.Message;
+import core.device.Device;
 import core.utils.Utils;
 import gnu.io.SerialPort;
 
@@ -43,6 +44,9 @@ public class Sensor extends Device implements ISensor {
                     )
             );
         }
+
+        setChanged();
+        notifyObservers(this.queue);
     }
 
     @Override

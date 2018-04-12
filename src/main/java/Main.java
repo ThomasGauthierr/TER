@@ -1,5 +1,9 @@
 import core.Application;
-import core.device.*;
+import core.device.IDevice;
+import core.device.actuator.Actuator;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
+import core.device.sensor.Sensor;
 import core.utils.Utils;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -108,7 +112,7 @@ public class Main {
 
         for(IDevice device : getDevices()){
             if(device instanceof ISensor)
-                app.addSensor((ISensor) device);
+                app.addSensor((Sensor) device);
             if(device instanceof IActuator)
                 app.addActuator((IActuator) device);
         }

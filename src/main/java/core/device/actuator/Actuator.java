@@ -1,5 +1,7 @@
-package core.device;
+package core.device.actuator;
 
+import core.behavior.UnrespectedContractEvent;
+import core.device.Device;
 import gnu.io.SerialPort;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Actuator extends Device implements IActuator {
+
     public Actuator() {
         super();
     }
@@ -33,5 +36,10 @@ public class Actuator extends Device implements IActuator {
             e.printStackTrace();
         }
         super.close();
+    }
+
+    @Override
+    public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
+
     }
 }

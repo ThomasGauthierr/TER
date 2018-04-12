@@ -23,6 +23,11 @@ public class ContractImpl<T> implements IContract<T> {
     }
 
     @Override
+    public void removePredicate(Predicate<T> predicate) {
+        predicates.remove(predicate);
+    }
+
+    @Override
     public boolean isRespected(List<T> data) {
 
         for(Predicate<T> p : predicates) {

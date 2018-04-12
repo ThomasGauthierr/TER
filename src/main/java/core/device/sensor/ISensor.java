@@ -1,6 +1,7 @@
-package core.device;
+package core.device.sensor;
 
 import core.Message;
+import core.device.IDevice;
 
 import java.util.List;
 

@@ -5,6 +5,8 @@ import core.behavior.ContractImpl;
 import core.behavior.IContract;
 import core.behavior.IRepair;
 import core.behavior.RepairImpl;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
 
 import java.util.ArrayList;
 import java.util.List;
