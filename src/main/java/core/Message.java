@@ -5,7 +5,8 @@ public class Message {
     private int value;
     private long time;
 
-    public Message(String id,int value, long time) {
+    public Message(String id, int value, long time) {
+        this.id = id;
         this.value = value;
         this.time = time;
     }
@@ -25,6 +26,7 @@ public class Message {
     @Override
     public String toString() {
         return "ValueTimestamp{" +
+                "id=" + id +
                 "value=" + value +
                 ", time=" + time +
                 '}';
