@@ -32,7 +32,7 @@ void loop() {
   }
 
   if(started){
-    Serial.println("10 " + String(millis()));
+    Serial.println(ID + " 10 " + String(millis()));
     delay(currentDelayTime);
   }
 }

@@ -38,9 +38,9 @@ public class Sensor extends Device implements ISensor {
 
         for(String strValueTimestamp : values){
             queue.add(
-                    new Message(ID,
-                            Integer.parseInt(strValueTimestamp.split(" ")[0]),
-                            Long.parseLong(strValueTimestamp.split(" ")[1])
+                    new Message(strValueTimestamp.split(" ")[0],
+                            Integer.parseInt(strValueTimestamp.split(" ")[1]),
+                            Long.parseLong(strValueTimestamp.split(" ")[2])
                     )
             );
         }

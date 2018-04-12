@@ -36,7 +36,7 @@ void loop() {
 
   if(started){
     potValue = analogRead(potPin);
-    Serial.println(String(potValue) + " " + millis());
+    Serial.println(ID + " " + String(potValue) + " " + millis());
     delay(currentDelayTime);
   }
 }
