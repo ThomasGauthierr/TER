@@ -6,7 +6,6 @@ import core.device.ISensor;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TooManyListenersException;
@@ -36,7 +35,7 @@ public class Application {
                     case SerialPortEvent.DATA_AVAILABLE:
                         // data is available !!!
                         sensor.collect();
-                        sensor.getData().forEach(System.out::println);
+
                         /*IGroup g = sensor.getGroup();
                         if(g.getContract().isRespected(sensor.getData())){
 
