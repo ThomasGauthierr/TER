@@ -1,7 +1,7 @@
 package core.device;
 
 import com.google.common.collect.EvictingQueue;
-import core.ValueTimestamp;
+import core.Message;
 import core.utils.Utils;
 import gnu.io.SerialPort;
 
@@ -14,7 +14,7 @@ import java.util.Queue;
 
 public class Sensor extends Device implements ISensor {
 
-    private Queue<ValueTimestamp> queue;
+    private Queue<Message> queue;
 
     public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize) {
         super(ID, serialPort, outputStream, inputStream);
@@ -37,7 +37,7 @@ public class Sensor extends Device implements ISensor {
 
         for(String strValueTimestamp : values){
             queue.add(
-                    new ValueTimestamp(
+                    new Message("id",
                             Integer.parseInt(strValueTimestamp.split(" ")[0]),
                             Long.parseLong(strValueTimestamp.split(" ")[1])
                     )
@@ -46,7 +46,7 @@ public class Sensor extends Device implements ISensor {
     }
 
     @Override
-    public List<ValueTimestamp> getData() {
+    public List<Message> getData() {
         return new ArrayList<>(queue);
     }
 

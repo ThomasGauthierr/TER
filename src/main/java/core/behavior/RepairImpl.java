@@ -1,14 +1,14 @@
 package core.behavior;
 
-import core.ValueTimestamp;
+import core.Message;
 import core.device.IActuator;
 
 import java.util.List;
 
-public class RepairImpl implements IRepair<ValueTimestamp> {
+public class RepairImpl implements IRepair<Message> {
 
     @Override
-    public boolean repair(List<ValueTimestamp> data, List<IActuator> actuators, IRepairStrategy strategy) {
+    public boolean repair(List<Message> data, List<IActuator> actuators, IRepairStrategy strategy) {
         // La magie
         return false;
     }

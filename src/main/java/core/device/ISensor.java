@@ -1,6 +1,6 @@
 package core.device;
 
-import core.ValueTimestamp;
+import core.Message;
 
 import java.util.List;
 
@@ -8,6 +8,6 @@ public interface ISensor extends IDevice {
 
     void collect();
 
-    List<ValueTimestamp> getData();
+    List<Message> getData();
 
 }

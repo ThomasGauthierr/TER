@@ -1,6 +1,6 @@
 package core.device;
 
-import core.ValueTimestamp;
+import core.Message;
 import core.behavior.IContract;
 import core.behavior.IRepair;
 
@@ -10,8 +10,8 @@ public interface IGroup {
 
     List<ISensor> getSensors();
     List<IActuator> getActuators();
-    IContract<ValueTimestamp> getContract();
-    void setRepair(IRepair<ValueTimestamp> repair);
+    IContract<Message> getContract();
+    void setRepair(IRepair<Message> repair);
     void repair();
 
 }

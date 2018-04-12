@@ -1,10 +1,11 @@
 package core;
 
-public class ValueTimestamp {
+public class Message {
+	private String id;
     private int value;
     private long time;
 
-    public ValueTimestamp(int value, long time) {
+    public Message(String id,int value, long time) {
         this.value = value;
         this.time = time;
     }
@@ -15,6 +16,10 @@ public class ValueTimestamp {
 
     public long getTime() {
         return time;
+    }
+    
+    public String getId() {
+        return id;
     }
 
     @Override

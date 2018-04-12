@@ -1,6 +1,6 @@
 package core.device;
 
-import core.ValueTimestamp;
+import core.Message;
 import core.behavior.ContractImpl;
 import core.behavior.IContract;
 import core.behavior.IRepair;
@@ -13,8 +13,8 @@ public class GroupImpl implements IGroup {
 
     private List<ISensor> sensors;
     private List<IActuator> actuators;
-    private IContract<ValueTimestamp> contract;
-    private IRepair<ValueTimestamp> repair;
+    private IContract<Message> contract;
+    private IRepair<Message> repair;
 
     public GroupImpl(){
         sensors = new ArrayList<>();
@@ -34,12 +34,12 @@ public class GroupImpl implements IGroup {
     }
 
     @Override
-    public IContract<ValueTimestamp> getContract() {
+    public IContract<Message> getContract() {
         return contract;
     }
 
     @Override
-    public void setRepair(IRepair<ValueTimestamp> repair) {
+    public void setRepair(IRepair<Message> repair) {
 
     }
 

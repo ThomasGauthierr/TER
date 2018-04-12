@@ -1,6 +1,6 @@
 package core.behavior;
 
-import core.ValueTimestamp;
+import core.Message;
 
 import java.util.List;
 import java.util.function.Predicate;

@@ -1,12 +1,12 @@
 package core.strategy;
 
-import core.ValueTimestamp;
+import core.Message;
 
 import java.util.List;
 
 public interface IOscillatorStrategy {
 
-	boolean isOscillating(List<ValueTimestamp> l);
+	boolean isOscillating(List<Message> l);
 	
 	
 
