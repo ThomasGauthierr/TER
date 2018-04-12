@@ -27,7 +27,7 @@ public class Message {
     public String toString() {
         return "ValueTimestamp{" +
                 "id=" + id +
-                "value=" + value +
+                ", value=" + value +
                 ", time=" + time +
                 '}';
     }
