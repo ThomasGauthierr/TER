@@ -36,7 +36,7 @@ void loop() {
 
   if(started){
     LDRValue = analogRead(LDRPin);
-    Serial.println(String(LDRValue) + " " + millis());
+    Serial.println(ID + " " + String(LDRValue) + " " + millis());
     delay(currentDelayTime); 
   }
 }
