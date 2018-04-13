@@ -1,5 +1,6 @@
-package core.behavior;
+package core.behavior.contract;
 
+import core.behavior.contract.ActionType;
 import core.device.sensor.ISensor;
 
 import java.util.EventObject;

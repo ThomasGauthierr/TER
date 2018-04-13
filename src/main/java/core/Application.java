@@ -1,5 +1,8 @@
 package core;
 
+import core.behavior.contract.ActionType;
+import core.behavior.contract.ContractImpl;
+import core.behavior.contract.IContract;
 import core.behavior.Manager;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
@@ -10,6 +13,7 @@ import gnu.io.SerialPortEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TooManyListenersException;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -23,8 +27,18 @@ public class Application {
         actuators = new ArrayList<>();
         managers = new ArrayList<>();
 
-        // BASIC IMPL WITH 1 MANAGER
-        managers.add(new Manager());
+        // BASIC IMPL WITH 1 MANAGER and contract
+
+        // The predicate tests that the value is > 20 so the actiontype is increase
+        IContract<Message> contract = new ContractImpl<>(new Predicate<Message>() {
+            @Override
+            public boolean test(Message message) {
+                System.out.println(this + " testing predicate : " + message.getValue() + " < 20");
+                return message.getValue() > 20;
+            }
+        },ActionType.INCREASE);
+
+        managers.add(new Manager(contract));
     }
 
     public void init() throws TooManyListenersException {
