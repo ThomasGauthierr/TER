@@ -40,6 +40,6 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
-
+        System.out.println(ID + " : should be checking if able to repair");
     }
 }

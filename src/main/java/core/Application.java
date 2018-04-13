@@ -51,6 +51,8 @@ public class Application {
         for (IActuator actuator : actuators) {
             managers.get(0).addUnrespectedContractListener(actuator);
         }
+
+
     }
 
     public void addSensor(Sensor sensor) {

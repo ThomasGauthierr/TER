@@ -47,6 +47,8 @@ public class Sensor extends Device implements ISensor {
 
         setChanged();
         notifyObservers(this.queue);
+
+        System.out.println(ID + " : notified");
     }
 
     @Override
