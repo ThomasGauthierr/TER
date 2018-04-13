@@ -1,7 +1,7 @@
-package core.behavior;
+package core.behavior.contract;
 
 public enum ActionType {
 	INCREASE,
 	DECREASE,
-	NONE;
+	OK;
 }

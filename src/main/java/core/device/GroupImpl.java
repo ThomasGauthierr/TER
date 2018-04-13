@@ -1,8 +1,8 @@
 package core.device;
 
 import core.Message;
-import core.behavior.ContractImpl;
-import core.behavior.IContract;
+import core.behavior.contract.ContractImpl;
+import core.behavior.contract.IContract;
 import core.behavior.IRepair;
 import core.behavior.RepairImpl;
 import core.device.actuator.IActuator;
