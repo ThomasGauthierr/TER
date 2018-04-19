@@ -40,13 +40,15 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
-        System.out.println("["+ getID() + ":"+ getDataType().name()+ "] Received event from -> ["+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
+        System.out.println("["+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> ["+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
         if(dataType.equals(evt.getSensor().getDataType())){
             if(getActionType().equals(evt.getActionType())){
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
+                //TODO: tell the manager that i am able to repair
             } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
                     || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
+                //TODO: tell the manager that i am able to repair
             } else {
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
             }
@@ -57,9 +59,5 @@ public class Actuator extends Device implements IActuator {
 
     public ActionType getActionType() {
         return actionType;
-    }
-
-    public void setActionType(ActionType actionType) {
-        this.actionType = actionType;
     }
 }
