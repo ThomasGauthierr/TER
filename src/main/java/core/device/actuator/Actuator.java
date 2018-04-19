@@ -41,7 +41,7 @@ public class Actuator extends Device implements IActuator {
     @Override
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
         System.out.println(ID + " : should be checking if able to repair");
-        System.out.println("The event is " + evt.getActionType().name() + " and i have ??? action over the sensor " + evt.getSensor().getID());
+        System.out.println("The event is " + evt.getActionType().name() + " and i have " + actionType.name() + " action over the sensor " + evt.getSensor().getID());
     }
 
     public ActionType getActionType() {
