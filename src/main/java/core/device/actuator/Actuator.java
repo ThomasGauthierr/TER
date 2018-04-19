@@ -40,8 +40,19 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
-        System.out.println(ID + " : should be checking if able to repair");
-        System.out.println("The event is " + evt.getActionType().name() + " and i have " + actionType.name() + " action over the sensor " + evt.getSensor().getID());
+        System.out.println("["+ getID() + ":"+ getDataType().name()+ "] Received event from -> ["+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
+        if(dataType.equals(evt.getSensor().getDataType())){
+            if(getActionType().equals(evt.getActionType())){
+                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
+            } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
+                    || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
+                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
+            } else {
+                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
+            }
+        } else {
+            System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + evt.getSensor().getDataType().name() + " but is " + dataType.name());
+        }
     }
 
     public ActionType getActionType() {
