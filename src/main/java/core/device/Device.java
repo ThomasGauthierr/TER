@@ -15,8 +15,6 @@ public abstract class Device extends Observable implements IDevice {
     protected InputStream inputStream;
     protected DataType dataType;
 
-    private Device() {}
-
     public Device(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType) {
         this.ID = ID;
         this.serialPort = serialPort;
