@@ -44,7 +44,7 @@ public class Actuator extends Device implements IActuator {
         if(dataType.equals(evt.getSensor().getDataType())){
             if(getActionType().equals(evt.getActionType())){
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
-                //TODO: tell the manager that i am able to repair
+                //TODO: tell the manager that i am working against the contract
             } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
                     || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");

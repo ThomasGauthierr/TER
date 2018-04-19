@@ -10,7 +10,7 @@
  *     --> 1 : LIGHT
  *  - Id : you can put whatever you want here.
 **/
-const String ID = "sensorPot1";
+const String ID = "00PotSen";
 
 bool started;
 bool DEBUG = false;
