@@ -1,4 +1,5 @@
 import core.Application;
+import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;
@@ -88,6 +89,33 @@ public class Main {
                         //If the device has answered, we check if he's an actuator or a sensor
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
+
+                            try {
+
+                                //Sensor
+                                if (ID.substring(0, 1).equals("0")) {
+                                    DataType type = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
+                                    devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5, type));
+                                    System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
+                                    System.out.println("DataType : " + type);
+
+                                    //Actuator
+                                } else if (ID.substring(0, 1).equals("1")) {
+                                    DataType dataType = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
+                                    ActionType actionType = ActionType.values()[Integer.parseInt(ID.substring(2, 3))];
+                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType));
+                                    System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
+                                    System.out.println("DataType : " + dataType + " || ActionType : " + actionType);
+                                    //Error
+                                } else {
+                                    System.out.println("Found [" + ID + "] without any valid ID.");
+                                }
+
+                            } catch (ArrayIndexOutOfBoundsException e) {
+                                System.out.println("Device [" + ID + "] ignored, illegal ID");
+                            }
+
+                            /*
                             if (ID.contains("sensor")) {
                                 devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5, getDataTypeFromId(ID)));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
@@ -97,6 +125,8 @@ public class Main {
                             } else {
                                 System.out.println("Found [" + ID + "] without any valid ID.");
                             }
+                            */
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();

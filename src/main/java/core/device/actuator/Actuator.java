@@ -1,5 +1,6 @@
 package core.device.actuator;
 
+import core.behavior.contract.ActionType;
 import core.behavior.contract.UnrespectedContractEvent;
 import core.device.DataType;
 import core.device.Device;
@@ -10,9 +11,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Actuator extends Device implements IActuator {
+    private ActionType actionType;
 
-    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType) {
+    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType) {
         super(ID, serialPort, outputStream, inputStream, dataType);
+        this.actionType = actionType;
     }
 
     @Override
@@ -39,5 +42,13 @@ public class Actuator extends Device implements IActuator {
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
         System.out.println(ID + " : should be checking if able to repair");
         System.out.println("The event is " + evt.getActionType().name() + " and i have ??? action over the sensor " + evt.getSensor().getID());
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
     }
 }

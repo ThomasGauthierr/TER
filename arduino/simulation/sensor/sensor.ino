@@ -1,4 +1,16 @@
-const String ID = "sensorSim1";
+/** CAUTION : The IDs have to be different from
+ *           one device to another and be 8 chars long.
+ *
+ *  The ID is composed as XYZId where :
+ *  - X allows the program to know what kind of device it is :
+ *     --> 0 : SENSOR
+ *     --> 1 : ACTUATOR
+ *  - Y corresponds to the data type influenced by the device :
+ *     --> 0 : TEMPERATURE
+ *     --> 1 : LIGHT
+**/
+
+const String ID = "00SimSen";
 
 bool started;
 bool DEBUG = false;
