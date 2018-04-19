@@ -60,4 +60,8 @@ public class Actuator extends Device implements IActuator {
     public ActionType getActionType() {
         return actionType;
     }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
+    }
 }

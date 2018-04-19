@@ -8,6 +8,7 @@
  *  - Y corresponds to the data type influenced by the device :
  *     --> 0 : TEMPERATURE
  *     --> 1 : LIGHT
+ *  - Id : you can put whatever you want here.
 **/
 
 const String ID = "00SimSen";
