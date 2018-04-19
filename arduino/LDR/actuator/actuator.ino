@@ -2,10 +2,23 @@ int value;
 int LED = 12;
 bool receivingValue;
 
-// CAUTION : The IDs have to be different from
-//           one device to another.
-//           An actuator has to contains "actuator" somewhere in its name
-//           but not "sensor".
+/** CAUTION : The IDs have to be different from
+ *           one device to another.
+ *
+ *  The ID is composed as XYZId where :
+ *  - X allows the program to know what kind of device it is :
+ *     --> 0 : SENSOR
+ *     --> 1 : ACTUATOR
+ *  - Y corresponds to the data type influenced by the device :
+ *     --> 0 : TEMPERATURE
+ *     --> 1 : LIGHT
+ *  - Z corresponds to the action the actuator is supposed to generate
+ *     --> 0 : INCREASE
+ *     --> 1 : DECREASE
+ *     --> 2 : NONE
+ *     --> 3 : OK
+ *  - Id : you can put whatever you want here.
+**/
 
 const String ID = "actuatorLDR1";
 

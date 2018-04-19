@@ -43,10 +43,12 @@ public class Actuator extends Device implements IActuator {
         System.out.println("["+ getID() + ":"+ getDataType().name()+ "] Received event from -> ["+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
         if(dataType.equals(evt.getSensor().getDataType())){
             if(getActionType().equals(evt.getActionType())){
+                sendValue(0);
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
             } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
                     || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
+                sendValue(1);
             } else {
                 System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
             }

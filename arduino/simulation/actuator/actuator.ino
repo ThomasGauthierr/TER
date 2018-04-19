@@ -1,9 +1,8 @@
 int value;
-int LED = 12;
 bool receivingValue;
 
 /** CAUTION : The IDs have to be different from
- *           one device to another and be 8 chars long.
+ *           one device to another.
  *
  *  The ID is composed as XYZId where :
  *  - X allows the program to know what kind of device it is :
@@ -17,14 +16,15 @@ bool receivingValue;
  *     --> 1 : DECREASE
  *     --> 2 : NONE
  *     --> 3 : OK
+ *  - Id : you can put whatever you want here.
 **/
 
 const String ID = "100SimAc";
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED, OUTPUT);
-  digitalWrite(LED, LOW);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
   value = 0;
   receivingValue = false;
 }
@@ -42,9 +42,9 @@ void loop() {
       //we light the corresponding LED.
       } else {
         if (value == 0) {
-          digitalWrite(LED, LOW);
+          digitalWrite(LED_BUILTIN, LOW);
         } else {
-          digitalWrite(LED, HIGH);
+          digitalWrite(LED_BUILTIN, HIGH);
         }
         value = 0;
         receivingValue = false;
