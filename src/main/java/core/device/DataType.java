@@ -1,8 +1,8 @@
 package core.device;
 
 public enum DataType {
-    Temperature(0),
-    Light(1);
+    TEMPERATURE(0),
+    LIGHT(1);
 
     private final int id;
 
