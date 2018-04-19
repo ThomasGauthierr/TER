@@ -2,6 +2,7 @@ package core.device;
 
 import gnu.io.SerialPort;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,24 +13,25 @@ public abstract class Device extends Observable implements IDevice {
     protected SerialPort serialPort;
     protected OutputStream outputStream;
     protected InputStream inputStream;
+    protected DataType dataType;
 
-    public Device() {
-        ID = null;
-        serialPort = null;
-        outputStream = null;
-        inputStream = null;
-    }
+    private Device() {}
 
-    public Device(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream) {
+    public Device(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType) {
         this.ID = ID;
         this.serialPort = serialPort;
         this.outputStream = outputStream;
         this.inputStream = inputStream;
+        this.dataType = dataType;
     }
 
+    @Override
     public String getID() {
         return ID;
     }
+
+    @Override
+    public DataType getDataType() { return dataType; }
 
     @Override
     public SerialPort getSerialPort() {

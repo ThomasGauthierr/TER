@@ -30,17 +30,18 @@ public class Manager implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ISensor) {
-            if (! contract.isRespected(((ISensor) o).getData()).equals(ActionType.OK)) {
-                fireUnrespectedContractEvent((ISensor) o);
+            ActionType actionType = contract.isRespected(((ISensor) o).getData());
+            if (! actionType.equals(ActionType.OK)) {
+                fireUnrespectedContractEvent((ISensor) o, actionType);
             }
         }
     }
 
-    private void fireUnrespectedContractEvent(ISensor sensor) {
+    private void fireUnrespectedContractEvent(ISensor sensor, ActionType actionType) {
         System.out.println("Fired event 'UnrespectedContractEvent' to all listeners");
 
         // TODO: change parameter ActionType to real action of the event
-        UnrespectedContractEvent evt = new UnrespectedContractEvent(this, sensor, ActionType.DECREASE);
+        UnrespectedContractEvent evt = new UnrespectedContractEvent(this, sensor, actionType);
         for (UnrespectedContractListener listener : listeners) {
             listener.unrespectedContractEventReceived(evt);
         }

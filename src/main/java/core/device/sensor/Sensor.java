@@ -2,10 +2,12 @@ package core.device.sensor;
 
 import com.google.common.collect.EvictingQueue;
 import core.Message;
+import core.device.DataType;
 import core.device.Device;
 import core.utils.Utils;
 import gnu.io.SerialPort;
 
+import javax.xml.crypto.Data;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,8 +19,8 @@ public class Sensor extends Device implements ISensor {
 
     private Queue<Message> queue;
 
-    public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize) {
-        super(ID, serialPort, outputStream, inputStream);
+    public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize, DataType dataType) {
+        super(ID, serialPort, outputStream, inputStream, dataType);
         queue = EvictingQueue.create(bufferSize);
     }
 

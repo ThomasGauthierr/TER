@@ -8,6 +8,7 @@ import java.io.OutputStream;
 public interface IDevice {
 
     String getID();
+    DataType getDataType();
     SerialPort getSerialPort();
     OutputStream getOutputStream();
     InputStream getInputStream();

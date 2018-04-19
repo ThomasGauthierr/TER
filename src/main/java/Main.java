@@ -1,4 +1,5 @@
 import core.Application;
+import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;
 import core.device.actuator.IActuator;
@@ -88,10 +89,10 @@ public class Main {
                         while (inputStream.available() > 0) {
                             String ID = Utils.getStringFromInputStream(inputStream);
                             if (ID.contains("sensor")) {
-                                devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5));
+                                devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5, getDataTypeFromId(ID)));
                                 System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                             } else if(ID.contains("actuator")){
-                                devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream));
+                                devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, getDataTypeFromId(ID)));
                                 System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                             } else {
                                 System.out.println("Found [" + ID + "] without any valid ID.");
@@ -137,5 +138,9 @@ public class Main {
         }
 
         System.out.println("Ports closed");
+    }
+
+    private static DataType getDataTypeFromId(String ID) {
+        return DataType.valueOf("1");
     }
 }
