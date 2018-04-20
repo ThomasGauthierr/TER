@@ -41,6 +41,8 @@ public class Manager implements Observer {
                     case VIOLATED:
                         // contract is violated start repairing
                         System.out.println("Contract is violated [Sensor:" + ((ISensor)o).getID() + " ...");
+                        // TODO: check if there is someone who can fix this
+                        contract.setContractStatus(IContract.ContractStatus.REAPAIRING);
                         break;
                     case REAPAIRING:
                         // contract is repairing
