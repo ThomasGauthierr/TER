@@ -29,14 +29,14 @@ public class Application {
 
         // BASIC IMPL WITH 1 MANAGER and contract
 
-        // The predicate tests that the value is > 20 so the actiontype is decrease because when it is violated it means the value has decreased
+        // The predicate tests that the value is < 500 so the actiontype is decrease because when it is violated it means the value has decreased
         IContract<Message> contract = new ContractImpl<>(new Predicate<Message>() {
             @Override
             public boolean test(Message message) {
-                System.out.println(this + " testing predicate : " + message.getValue() + " > 20");
-                return message.getValue() > 20;
+                System.out.println(this + " testing predicate : " + message.getValue() + " > 500");
+                return message.getValue() < 500;
             }
-        },ActionType.DECREASE);
+        },ActionType.INCREASE);
 
         managers.add(new Manager(contract));
     }

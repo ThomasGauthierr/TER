@@ -21,7 +21,7 @@ bool receivingValue;
  *  - Id : you can put whatever you want here.
 **/
 
-const String ID = "actuatorPot1";
+const String ID = "101PotAc";
 
 void setup() {
   Serial.begin(9600);
