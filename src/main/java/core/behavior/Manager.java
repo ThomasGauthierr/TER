@@ -44,6 +44,8 @@ public class Manager implements Observer {
                     case REAPAIRING:
                         // contract is repairing
                         System.out.println("Now repairing the contract ...");
+                        // We assume this is repaired by magic voodo tricks so yeah
+                        contract.setContractStatus(IContract.ContractStatus.OK);
                         break;
                 }
             } else {
