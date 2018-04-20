@@ -59,17 +59,26 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void unrespectedContractEventReceived(UnrespectedContractEvent evt) {
-        System.out.println("["+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> ["+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
+        System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> [Sensor:"+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
         if(dataType.equals(evt.getSensor().getDataType())){
             if(getActionType().equals(evt.getActionType())){
-                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
-                //TODO: tell the manager that i am working against the contract
+                if(isActivated()) {
+                    System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
+                    //TODO: tell the manager that i am working against the contract
+                } else {
+                    // not my fault
+                }
+
             } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
                     || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
-                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
-                //TODO: tell the manager that i am able to repair
+                if(isActivated()) {
+                    // not my fault
+                } else {
+                    System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
+                    //TODO: tell the manager that i am able to repair
+                }
             } else {
-                System.out.println("["+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
+                System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
             }
         } else {
             System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + evt.getSensor().getDataType().name() + " but is " + dataType.name());
@@ -78,9 +87,5 @@ public class Actuator extends Device implements IActuator {
 
     public ActionType getActionType() {
         return actionType;
-    }
-
-    public void setActionType(ActionType actionType) {
-        this.actionType = actionType;
     }
 }
