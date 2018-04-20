@@ -31,6 +31,7 @@ public class Manager implements Observer {
     public void update(Observable o, Object arg) {
         if (o instanceof ISensor) {
             ActionType actionType = contract.isRespected(((ISensor) o).getData().get(0));
+            System.out.println("Checking actionType of [Sensor:" + ((ISensor)o).getID() + "] -> " + actionType.name());
             if (! actionType.equals(ActionType.OK)) {
                 switch (contract.getContractStatus()) {
                     case OK:
