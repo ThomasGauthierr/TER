@@ -12,10 +12,12 @@ import java.io.OutputStream;
 
 public class Actuator extends Device implements IActuator {
     private ActionType actionType;
+    private boolean isActivated;
 
     public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType) {
         super(ID, serialPort, outputStream, inputStream, dataType);
         this.actionType = actionType;
+        isActivated = false;
     }
 
     @Override
@@ -26,6 +28,23 @@ public class Actuator extends Device implements IActuator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void activate() {
+        isActivated = true;
+        sendValue(1);
+    }
+
+    @Override
+    public void deactivate() {
+        isActivated = false;
+        sendValue(0);
+    }
+
+    @Override
+    public boolean isActivated() {
+        return isActivated;
     }
 
     @Override
