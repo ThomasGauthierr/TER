@@ -63,7 +63,7 @@ public class Application {
         }
 
         for (IActuator actuator : actuators) {
-            managers.get(0).addUnrespectedContractListener(actuator);
+            managers.get(0).addContractListener(actuator);
         }
 
 

@@ -10,4 +10,13 @@ public interface IContract<T> {
     ActionType isRespected(T data);
     ActionType isRespected(List<T> data);
 
+    ContractStatus getContractStatus();
+    void setContractStatus(ContractStatus status);
+
+    enum ContractStatus {
+        OK,
+        VIOLATED,
+        REAPAIRING
+    }
+
 }

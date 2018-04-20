@@ -14,7 +14,7 @@ import java.util.Observer;
  */
 public class Manager implements Observer {
     // Actuators
-    private List<UnrespectedContractListener> listeners;
+    private List<ContractListener> listeners;
     private IContract<Message> contract;
 
     public Manager() {
@@ -32,8 +32,31 @@ public class Manager implements Observer {
         if (o instanceof ISensor) {
             ActionType actionType = contract.isRespected(((ISensor) o).getData());
             if (! actionType.equals(ActionType.OK)) {
-                fireUnrespectedContractEvent((ISensor) o, actionType);
+                switch (contract.getContractStatus()) {
+                    case OK:
+                        contract.setContractStatus(IContract.ContractStatus.VIOLATED);
+                        fireUnrespectedContractEvent((ISensor) o, actionType);
+                        break;
+                    case VIOLATED:
+                        // contract is violated start repairing
+                        break;
+                    case REAPAIRING:
+                        // contract is repairing
+                        break;
+                }
+            } else {
+                fireRespectedContractEvent((ISensor) o, actionType);
             }
+        }
+    }
+
+    private void fireRespectedContractEvent(ISensor sensor, ActionType actionType) {
+        System.out.println("Fired event 'RespectedContractEvent' to all listeners");
+
+        // TODO: change parameter ActionType to real action of the event
+        ContractEvent evt = new ContractEvent(this, sensor, actionType);
+        for (RespectedContractListener listener : listeners) {
+            listener.respectedContractEventReceived(evt);
         }
     }
 
@@ -41,17 +64,17 @@ public class Manager implements Observer {
         System.out.println("Fired event 'UnrespectedContractEvent' to all listeners");
 
         // TODO: change parameter ActionType to real action of the event
-        UnrespectedContractEvent evt = new UnrespectedContractEvent(this, sensor, actionType);
+        ContractEvent evt = new ContractEvent(this, sensor, actionType);
         for (UnrespectedContractListener listener : listeners) {
             listener.unrespectedContractEventReceived(evt);
         }
     }
 
-    public void addUnrespectedContractListener(UnrespectedContractListener l) {
+    public void addContractListener(ContractListener l) {
         this.listeners.add(l);
     }
 
-    public void removeUnrespectedContractListener(UnrespectedContractListener l) {
+    public void removeContractListener(ContractListener l) {
         this.listeners.remove(l);
     }
 

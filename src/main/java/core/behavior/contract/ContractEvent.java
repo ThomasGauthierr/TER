@@ -8,10 +8,9 @@ import java.util.EventObject;
 /**
  * Created by Alexis Couvreur on 12/04/2018.
  */
-public class UnrespectedContractEvent extends EventObject {
+public class ContractEvent extends EventObject {
     private ISensor sensor;
     private ActionType actionType;
-
 
 
     /**
@@ -20,11 +19,11 @@ public class UnrespectedContractEvent extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public UnrespectedContractEvent(Object source) {
+    public ContractEvent(Object source) {
         super(source);
     }
 
-    public UnrespectedContractEvent(Object source, ISensor sensor, ActionType actionType) {
+    public ContractEvent(Object source, ISensor sensor, ActionType actionType) {
         super(source);
         this.sensor = sensor;
         this.actionType = actionType;

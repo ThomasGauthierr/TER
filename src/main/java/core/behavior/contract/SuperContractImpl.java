@@ -44,6 +44,16 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
     }
 
     @Override
+    public ContractStatus getContractStatus() {
+        return null;
+    }
+
+    @Override
+    public void setContractStatus(ContractStatus status) {
+
+    }
+
+    @Override
     public List<IContract> getContracts() {
         return null;
     }
