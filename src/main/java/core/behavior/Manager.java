@@ -30,7 +30,7 @@ public class Manager implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o instanceof ISensor) {
-            ActionType actionType = contract.isRespected(((ISensor) o).getData());
+            ActionType actionType = contract.isRespected(((ISensor) o).getData().get(0));
             if (! actionType.equals(ActionType.OK)) {
                 switch (contract.getContractStatus()) {
                     case OK:
@@ -39,9 +39,11 @@ public class Manager implements Observer {
                         break;
                     case VIOLATED:
                         // contract is violated start repairing
+                        System.out.println("Contract is violated [Sensor:" + ((ISensor)o).getID() + " ...");
                         break;
                     case REAPAIRING:
                         // contract is repairing
+                        System.out.println("Now repairing the contract ...");
                         break;
                 }
             } else {
@@ -76,6 +78,10 @@ public class Manager implements Observer {
 
     public void removeContractListener(ContractListener l) {
         this.listeners.remove(l);
+    }
+
+    public void repairing() {
+        contract.setContractStatus(IContract.ContractStatus.REAPAIRING);
     }
 
 }

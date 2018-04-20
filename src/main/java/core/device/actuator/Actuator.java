@@ -1,5 +1,6 @@
 package core.device.actuator;
 
+import core.behavior.Manager;
 import core.behavior.contract.ActionType;
 import core.behavior.contract.ContractEvent;
 import core.device.DataType;
@@ -66,6 +67,7 @@ public class Actuator extends Device implements IActuator {
                     System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
                     //TODO: tell the manager that i am working against the contract
                     deactivate();
+                    ((Manager)evt.getSource()).repairing();
                 } else {
                     // not my fault
                     System.out.println("Not my fault");
@@ -80,6 +82,7 @@ public class Actuator extends Device implements IActuator {
                     System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
                     //TODO: tell the manager that i am able to repair
                     activate();
+                    ((Manager)evt.getSource()).repairing();
                 }
             } else {
                 System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
