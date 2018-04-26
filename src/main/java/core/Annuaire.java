@@ -22,23 +22,23 @@ public class Annuaire {
 	private HashMap<String, Information> annuaire;
 
 	public class Information{
-		private DataType dataType;
+		private int dataType;
 		private boolean isActuator;
-		private ActionType actionType;
+		private int actionType;
 		
-		private Information(DataType dataType, ActionType actionType){
+		private Information(int dataType, int actionType){
 			this.dataType=dataType;
 			this.actionType=actionType;
-			isActuator = actionType!=null;
+			isActuator = actionType!=-1;
 		}
 		
-		public DataType getDataType() {
+		public int getDataType() {
 			return dataType;
 		}
 		public boolean isActuator() {
 			return isActuator;
 		}
-		public ActionType getActionType() {
+		public int getActionType() {
 			return actionType;
 		}
 		
@@ -62,8 +62,8 @@ public class Annuaire {
 			  for (Object o : a)
 			  {
 			    JSONObject information = (JSONObject) o;
-			    annuaire.put(information.getString("ID"), new Information((DataType)information.get("dataType")
-			    		, (ActionType)information.get("actionType")));
+			    annuaire.put(information.getString("ID"), new Information(information.getInt("dataType")
+			    		, information.getInt("actionType")));
 			    
 			  }
 		} catch (IOException | ParseException e) {
