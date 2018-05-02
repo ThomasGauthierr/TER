@@ -1,5 +1,5 @@
-int value;
 bool receivingValue;
+int ledPin = 9;
 
 /** CAUTION : The IDs have to be different from
  *           one device to another.
@@ -20,13 +20,18 @@ bool receivingValue;
 **/
 
 const String ID = "100SimAc";
+String intensity;
+
+float currentIntensity = 0;
+byte luminosite;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, LOW);
-  value = 0;
+  pinMode(ledPin, OUTPUT);
   receivingValue = false;
+  intensity = "";
+  currentIntensity = 0;
+  analogWrite(ledPin, 255 * currentIntensity);
 }
 
 void loop() {
@@ -34,28 +39,37 @@ void loop() {
   {
     char read = Serial.read();
     if (receivingValue) {
-      //Receiving the value byte per byte
+      //Receiving the intensity char per char
+      //The intensity has to be HIGH, MEDHIGH, MEDLOW, or LOW
       if (read != '\n') {
-        value = value * 10 + (read - 48);
+        intensity += read;
 
-      //When we reach the end of the value, 
-      //we light the corresponding LED.
+      //When we reach the end of the word, 
+      //we light the LED according to the received intensity.
       } else {
-        if (value == 0) {
-          digitalWrite(LED_BUILTIN, LOW);
+        if (intensity == "HIGH") {
+            currentIntensity = 1;
+        } else if (intensity == "MEDHIGH") {
+            currentIntensity = 0.7;
+        } else if (intensity == "MEDLOW") {
+            currentIntensity = 0.4;
+        } else if (intensity == "LOW") {
+            currentIntensity = 0.1;
         } else {
-          digitalWrite(LED_BUILTIN, HIGH);
+            currentIntensity = 0;
         }
-        value = 0;
+
+        analogWrite(ledPin, 255 * currentIntensity);
+        intensity = "";
         receivingValue = false;
       }
     }
     
-    //Sending the value if a 'v' is read
+    //Receiving the value if a 'v' is read
     if (read == 'v') {      
       receivingValue = true;
             
-      //Send the ID if a 'i' is received
+    //Send the ID if a 'i' is received
     } else if (read == 'i') {
       Serial.println(ID.c_str());
 
