@@ -6,7 +6,9 @@ import java.util.HashMap;
 
 import core.behavior.contract.ActionType;
 import core.device.DataType;
-import org.json.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -32,6 +34,12 @@ public class Annuaire {
 			isActuator = actionType!=-1;
 		}
 		
+		private Information(long dataType, long actionType) {
+			this.dataType=Integer.parseInt(Long.toString(dataType));
+			this.actionType=Integer.parseInt(Long.toString(actionType));
+			isActuator = actionType!=-1;
+		}
+
 		public DataType getDataType() {
 			return DataType.findFromId(dataType);
 		}
@@ -57,13 +65,14 @@ public class Annuaire {
 		annuaire.clear();
 		JSONParser parser = new JSONParser();
 		try {
-			JSONArray a = (JSONArray) parser.parse(new FileReader("Annuaire.json"));
+			JSONObject tmp = (org.json.simple.JSONObject) parser.parse(new FileReader("Annuaire.json"));
+			JSONArray a = (JSONArray) tmp.get("device");
 
 			  for (Object o : a)
 			  {
 			    JSONObject information = (JSONObject) o;
-			    annuaire.put(information.getString("ID"), new Information(information.getInt("dataType")
-			    		, information.getInt("actionType")));
+			    annuaire.put((String) information.get("ID"), new Information((long) information.get("dataType")
+			    		, (long) information.get("actionType")));
 			    
 			  }
 		} catch (IOException | ParseException e) {

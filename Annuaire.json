@@ -1,0 +1,13 @@
+{
+	"device":[
+		{
+			"ID": "TEST1",
+			"dataType": 1,
+			"actionType": -1
+		},{
+			"ID": "TEST2",
+			"dataType": 0,
+			"actionType": 0
+		}
+	]
+}
