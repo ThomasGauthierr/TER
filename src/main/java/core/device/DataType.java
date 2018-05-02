@@ -13,4 +13,14 @@ public enum DataType {
     public int getId() {
         return id;
     }
+    
+	public static DataType findFromId(int id){
+		switch (id){
+		case 0:
+			return TEMPERATURE;
+		case 1:
+			return LIGHT;
+		}
+		return null;
+	}
 }

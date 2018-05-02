@@ -15,4 +15,17 @@ public enum ActionType {
 	public int getId() {
 		return id;
 	}
+	
+	public static ActionType findFromId(int id){
+		switch (id){
+		case 0:
+			return INCREASE;
+		case 1:
+			return DECREASE;
+		case 3:
+			return OK;
+		default:
+			return NONE;
+		}
+	}
 }

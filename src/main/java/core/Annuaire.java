@@ -32,14 +32,14 @@ public class Annuaire {
 			isActuator = actionType!=-1;
 		}
 		
-		public int getDataType() {
-			return dataType;
+		public DataType getDataType() {
+			return DataType.findFromId(dataType);
 		}
 		public boolean isActuator() {
 			return isActuator;
 		}
-		public int getActionType() {
-			return actionType;
+		public ActionType getActionType() {
+			return ActionType.findFromId(actionType);
 		}
 		
 	}
