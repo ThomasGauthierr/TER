@@ -7,45 +7,52 @@ import core.device.DataType;
 import core.device.Device;
 import gnu.io.SerialPort;
 
+import javax.xml.transform.sax.SAXTransformerFactory;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Actuator extends Device implements IActuator {
     private ActionType actionType;
-    private boolean isActivated;
+    private State state;
 
     public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType) {
         super(ID, serialPort, outputStream, inputStream, dataType);
         this.actionType = actionType;
-        isActivated = false;
+        state = State.OFF;
     }
 
     @Override
-    public void sendValue(int value) {
+    public void sendState(State state) {
         try {
+            String stateName = state.name();
             //Sending the value to the actuator
-            outputStream.write(("v" + Integer.toString(value) + "\n").getBytes());
+            outputStream.write(("v" + stateName + "\n").getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void activate() {
-        isActivated = true;
-        sendValue(1);
+    public void activate(State state) {
+        if (state != State.OFF) {
+            this.state = state;
+            sendState(state);
+        } else {
+            deactivate();
+        }
     }
 
     @Override
     public void deactivate() {
-        isActivated = false;
-        sendValue(0);
+        state = State.OFF;
+        sendState(State.OFF);
     }
 
     @Override
     public boolean isActivated() {
-        return isActivated;
+        return state != State.OFF;
     }
 
     @Override
@@ -81,7 +88,7 @@ public class Actuator extends Device implements IActuator {
                 } else {
                     System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
                     //TODO: tell the manager that i am able to repair
-                    activate();
+                    activate(State.HIGH);
                     // ((Manager)evt.getSource()).repairing();
                 }
             } else {
@@ -104,5 +111,10 @@ public class Actuator extends Device implements IActuator {
         } else {
             System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + evt.getSensor().getDataType().name() + " but is " + dataType.name());
         }
+    }
+
+    @Override
+    public State getState() {
+        return state;
     }
 }

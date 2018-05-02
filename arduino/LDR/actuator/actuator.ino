@@ -31,7 +31,7 @@ void setup() {
   receivingValue = false;
   intensity = "";
   currentIntensity = 0;
-  analogWrite(ledPin, 255 * currentIntensity);
+  analogWrite(LED, 255 * currentIntensity);
 }
 
 void loop() {
@@ -59,7 +59,7 @@ void loop() {
             currentIntensity = 0;
         }
 
-        analogWrite(ledPin, 255 * currentIntensity);
+        analogWrite(LED, 255 * currentIntensity);
         intensity = "";
         receivingValue = false;
       }
