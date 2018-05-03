@@ -140,7 +140,7 @@ public class Main {
         }
 
         SerialPort fsp = new FakeSerialPort();
-        FakeSensor fakeSensor = new FakeSensor("01LigSen", 25, DataType.TEMPERATURE, fsp);
+        FakeSensor fakeSensor = new FakeSensor("01WindowSen", 25, DataType.TEMPERATURE, fsp);
         app.addSensor(fakeSensor);
 
         try {
@@ -159,6 +159,7 @@ public class Main {
             if(params[0].equalsIgnoreCase("w") && params.length == 3) {
                 fakeSensor.setFakeMessageStrategyBehavior(new WeatherStrategy(Integer.parseInt(params[1]), Double.parseDouble(params[2])));
             }
+
         }
 
         //Closing the sensors

@@ -1,4 +1,4 @@
 package core.behavior.contract;
 
-public interface ContractListener extends UnrespectedContractListener, RespectedContractListener {
+public interface ContractListener extends ViolatedContractListener, RespectedContractListener {
 }

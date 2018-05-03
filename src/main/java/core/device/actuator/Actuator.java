@@ -66,7 +66,7 @@ public class Actuator extends Device implements IActuator {
     }
 
     @Override
-    public void unrespectedContractEventReceived(ContractEvent evt) {
+    public void violatedContractEventReceived(ContractEvent evt) {
         System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> [Sensor:"+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
         if(dataType.equals(evt.getSensor().getDataType())){
             if(getActionType().equals(evt.getActionType())){

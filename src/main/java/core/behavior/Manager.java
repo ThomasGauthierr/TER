@@ -46,7 +46,7 @@ public class Manager implements Observer, ISuperContract<Message> {
                 ActionType actionType = contract.isRespected(((ISensor) o).getData().get(0));
                 System.out.println("Checking actionType of [Sensor:" + ((ISensor)o).getID() + "] -> " + actionType.name());
                 if (! actionType.equals(ActionType.OK)) {
-                    switch (contract.getContractStatus()) {
+                    switch (contract.getStatus()) {
                         case OK:
                             contract.setContractStatus(IContract.ContractStatus.VIOLATED);
                             fireUnrespectedContractEvent((ISensor) o, actionType);
@@ -55,9 +55,9 @@ public class Manager implements Observer, ISuperContract<Message> {
                             // contract is violated start repairing
                             System.out.println("Contract is violated [Sensor:" + ((ISensor)o).getID() + " ...");
                             // TODO: check if there is someone who can fix this
-                            contract.setContractStatus(IContract.ContractStatus.REAPAIRING);
+                            contract.setContractStatus(IContract.ContractStatus.REPAIRING);
                             break;
-                        case REAPAIRING:
+                        case REPAIRING:
                             // contract is repairing
                             System.out.println("Now repairing the contract ...");
                             // We assume this is repaired by magic voodo tricks so yeah
@@ -86,8 +86,8 @@ public class Manager implements Observer, ISuperContract<Message> {
 
         // TODO: change parameter ActionType to real action of the event
         ContractEvent evt = new ContractEvent(this, sensor, actionType);
-        for (UnrespectedContractListener listener : listeners) {
-            listener.unrespectedContractEventReceived(evt);
+        for (ViolatedContractListener listener : listeners) {
+            listener.violatedContractEventReceived(evt);
         }
     }
 
@@ -101,7 +101,7 @@ public class Manager implements Observer, ISuperContract<Message> {
 
     public void repairing() {
     	for(IContract<Message> contract : contracts) {
-    		contract.setContractStatus(IContract.ContractStatus.REAPAIRING);
+    		contract.setContractStatus(IContract.ContractStatus.REPAIRING);
     	}
     }
 

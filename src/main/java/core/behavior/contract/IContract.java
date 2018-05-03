@@ -1,24 +1,25 @@
 package core.behavior.contract;
 
+import core.device.sensor.ISensor;
+
 import java.util.List;
+import java.util.Observer;
 import java.util.function.Predicate;
 
-public interface IContract<T> {
+public interface IContract extends ITree<IContract>, Observer {
 
-    Predicate<T> getPredicate();
+    List<ContractObserver> getObservers();
+    List<ContractListener> getListeners();
 
-    ActionType isRespected(T data);
-    ActionType isRespected(List<T> data);
-    
-    void addObserver(ContractObserver observer);
+    void addObserver(ContractObserver contractObserver);
+    void addListener(ContractListener contractListener);
 
-    ContractStatus getContractStatus();
-    void setContractStatus(ContractStatus status);
+    Status getStatus();
 
-    enum ContractStatus {
+    enum Status {
         OK,
         VIOLATED,
-        REAPAIRING
+        REPAIRING
     }
 
 }
