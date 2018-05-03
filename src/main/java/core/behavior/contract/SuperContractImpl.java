@@ -12,6 +12,7 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
     private Predicate<T> predicate;
     private ActionType actionType;
     private HashMap<IContract<T>, Information> extraInfo;
+    private ContractObserver observer;
 
     public SuperContractImpl() {
         this.predicate = t -> true;
@@ -19,11 +20,13 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
         contracts = new ArrayList<>();
     }
 
-    public SuperContractImpl(Predicate<T> predicate, ActionType actionType){
+    public SuperContractImpl(Predicate<T> predicate, ActionType actionType, ContractObserver observer){
         this.predicate = predicate;
         this.actionType = actionType;
         this.contracts = new ArrayList<>();
         this.extraInfo = new HashMap<>();
+        this.observer = observer;
+        this.observer.setSuperContract(this);
     }
 
     @Override
@@ -76,4 +79,8 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
     	contracts.remove(contract);
     	extraInfo.remove(contract);
     }
+
+	@Override
+	public void addObserver(ContractObserver observer) {		
+	}
 }

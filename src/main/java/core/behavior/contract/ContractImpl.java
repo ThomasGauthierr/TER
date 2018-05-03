@@ -1,11 +1,13 @@
 package core.behavior.contract;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class ContractImpl<T> implements IContract<T> {
 
     private Predicate<T> predicate;
+    private List<ContractObserver> observers;
     private ActionType actionType;
     private ContractStatus status;
 
@@ -13,12 +15,14 @@ public class ContractImpl<T> implements IContract<T> {
         this.predicate = t -> true;
         this.actionType = ActionType.OK;
         this.status = ContractStatus.OK;
+        observers = new ArrayList<>();
     }
 
     public ContractImpl(Predicate<T> predicate, ActionType actionType){
         this.predicate = predicate;
         this.actionType = actionType;
         this.status = ContractStatus.OK;
+        observers = new ArrayList<>();
     }
 
     @Override
@@ -49,4 +53,16 @@ public class ContractImpl<T> implements IContract<T> {
     public void setContractStatus(ContractStatus status) {
         this.status = status;
     }
+
+	@Override
+	public void addObserver(ContractObserver observer) {
+		observers.add(observer);
+		
+	}
+	
+	private void notifyObserver(ContractEvent event) {
+		for(ContractObserver c : observers) {
+			c.notifySuperContract(event);
+		}
+	}
 }
