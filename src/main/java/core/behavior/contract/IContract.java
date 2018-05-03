@@ -9,6 +9,8 @@ public interface IContract<T> {
 
     ActionType isRespected(T data);
     ActionType isRespected(List<T> data);
+    
+    void addObserver(ContractObserver observer);
 
     ContractStatus getContractStatus();
     void setContractStatus(ContractStatus status);

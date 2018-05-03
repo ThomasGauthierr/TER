@@ -3,9 +3,20 @@ package core.behavior.contract;
 import java.util.List;
 
 public interface ISuperContract<T> extends IContract<T> {
+	
+	public class Information{
+		public int priority;
 
-    List<IContract> getContracts();
+		public Information(int priority) {
+			this.priority = priority;
+		}
+		
+	}
 
-    void addContract(IContract<T> contract);
+	List<IContract<T>> getContracts();
+
+    void addContract(IContract<T> contract, Information info);
     void removeContract(IContract<T> contract);
+
+	Information getInfo(IContract<T> contract);
 }
