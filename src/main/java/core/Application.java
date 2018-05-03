@@ -39,7 +39,7 @@ public class Application {
                 return message.getValue() > 900;
             }
         },ActionType.DECREASE);
-        List<IContract<Message>> contracts= new ArrayList();
+        List<IContract<Message>> contracts= new ArrayList<IContract<Message>>();
         contracts.add(contract);
         managers.add(new Manager(contracts, null));
     }
