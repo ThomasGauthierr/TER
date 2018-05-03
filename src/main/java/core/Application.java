@@ -3,6 +3,8 @@ package core;
 import core.behavior.contract.ActionType;
 import core.behavior.contract.ContractImpl;
 import core.behavior.contract.IContract;
+import core.behavior.contract.ISuperContract;
+import core.behavior.contract.SuperContractImpl;
 import core.behavior.Manager;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
