@@ -1,16 +1,17 @@
 package core.behavior.contract;
 
-import core.Message;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class SuperContractImpl<T> implements ISuperContract<T> {
 
+
     private List<IContract<T>> contracts;
     private Predicate<T> predicate;
     private ActionType actionType;
+    private HashMap<IContract<T>, Information> extraInfo;
 
     public SuperContractImpl() {
         this.predicate = t -> true;
@@ -22,6 +23,7 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
         this.predicate = predicate;
         this.actionType = actionType;
         this.contracts = new ArrayList<>();
+        this.extraInfo = new HashMap<>();
     }
 
     @Override
@@ -52,19 +54,26 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
     public void setContractStatus(ContractStatus status) {
 
     }
+    
+    @Override
+    public Information getInfo(IContract<T> contract) {
+        return extraInfo.get(contract);
+    }
 
     @Override
-    public List<IContract> getContracts() {
-        return null;
+    public List<IContract<T>> getContracts() {
+        return contracts;
     }
 
     @Override
     public void addContract(IContract<T> contract) {
         contracts.add(contract);
+        extraInfo.put(contract, new Information(0));
     }
 
     @Override
     public void removeContract(IContract<T> contract) {
-
+    	contracts.remove(contract);
+    	extraInfo.remove(contract);
     }
 }
