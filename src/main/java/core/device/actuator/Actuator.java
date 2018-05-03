@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class Actuator extends Device implements IActuator {
     private ActionType actionType;
     private State state;
+    ResponseType responseType;
 
     //This class is in charge of activating or deactivating the actuator
     //It requires a thread to verify the actuator state without blocking the program
@@ -49,6 +50,9 @@ public class Actuator extends Device implements IActuator {
             State backUpState = actuator.state;
 
             if (mode == Mode.ACTIVATE) {
+                if (responseType == ResponseType.NUMERIC) {
+                    state = State.HIGH;
+                }
 
                 //Changing the actuator state
                 sendState(state);
@@ -88,9 +92,10 @@ public class Actuator extends Device implements IActuator {
         }
     }
 
-    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType) {
+    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType, ResponseType responseType) {
         super(ID, serialPort, outputStream, inputStream, dataType);
         this.actionType = actionType;
+        this.responseType = responseType;
         state = State.OFF;
     }
 

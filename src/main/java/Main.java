@@ -4,6 +4,7 @@ import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;
+import core.device.actuator.IActivator;
 import core.device.actuator.IActuator;
 import core.device.sensor.FakeSensor;
 import core.device.sensor.ISensor;
@@ -105,7 +106,8 @@ public class Main {
                                 } else if (ID.substring(0, 1).equals("1")) {
                                     DataType dataType = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
                                     ActionType actionType = ActionType.values()[Integer.parseInt(ID.substring(2, 3))];
-                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType));
+                                    IActuator.ResponseType responseType = IActuator.ResponseType.values()[Integer.parseInt(ID.substring(3,4))];
+                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType, responseType));
                                     System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + dataType + " || ActionType : " + actionType);
 

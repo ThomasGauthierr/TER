@@ -16,12 +16,17 @@ public interface IActuator extends IDevice, ContractListener {
 
     State getState();
 
-    enum State{
+    enum State {
         HIGH,
         MEDHIGH,
         MEDLOW,
         LOW,
         OFF
+    }
+
+    enum ResponseType {
+        NUMERIC,
+        ANALOGIC
     }
 
 }

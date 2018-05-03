@@ -18,68 +18,56 @@
  *     --> 1 : Analogic
  *  - Id : you can put whatever you want here.
 **/
-const String ID = "1001SimAc";
+const String ID = "1011Door";
 
-String intensity;
 bool receivingValue;
-int ledPin = 9;
+String intensity;
 
-float currentIntensity = 0;
-byte luminosite;
+int switchPin = 3;
+int switchState;
+
+int defaultDelayTime = 1000;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(ledPin, OUTPUT);
   receivingValue = false;
-  intensity = "";
-  currentIntensity = 0;
-  analogWrite(ledPin, 255 * currentIntensity);
+  pinMode(switchPin, INPUT);
 }
 
 void loop() {
+  switchState = digitalRead(switchPin);
+
+  if (switchState == 0) {
+    intensity = "OFF";
+  } else {
+    intensity = "HIGH";
+  }
+
   if (Serial.available() > 0)
   {
     char read = Serial.read();
     if (receivingValue) {
-      //Receiving the intensity char per char
-      //The intensity has to be HIGH, MEDHIGH, MEDLOW, or LOW
       if (read != '\n') {
-        intensity += read;
-
-      //When we reach the end of the word, 
-      //we light the LED according to the received intensity.
+        //Do nothing
       } else {
-        if (intensity == "HIGH") {
-            currentIntensity = 1;
-        } else if (intensity == "MEDHIGH") {
-            currentIntensity = 0.7;
-        } else if (intensity == "MEDLOW") {
-            currentIntensity = 0.4;
-        } else if (intensity == "LOW") {
-            currentIntensity = 0.1;
-        } else {
-            currentIntensity = 0;
-        }
-
-        analogWrite(ledPin, 255 * currentIntensity);
-        intensity = "";
         receivingValue = false;
       }
     }
-    
+
     //Receiving the value if a 'v' is read
-    if (read == 'v') {      
+    if (read == 'v') {
       receivingValue = true;
-            
+
     //Send the ID if a 'i' is received
     } else if (read == 'i') {
       Serial.println(ID.c_str());
-
     } else if (read == 'c') {
       setup();
-      
+
     } else {
       //Do nothing if anything else is received
     }
   }
+
+  delay(defaultDelayTime);
 }
