@@ -39,8 +39,9 @@ public class Application {
                 return message.getValue() > 900;
             }
         },ActionType.DECREASE);
-
-        managers.add(new Manager(contract));
+        List<IContract<Message>> contracts= new ArrayList();
+        contracts.add(contract);
+        managers.add(new Manager(contracts, null));
     }
 
     public void init() throws TooManyListenersException {
