@@ -35,7 +35,7 @@ public class Application {
         IContract<Message> contract = new ContractImpl<>(new Predicate<Message>() {
             @Override
             public boolean test(Message message) {
-                System.out.println(this + " testing predicate : " + message.getValue() + " > 900");
+                System.out.println(this + " testing predicate : is " + message.getValue() + " > 900 ?");
                 return message.getValue() > 900;
             }
         },ActionType.DECREASE);
