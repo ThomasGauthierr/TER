@@ -18,24 +18,19 @@ bool DEBUG = false;
 short defaultDelayTime = 1000;
 unsigned long currentDelayTime;
 
-int buttonPin = 3;
+int switchPin = 3;
 
 bool doorOpen;
-int buttonState;
-
-int state;
+int switchState;
 
 void setup() { 
-  pinMode(buttonPin, INPUT);
+  pinMode(switchPin, INPUT);
    
   Serial.begin(9600);
   started = false;
   currentDelayTime = defaultDelayTime;  
-  
-  doorOpen = false;
-  buttonState = 0;
 
-  state = 0;
+  switchState = 0;
 }
 
 void loop() {    
@@ -56,7 +51,8 @@ void loop() {
   }
 
   if(started){
-    buttonState = digitalRead(buttonPin); 
+    switchState = digitalRead(switchPin);
+    Serial.println(ID + " " + String(switchState) + " " + millis());
     delay(currentDelayTime); 
   }
 }
