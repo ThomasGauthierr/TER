@@ -4,11 +4,7 @@ import core.Message;
 import core.behavior.contract.*;
 import core.device.sensor.ISensor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -43,7 +39,12 @@ public class Manager implements Observer, ISuperContract<Message> {
     public void update(Observable o, Object arg) {
         for(IContract<Message> contract : contracts) {
         	if (o instanceof ISensor) {
-                ActionType actionType = contract.isRespected(((ISensor) o).getData().get(0));
+                List<Message> msg = ((ISensor) o).getData();
+                if (msg.size() == 0)
+                    return;
+
+
+                ActionType actionType = contract.isRespected(msg.get(msg.size() - 1));
                 System.out.println("Checking actionType of [Sensor:" + ((ISensor)o).getID() + "] -> " + actionType.name());
                 if (! actionType.equals(ActionType.OK)) {
                     switch (contract.getContractStatus()) {
