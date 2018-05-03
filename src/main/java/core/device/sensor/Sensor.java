@@ -17,7 +17,7 @@ import java.util.Queue;
 
 public class Sensor extends Device implements ISensor {
 
-    private Queue<Message> queue;
+    protected Queue<Message> queue;
 
     public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize, DataType dataType) {
         super(ID, serialPort, outputStream, inputStream, dataType);

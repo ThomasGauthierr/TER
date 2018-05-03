@@ -1,9 +1,11 @@
 import core.Application;
+import core.behavior.context.WeatherStrategy;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;
 import core.device.actuator.IActuator;
+import core.device.sensor.FakeSensor;
 import core.device.sensor.ISensor;
 import core.device.sensor.Sensor;
 import core.utils.Utils;
@@ -137,6 +139,10 @@ public class Main {
                 app.addActuator((IActuator) device);
         }
 
+        SerialPort fsp = new FakeSerialPort();
+        FakeSensor fakeSensor = new FakeSensor("01LigSen", 25, DataType.TEMPERATURE, fsp);
+        app.addSensor(fakeSensor);
+
         try {
             app.init();
         } catch (TooManyListenersException e) {
@@ -144,7 +150,16 @@ public class Main {
         }
 
         Scanner sc = new Scanner(System.in);
-        sc.nextLine();
+
+        System.out.println("Control the fake data:");
+        String line;
+        while(!(line = sc.nextLine()).equalsIgnoreCase("q")) {
+            ((FakeSerialPort) fsp).triggerDataAvailable();
+            String[] params = line.split(" ");
+            if(params[0].equalsIgnoreCase("w") && params.length == 3) {
+                fakeSensor.setFakeMessageStrategyBehavior(new WeatherStrategy(Integer.parseInt(params[1]), Double.parseDouble(params[2])));
+            }
+        }
 
         //Closing the sensors
         for (ISensor sensor : app.getSensors()) {

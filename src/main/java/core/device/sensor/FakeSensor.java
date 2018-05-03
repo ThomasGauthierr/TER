@@ -2,6 +2,8 @@ package core.device.sensor;
 
 import com.google.common.collect.EvictingQueue;
 import core.Message;
+import core.behavior.context.FakeMessageStrategy;
+import core.behavior.context.IFakeValueStrategy;
 import core.device.DataType;
 import core.device.Device;
 import gnu.io.SerialPort;
@@ -11,38 +13,24 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Queue;
 
-public class FakeSensor extends Device implements ISensor {
+public class FakeSensor extends Sensor {
 
-    private Queue<Message> queue;
+    private FakeMessageStrategy fakeMessageStrategy;
 
-    public FakeSensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize, DataType dataType) {
-        super(ID, serialPort, outputStream, inputStream, dataType);
-        queue = EvictingQueue.create(bufferSize);
+    public FakeSensor(String ID, int bufferSize, DataType dataType, SerialPort serialPort) {
+        super(ID, serialPort, null, null, bufferSize, dataType);
+        fakeMessageStrategy = new FakeMessageStrategy(this);
     }
 
     @Override
     public void collect() {
-
+        Message message = fakeMessageStrategy.getNextMessage();
+        queue.add(message);
+        System.out.println("i collected fake data " + message);
     }
 
-    @Override
-    public List<Message> getData() {
-        return null;
-    }
-
-    @Override
-    public String getID() {
-        return null;
-    }
-
-    @Override
-    public DataType getDataType() {
-        return null;
-    }
-
-    @Override
-    public SerialPort getSerialPort() {
-        return null;
+    public void setFakeMessageStrategyBehavior(IFakeValueStrategy fakeValueStrategy){
+        fakeMessageStrategy.setFakeValueStrategy(fakeValueStrategy);
     }
 
     @Override
@@ -56,17 +44,11 @@ public class FakeSensor extends Device implements ISensor {
     }
 
     @Override
-    public void close() {
-
-    }
+    public void close() {}
 
     @Override
-    public void writeString(String s) {
-
-    }
+    public void writeString(String s) { }
 
     @Override
-    public void writeInt(int i) {
-
-    }
+    public void writeInt(int i) { }
 }
