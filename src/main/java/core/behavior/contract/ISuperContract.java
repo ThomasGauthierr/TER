@@ -15,7 +15,7 @@ public interface ISuperContract<T> extends IContract<T> {
 
 	List<IContract<T>> getContracts();
 
-    void addContract(IContract<T> contract);
+    void addContract(IContract<T> contract, Information info);
     void removeContract(IContract<T> contract);
 
 	Information getInfo(IContract<T> contract);

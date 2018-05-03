@@ -66,9 +66,9 @@ public class SuperContractImpl<T> implements ISuperContract<T> {
     }
 
     @Override
-    public void addContract(IContract<T> contract) {
+    public void addContract(IContract<T> contract, Information info) {
         contracts.add(contract);
-        extraInfo.put(contract, new Information(0));
+        extraInfo.put(contract, info);
     }
 
     @Override
