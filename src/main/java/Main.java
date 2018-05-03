@@ -159,6 +159,8 @@ public class Main {
             if(params[0].equalsIgnoreCase("w") && params.length == 3) {
                 fakeSensor.setFakeMessageStrategyBehavior(new WeatherStrategy(Integer.parseInt(params[1]), Double.parseDouble(params[2])));
             }
+
+            ((FakeSerialPort) fsp).triggerDataAvailable();
         }
 
         //Closing the sensors
