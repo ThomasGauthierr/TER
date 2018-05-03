@@ -41,7 +41,6 @@ public class Manager implements Observer, ISuperContract<Message> {
 
     @Override
     public void update(Observable o, Object arg) {
-<<<<<<< HEAD
         for(IContract<Message> contract : contracts) {
         	if (o instanceof ISensor) {
                 ActionType actionType = contract.isRespected(((ISensor) o).getData().get(0));
