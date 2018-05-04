@@ -18,22 +18,27 @@
  *     --> 1 : Analogic
  *  - Id : you can put whatever you want here.
 **/
-const String ID = "1000LigAc";
+const String ID = "1001LigAc";
 
 String intensity;
-int LED = 9;
 bool receivingValue;
+int ledPin1 = 9;
+int ledPin2 = 10;
 
-float currentIntensity = 0;
+float led1Intensity = 0;
+float led2Intensity = 0;
 byte luminosite;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(LED, OUTPUT);
+  pinMode(ledPin1, OUTPUT);
+  pinMode(ledPin2, OUTPUT);
   receivingValue = false;
-  currentIntensity = 0;
-  analogWrite(LED, 255 * currentIntensity);
-  intensity = "OFF";
+  intensity = "";
+  led1Intensity = 0;
+  led2Intensity = 0;
+  analogWrite(ledPin1, 255 * led1Intensity);
+  analogWrite(ledPin2, 255 * led2Intensity);
 }
 
 void loop() {
@@ -46,16 +51,29 @@ void loop() {
       if (read != '\n') {
         intensity += read;
 
-      //When we reach the end of the word,
+      //When we reach the end of the word, 
       //we light the LED according to the received intensity.
       } else {
-        if (intensity == "OFF") {
-            currentIntensity = 0;
+        if (intensity == "HIGH") {
+            led1Intensity = 1;
+            led2Intensity = 1;
+        } else if (intensity == "MEDHIGH") {
+            led1Intensity = 1;
+            led2Intensity = 0.3;
+        } else if (intensity == "MEDLOW") {
+            led1Intensity = 1;
+            led2Intensity = 0;
+        } else if (intensity == "LOW") {
+            led1Intensity = 0.5;
+            led2Intensity = 0;
         } else {
-            currentIntensity = 1;
+            led1Intensity = 0;
+            led2Intensity = 2;
         }
 
-        analogWrite(LED, 255 * currentIntensity);
+        analogWrite(ledPin1, 255 * led1Intensity);
+        analogWrite(ledPin2, 255 * led2Intensity);
+        intensity = "";
         receivingValue = false;
       }
     }
@@ -63,7 +81,6 @@ void loop() {
     //Receiving the value if a 'v' is read
     if (read == 'v') {      
       receivingValue = true;
-      intensity = "";
             
     //Send the ID if a 'i' is received
     } else if (read == 'i') {
@@ -71,10 +88,7 @@ void loop() {
 
     } else if (read == 'c') {
       setup();
-
-    } else if (read == 't') {
-      Serial.println(intensity.c_str());
-
+      
     } else {
       //Do nothing if anything else is received
     }
