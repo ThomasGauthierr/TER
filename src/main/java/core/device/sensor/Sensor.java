@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Sensor extends Observable implements ISensor {
 
-    Queue<Message> queue;
+    protected Queue<Message> queue;
     int bufferSize;
     protected String ID;
     protected SerialPort serialPort;
