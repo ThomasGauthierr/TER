@@ -5,6 +5,7 @@ import core.behavior.contract.ActionType;
 import core.behavior.contract.ContractEvent;
 import core.device.DataType;
 import core.device.Device;
+import core.utils.Utils;
 import gnu.io.SerialPort;
 
 import javax.xml.transform.sax.SAXTransformerFactory;
@@ -12,14 +13,89 @@ import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.TimeUnit;
 
 public class Actuator extends Device implements IActuator {
     private ActionType actionType;
     private State state;
+    ResponseType responseType;
 
-    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType) {
+    //This class is in charge of activating or deactivating the actuator
+    //It requires a thread to verify the actuator state without blocking the program
+    class Activator implements Runnable, IActivator {
+        Actuator actuator;
+        Mode mode;
+        State state;
+
+        //An activator with 2 args should activate the actuator
+        public Activator(Actuator actuator, State state) {
+            this.actuator = actuator;
+            if (state == State.OFF) {
+                mode = Mode.DEACTIVATE;
+            } else {
+                mode = mode.ACTIVATE;
+                this.state = state;
+            }
+        }
+
+        //An activator with 1 arg deactivate the actuator
+        public Activator(Actuator actuator) {
+            this.actuator = actuator;
+            this.mode = Mode.DEACTIVATE;
+        }
+
+        @Override
+        public void run() {
+            //We save the actuator state so we can rollback it if there is an error
+            State backUpState = actuator.state;
+
+            if (mode == Mode.ACTIVATE) {
+                if (responseType == ResponseType.NUMERIC) {
+                    state = State.HIGH;
+                }
+
+                //Changing the actuator state
+                sendState(state);
+
+                try {
+                    actuator.state = state;
+                    //We verify if the actuator changed of state correctly
+                    verifyState();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    actuator.state = backUpState;
+
+                } catch (IncorrectStateException e) {
+                    e.printStackTrace();
+                    actuator.state = backUpState;
+                }
+
+            } else {
+
+                //Changing the actuator state
+                sendState(State.OFF);
+                try {
+                    actuator.state = State.OFF;
+                    //We verify if the actuator changed of state correctly
+                    verifyState();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    actuator.state = backUpState;
+
+                } catch (IncorrectStateException e) {
+                    e.printStackTrace();
+                    actuator.state = backUpState;
+                }
+            }
+        }
+    }
+
+    public Actuator(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, DataType dataType, ActionType actionType, ResponseType responseType) {
         super(ID, serialPort, outputStream, inputStream, dataType);
         this.actionType = actionType;
+        this.responseType = responseType;
         state = State.OFF;
     }
 
@@ -36,18 +112,16 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void activate(State state) {
-        if (state != State.OFF) {
-            this.state = state;
-            sendState(state);
-        } else {
-            deactivate();
-        }
+        Activator activator = new Activator(this, state);
+        Thread t = new Thread(activator);
+        t.start();
     }
 
     @Override
     public void deactivate() {
-        state = State.OFF;
-        sendState(State.OFF);
+        Activator activator = new Activator(this);
+        Thread t = new Thread(activator);
+        t.start();
     }
 
     @Override
@@ -116,5 +190,34 @@ public class Actuator extends Device implements IActuator {
     @Override
     public State getState() {
         return state;
+    }
+
+    @Override
+    public void verifyState() throws IOException, IncorrectStateException {
+        //Empty the input stream (just in case)
+        Utils.getStringFromInputStream(this.getSerialPort().getInputStream());
+
+        askState();
+
+        String message = "";
+
+        //We wait until we receive the state
+        while (message.length() == 0) {
+            message = Utils.getStringFromInputStream(this.getSerialPort().getInputStream());
+        }
+
+        if (!message.equals(state.name())) {
+            throw new IncorrectStateException(state.name(), message);
+        }
+    }
+
+    @Override
+    //Asks the actuator to transmit its state
+    public void askState() {
+        try {
+            outputStream.write(("t" + "\n").getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

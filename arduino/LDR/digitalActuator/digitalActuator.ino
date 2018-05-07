@@ -18,11 +18,11 @@
  *     --> 1 : Analogic
  *  - Id : you can put whatever you want here.
 **/
-const String ID = "1001SimAc";
+const String ID = "1000LigAc";
 
 String intensity;
-bool receivingValue;
 int ledPin = 9;
+bool receivingValue;
 
 float currentIntensity = 0;
 byte luminosite;
@@ -31,9 +31,9 @@ void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
   receivingValue = false;
-  intensity = "";
   currentIntensity = 0;
   analogWrite(ledPin, 255 * currentIntensity);
+  intensity = "OFF";
 }
 
 void loop() {
@@ -46,23 +46,16 @@ void loop() {
       if (read != '\n') {
         intensity += read;
 
-      //When we reach the end of the word, 
+      //When we reach the end of the word,
       //we light the LED according to the received intensity.
       } else {
-        if (intensity == "HIGH") {
-            currentIntensity = 1;
-        } else if (intensity == "MEDHIGH") {
-            currentIntensity = 0.7;
-        } else if (intensity == "MEDLOW") {
-            currentIntensity = 0.4;
-        } else if (intensity == "LOW") {
-            currentIntensity = 0.1;
-        } else {
+        if (intensity == "OFF") {
             currentIntensity = 0;
+        } else {
+            currentIntensity = 1;
         }
 
         analogWrite(ledPin, 255 * currentIntensity);
-        intensity = "";
         receivingValue = false;
       }
     }
@@ -70,6 +63,7 @@ void loop() {
     //Receiving the value if a 'v' is read
     if (read == 'v') {      
       receivingValue = true;
+      intensity = "";
             
     //Send the ID if a 'i' is received
     } else if (read == 'i') {
@@ -77,7 +71,10 @@ void loop() {
 
     } else if (read == 'c') {
       setup();
-      
+
+    } else if (read == 't') {
+      Serial.println(intensity.c_str());
+
     } else {
       //Do nothing if anything else is received
     }
