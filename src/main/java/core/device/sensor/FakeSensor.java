@@ -24,6 +24,7 @@ public class FakeSensor extends Sensor {
 
     @Override
     public void collect() {
+        queue = EvictingQueue.create(bufferSize);
         Message message = fakeMessageStrategy.getNextMessage();
         queue.add(message);
         setChanged();
