@@ -1,24 +1,35 @@
 package core.device.actuator;
 
-import core.behavior.Manager;
 import core.behavior.contract.ActionType;
-import core.behavior.contract.ContractEvent;
+import core.behavior.contract.IContract;
 import core.device.DataType;
 import core.device.Device;
+import core.device.sensor.ISensor;
+import core.device.sensor.Sensor;
 import core.utils.Utils;
 import gnu.io.SerialPort;
 
-import javax.xml.transform.sax.SAXTransformerFactory;
-import java.io.Console;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.concurrent.TimeUnit;
+import java.util.Observable;
 
 public class Actuator extends Device implements IActuator {
     private ActionType actionType;
     private State state;
     ResponseType responseType;
+
+    @Override
+    public void update(Observable observable, Object o) {
+        IContract source = (IContract) observable;
+        Sensor sensor = (Sensor) o;
+
+        if(source.getStatus().isViolated()) {
+            violatedContractEventReceived(source, sensor);
+        } else {
+            respectedContractEventReceived(source, sensor);
+        }
+    }
 
     //This class is in charge of activating or deactivating the actuator
     //It requires a thread to verify the actuator state without blocking the program
@@ -33,7 +44,7 @@ public class Actuator extends Device implements IActuator {
             if (state == State.OFF) {
                 mode = Mode.DEACTIVATE;
             } else {
-                mode = mode.ACTIVATE;
+                mode = Mode.ACTIVATE;
                 this.state = state;
             }
         }
@@ -62,11 +73,7 @@ public class Actuator extends Device implements IActuator {
                     //We verify if the actuator changed of state correctly
                     verifyState();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    actuator.state = backUpState;
-
-                } catch (IncorrectStateException e) {
+                } catch (IOException | IncorrectStateException e) {
                     e.printStackTrace();
                     actuator.state = backUpState;
                 }
@@ -80,13 +87,10 @@ public class Actuator extends Device implements IActuator {
                     //We verify if the actuator changed of state correctly
                     verifyState();
 
-                } catch (IOException e) {
+                } catch (IOException | IncorrectStateException e) {
                     e.printStackTrace();
                     actuator.state = backUpState;
 
-                } catch (IncorrectStateException e) {
-                    e.printStackTrace();
-                    actuator.state = backUpState;
                 }
             }
         }
@@ -139,11 +143,10 @@ public class Actuator extends Device implements IActuator {
         super.close();
     }
 
-    @Override
-    public void violatedContractEventReceived(ContractEvent evt) {
-        System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> [Sensor:"+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
-        if(dataType.equals(evt.getSensor().getDataType())){
-            if(getActionType().equals(evt.getActionType())){
+    private void violatedContractEventReceived(IContract source, ISensor violator) {
+        System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ source.getStatus().name() + "\" event from -> [Sensor:"+ violator.getID() + ":"+ violator.getDataType().name()+ "]");
+        if(dataType.equals(violator.getDataType())){
+            if((getActionType().equals(ActionType.INCREASE) && source.getStatus().equals(IContract.Status.VIOLATED_INCREASING)) || (getActionType().equals(ActionType.DECREASE) && source.getStatus().equals(IContract.Status.VIOLATED_DECREASING))){
                 if(isActivated()) {
                     System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned off.");
                     //TODO: tell the manager that i am working against the contract
@@ -154,11 +157,10 @@ public class Actuator extends Device implements IActuator {
                     System.out.println("Not my fault");
                 }
 
-            } else if ((getActionType().equals(ActionType.INCREASE) && evt.getActionType().equals(ActionType.DECREASE))
-                    || (getActionType().equals(ActionType.DECREASE) && evt.getActionType().equals(ActionType.INCREASE))) {
+            } else if ((getActionType().equals(ActionType.INCREASE) && source.getStatus().equals(IContract.Status.VIOLATED_DECREASING))
+                    || (getActionType().equals(ActionType.DECREASE) && source.getStatus().equals(IContract.Status.VIOLATED_INCREASING))) {
                 if(isActivated()) {
-                    // not my fault
-                    System.out.println("Not my fault");
+                    System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so there is nothing i can do about it.");
                 } else {
                     System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " data so it should be turned on.");
                     //TODO: tell the manager that i am able to repair
@@ -166,10 +168,10 @@ public class Actuator extends Device implements IActuator {
                     // ((Manager)evt.getSource()).repairing();
                 }
             } else {
-                System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + evt.getActionType().name() + " so i have no idea what to do.");
+                System.out.println("[Actuator:"+ getID() + "] has " + getActionType().name() + " action over " + getDataType().name() + " and the action type is " + source.getStatus().name() + " so i have no idea what to do.");
             }
         } else {
-            System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + evt.getSensor().getDataType().name() + " but is " + dataType.name());
+            System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + violator.getDataType().name() + " but is " + dataType.name());
         }
     }
 
@@ -177,13 +179,12 @@ public class Actuator extends Device implements IActuator {
         return actionType;
     }
 
-    @Override
-    public void respectedContractEventReceived(ContractEvent evt) {
-        System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ evt.getActionType().name() + "\" event from -> [Sensor:"+ evt.getSensor().getID() + ":"+ evt.getSensor().getDataType().name()+ "]");
-        if(dataType.equals(evt.getSensor().getDataType())){
+    private void respectedContractEventReceived(IContract source, ISensor sensor) {
+        System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ source.getStatus().name() + "\" event from -> [Sensor:"+ sensor.getID() + ":"+ sensor.getDataType().name()+ "]");
+        if(dataType.equals(sensor.getDataType())){
            deactivate();
         } else {
-            System.out.println("DataType is not the same [" + getID() + "] can't handle this violation. (Needed " + evt.getSensor().getDataType().name() + " but is " + dataType.name());
+            System.out.println("DataType is not the same [" + getID() + "] i should be off. (Needed " + sensor.getDataType().name() + " but is " + dataType.name());
         }
     }
 

@@ -1,11 +1,11 @@
 package core.device.actuator;
 
-import core.behavior.contract.ContractListener;
 import core.device.IDevice;
 
 import java.io.IOException;
+import java.util.Observer;
 
-public interface IActuator extends IDevice, ContractListener {
+public interface IActuator extends IDevice, Observer {
     void sendState(State state);
     void activate(State state);
     void deactivate();

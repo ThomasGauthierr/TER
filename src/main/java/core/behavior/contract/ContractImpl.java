@@ -1,36 +1,24 @@
 package core.behavior.contract;
 
-import core.Message;
-import core.device.sensor.ISensor;
-import core.device.sensor.Sensor;
-
 import java.util.Observable;
-import java.util.function.Predicate;
 
-public class BasicContract extends AbstractContract{
+public class ContractImpl extends AbstractContract{
 
-    public BasicContract(Predicate<Observable> predicate) {
-        super(predicate);
+    public ContractImpl(String name, ContractPredicate predicate) {
+        super(name, predicate);
     }
 
     @Override
     public void update(Observable o, Object args) {
-        if(o instanceof ISensor) {
-            Sensor sensor = (Sensor) o;
-            if(getPredicate().test(sensor)) {
-                // Everything is ok
-                notifyObservers();
-            } else {
-                setStatus(Status.VIOLATED);
-                setChanged();
-                notifyObservers(this);
+        if (!getPredicate().getPredicate().test(o)) {
+            if(getPredicate().getActionType().equals(ActionType.DECREASE)) {
+                setStatus(Status.VIOLATED_DECREASING);
+            } else if (getPredicate().getActionType().equals(ActionType.INCREASE)) {
+                setStatus(Status.VIOLATED_INCREASING);
             }
-
-        } else if(o instanceof IContract) {
-
-        } else {
-            System.out.println("contract update dunno what i received");
+            setChanged();
         }
+        notifyObservers(args);
     }
 
 }

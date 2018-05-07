@@ -105,7 +105,7 @@ public class Main {
                                 } else if (ID.substring(0, 1).equals("1")) {
                                     DataType dataType = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
                                     ActionType actionType = ActionType.values()[Integer.parseInt(ID.substring(2, 3))];
-                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType));
+                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType, IActuator.ResponseType.NUMERIC));
                                     System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + dataType + " || ActionType : " + actionType);
 
