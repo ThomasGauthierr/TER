@@ -1,25 +1,32 @@
 package core.behavior.contract;
 
-import core.device.sensor.ISensor;
-
-import java.util.List;
+import java.util.Observable;
 import java.util.Observer;
 import java.util.function.Predicate;
 
-public interface IContract extends ITree<IContract>, Observer {
+public interface IContract extends Observer {
 
-    List<ContractObserver> getObservers();
-    List<ContractListener> getListeners();
+    String getName();
 
-    void addObserver(ContractObserver contractObserver);
-    void addListener(ContractListener contractListener);
+    void addObservable(Observable observable);
+    void deleteObservable(Observable observable);
+    void deleteObservables();
+    int countObservables();
+
+    ContractPredicate getPredicate();
 
     Status getStatus();
 
+
     enum Status {
         OK,
-        VIOLATED,
-        REPAIRING
+        VIOLATED_INCREASING,
+        VIOLATED_DECREASING,
+        REPAIRING;
+
+        public boolean isViolated() {
+            return this.equals(Status.VIOLATED_DECREASING) || this.equals(Status.VIOLATED_INCREASING);
+        }
     }
 
 }
