@@ -10,6 +10,7 @@ public class ContractImpl extends AbstractContract{
 
     @Override
     public void update(Observable o, Object args) {
+
         if (!getPredicate().getPredicate().test(o)) {
             if(getPredicate().getActionType().equals(ActionType.DECREASE)) {
                 setStatus(Status.VIOLATED_DECREASING);
@@ -18,7 +19,7 @@ public class ContractImpl extends AbstractContract{
             }
             setChanged();
         }
-        notifyObservers(args);
+        notifyObservers(o);
     }
 
 }

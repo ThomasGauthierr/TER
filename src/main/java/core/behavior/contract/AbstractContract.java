@@ -28,7 +28,6 @@ public abstract class AbstractContract extends Observable implements IContract  
     public void deleteObservable(Observable observable) {
         observable.deleteObserver(this);
         observables.remove(observable);
-        this.notifyObservers();
     }
 
     @Override

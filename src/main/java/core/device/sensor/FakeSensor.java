@@ -28,7 +28,7 @@ public class FakeSensor extends Sensor {
         Message message = fakeMessageStrategy.getNextMessage();
         queue.add(message);
         setChanged();
-        notifyObservers(this.queue);
+        notifyObservers(this);
         System.out.println("i collected fake data " + message);
     }
 

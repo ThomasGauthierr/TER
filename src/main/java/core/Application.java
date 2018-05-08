@@ -29,17 +29,14 @@ public class Application {
 
         // The predicate tests that the value is < 700 so the actiontype is decrease because when it is violated it means the value has decreased
         AbstractContract contract = new ContractImpl("Contract01", new ContractPredicate(o -> {
-            System.out.print("Contract01 testing on ");
             if(o instanceof ISensor) {
-                System.out.println("sensor");
                 ISensor sensor = (ISensor) o;
                 System.out.println(sensor.getData());
                 return sensor.getData().stream().anyMatch(m -> m.getValue() < 30);
             } else if(o instanceof IContract) {
-                System.out.println("contract");
             }
             return true;
-        }, ActionType.DECREASE));
+        }, ActionType.INCREASE));
 
         AbstractContract contract2 = new ContractImpl("Contract02", new ContractPredicate(o -> {
             if(o instanceof ISensor) {
@@ -56,7 +53,7 @@ public class Application {
         contracts.add(contract);
         contracts.add(contract2);
 
-        contract2.addObserver(contract);
+        contract2.addObservable(contract);
     }
 
     public void init() throws TooManyListenersException {
