@@ -8,6 +8,10 @@ public class ContractImpl extends AbstractContract{
         super(name, predicate);
     }
 
+    public ContractImpl(String name, ContractPredicate predicate, int nice) {
+        super(name, predicate, nice);
+    }
+
     @Override
     public void update(Observable o, Object args) {
 

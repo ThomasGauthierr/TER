@@ -1,6 +1,8 @@
 import core.Application;
 import core.behavior.context.WeatherStrategy;
+import core.behavior.contract.AbstractContract;
 import core.behavior.contract.ActionType;
+import core.behavior.contract.ContractImpl;
 import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;

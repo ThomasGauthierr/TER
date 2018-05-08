@@ -1,6 +1,9 @@
 package core.device.actuator;
 
+import core.behavior.contract.ActionType;
+import core.behavior.contract.IContract;
 import core.device.IDevice;
+import core.device.sensor.ISensor;
 
 import java.io.IOException;
 import java.util.Observer;
@@ -15,6 +18,10 @@ public interface IActuator extends IDevice, Observer {
     void askState();
 
     State getState();
+    ActionType getActionType();
+
+    void violatedContractEventReceived(IContract source, ISensor violator);
+    void respectedContractEventReceived(IContract source, ISensor sensor);
 
     enum State {
         HIGH,

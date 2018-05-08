@@ -1,6 +1,7 @@
 package core;
 
 import core.behavior.contract.*;
+import core.device.actuator.DecisionMaker;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 import core.device.sensor.Sensor;
@@ -36,7 +37,7 @@ public class Application {
             } else if(o instanceof IContract) {
             }
             return true;
-        }, ActionType.INCREASE));
+        }, ActionType.DECREASE));
 
         AbstractContract contract2 = new ContractImpl("Contract02", new ContractPredicate(o -> {
             if(o instanceof ISensor) {
@@ -58,7 +59,12 @@ public class Application {
 
     public void init() throws TooManyListenersException {
 
+        DecisionMaker decisionMaker = new DecisionMaker();
+
         AbstractContract test = contracts.get(0);
+
+        test.addObserver(decisionMaker);
+
         // retrieve values from sensors
         for (Sensor sensor : sensors) {
 
@@ -78,7 +84,8 @@ public class Application {
         }
 
         for (IActuator actuator : actuators) {
-            test.addObserver(actuator);
+            //test.addObserver(actuator);
+            decisionMaker.addActuator(actuator);
         }
 
     }

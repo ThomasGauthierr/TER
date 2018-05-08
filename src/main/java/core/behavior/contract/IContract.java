@@ -17,6 +17,7 @@ public interface IContract extends Observer {
 
     Status getStatus();
 
+    int getNice();
 
     enum Status {
         OK,

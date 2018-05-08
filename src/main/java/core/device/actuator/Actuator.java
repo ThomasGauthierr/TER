@@ -143,7 +143,7 @@ public class Actuator extends Device implements IActuator {
         super.close();
     }
 
-    private void violatedContractEventReceived(IContract source, ISensor violator) {
+    public void violatedContractEventReceived(IContract source, ISensor violator) {
         System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ source.getStatus().name() + "\" event from -> [Sensor:"+ violator.getID() + ":"+ violator.getDataType().name()+ "]");
         if(dataType.equals(violator.getDataType())){
             if((getActionType().equals(ActionType.INCREASE) && source.getStatus().equals(IContract.Status.VIOLATED_INCREASING)) || (getActionType().equals(ActionType.DECREASE) && source.getStatus().equals(IContract.Status.VIOLATED_DECREASING))){
@@ -179,7 +179,7 @@ public class Actuator extends Device implements IActuator {
         return actionType;
     }
 
-    private void respectedContractEventReceived(IContract source, ISensor sensor) {
+    public void respectedContractEventReceived(IContract source, ISensor sensor) {
         System.out.println("[Actuator:"+ getID() + ":"+ getDataType().name()+ "] Received \""+ source.getStatus().name() + "\" event from -> [Sensor:"+ sensor.getID() + ":"+ sensor.getDataType().name()+ "]");
         if(dataType.equals(sensor.getDataType())){
            deactivate();
