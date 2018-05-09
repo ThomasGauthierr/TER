@@ -23,6 +23,8 @@ public interface IActuator extends IDevice, Observer {
     void violatedContractEventReceived(IContract source, ISensor violator);
     void respectedContractEventReceived(IContract source, ISensor sensor);
 
+    DecisionMaker getDecisionMaker();
+
     enum State {
         HIGH,
         MEDHIGH,

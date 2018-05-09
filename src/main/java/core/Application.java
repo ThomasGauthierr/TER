@@ -33,6 +33,7 @@ public class Application {
             if(o instanceof ISensor) {
                 ISensor sensor = (ISensor) o;
                 System.out.println(sensor.getData());
+                System.out.println("Contract01 violated : " + sensor.getData().stream().anyMatch(m -> m.getValue() < 30));
                 return sensor.getData().stream().anyMatch(m -> m.getValue() < 30);
             } else if(o instanceof IContract) {
             }
@@ -59,11 +60,8 @@ public class Application {
 
     public void init() throws TooManyListenersException {
 
-        DecisionMaker decisionMaker = new DecisionMaker();
-
         AbstractContract test = contracts.get(0);
 
-        test.addObserver(decisionMaker);
 
         // retrieve values from sensors
         for (Sensor sensor : sensors) {
@@ -84,8 +82,7 @@ public class Application {
         }
 
         for (IActuator actuator : actuators) {
-            //test.addObserver(actuator);
-            decisionMaker.addActuator(actuator);
+            test.addObserver(actuator.getDecisionMaker());
         }
 
     }

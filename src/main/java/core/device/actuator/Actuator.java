@@ -18,6 +18,7 @@ public class Actuator extends Device implements IActuator {
     private ActionType actionType;
     private State state;
     ResponseType responseType;
+    private DecisionMaker decisionMaker;
 
     @Override
     public void update(Observable observable, Object o) {
@@ -101,6 +102,7 @@ public class Actuator extends Device implements IActuator {
         this.actionType = actionType;
         this.responseType = responseType;
         state = State.OFF;
+        decisionMaker = new DecisionMaker(this);
     }
 
     @Override
@@ -220,5 +222,10 @@ public class Actuator extends Device implements IActuator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public DecisionMaker getDecisionMaker() {
+        return decisionMaker;
     }
 }
