@@ -34,3 +34,24 @@ Thrown when a young data arrive before an older one.
 
 ### PE : Parity error ###
 Results from irregular changes to data, as it is recorded when it is entered in memory.
+
+## TODO:
+
+On pose un contrat sur un contexte
+
+Un contexte c'est :
+* des capteurs ;
+* des actionneurs ;
+* un nom (salle ?)
+* des données météo ?
+
+Lorsque qu'un contrat est violé, celui-ci donne un ViolatedContext avec les fautifs énumérés dans une brique de choix de décision.
+
+Une brique de choix de décision c'est :
+* un Context en entrée (violé ou pas ? ça dépend, que faire quand tout va bien = même question ue quoi faire quand tt va pas bien) ;
+* une réponse en sortie -> un objet indiquant quoi faire
+
+Optionnel:
+lorsque la décision est donnée, on étudie si elle est pertinente avec les données de learning :
+* ouvrir la fenêtre pour réduire un peu la chaleur alors qu'on est en hiver ? pas une très bonne idée
+* jsais pas, d'autres exemples quoi
