@@ -1,16 +1,18 @@
 package core.behavior.context;
 
+import core.device.actuator.Actuator;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface IContext {
 
-    int getStartingX();
-    int getEndingX();
+    List<ISensor> getSensors();
+    List<IActuator> getActuators();
 
-    Optional<Point> getPointAt(int x);
-    Optional<Point> getPointAtOrBefore(int x);
-    Optional<Point> getPointAtOrAfter(int x);
+    String getIdentifier();
 
-    void addPoint(Point point);
 
 }
