@@ -1,14 +1,14 @@
 package core.descision;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import core.Annuaire;
 import core.behavior.context.IViolatedContext;
 import core.behavior.contract.ActionType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimplePriorityDescision implements IDescisionMaker {
 
@@ -41,8 +41,8 @@ public class SimplePriorityDescision implements IDescisionMaker {
 			@Override
 			public int compare(IActuator o1, IActuator o2) {
 				Annuaire annuaire = Annuaire.getInstance();
-				
-				return annuaire.getInfo(o2.getID()).getPriority() - annuaire.getInfo(o1.getID()).getPriority() ;
+
+                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
 			}
 		});
 		needToOff.sort(new Comparator<IActuator>() {
@@ -50,8 +50,8 @@ public class SimplePriorityDescision implements IDescisionMaker {
 			@Override
 			public int compare(IActuator o1, IActuator o2) {
 				Annuaire annuaire = Annuaire.getInstance();
-				
-				return annuaire.getInfo(o2.getID()).getPriority() - annuaire.getInfo(o1.getID()).getPriority() ;
+
+                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
 			}
 		});
 		action.getActuators().addAll(needToOff);
