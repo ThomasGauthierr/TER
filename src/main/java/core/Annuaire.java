@@ -93,12 +93,14 @@ public class Annuaire {
 		private ActionType actionType;
 		private String id;
 		private String contextName;
+		private int priority;
 
 		private Information(String id, String contextName, DataType dataType, ActionType actionType) {
 			this.id = id;
 			this.contextName = contextName;
 			this.dataType = dataType;
 			this.actionType = actionType;
+            this.priority = 0;
 		}
 
 		private Information(String id, String contextName, String dataType, String actionType) {
@@ -106,6 +108,7 @@ public class Annuaire {
 			this.contextName = contextName;
 			this.dataType = DataType.findFromId(dataType);
 			this.actionType = actionType == null ? null : ActionType.findFromId(actionType);
+		    this.priority = 0;
 		}
 
 		private Information(String id, String contextName, Integer dataType, Integer actionType) {
@@ -113,6 +116,7 @@ public class Annuaire {
 			this.contextName = contextName;
 			this.dataType = DataType.findFromId(dataType);
 			this.actionType = actionType == null ? null : ActionType.findFromId(actionType);
+            this.priority = 0;
 		}
 
 		public DataType getDataType() {
@@ -134,5 +138,9 @@ public class Annuaire {
 		public boolean isActuator() {
 			return actionType == null;
 		}
+
+		public int getPriority() {
+		    return priority;
+        }
 	}
 }
