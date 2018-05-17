@@ -5,6 +5,7 @@ import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 
 import java.util.List;
+import java.util.OptionalDouble;
 
 public interface IContext {
 
@@ -21,6 +22,8 @@ public interface IContext {
     List<IActuator> getActuatorsThatDecrease(ISensor sensor);
 
     List<IActuator> getActuatorsThatIncrease(ISensor sensor);
+
+    OptionalDouble getValueOf(DataType dt);
 
     String getIdentifier();
 

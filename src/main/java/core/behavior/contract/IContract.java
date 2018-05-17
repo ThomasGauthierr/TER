@@ -1,32 +1,19 @@
 package core.behavior.contract;
 
-import java.util.Observable;
-import java.util.Observer;
+import core.behavior.context.ContextObserver;
+import core.behavior.context.IContext;
+import core.device.DataType;
+
 import java.util.function.Predicate;
 
-public interface IContract extends Observer {
+public interface IContract extends ContextObserver {
 
     String getName();
 
-    void addObservable(Observable observable);
-    void deleteObservable(Observable observable);
-    void deleteObservables();
-    int countObservables();
+    IContext getContext();
 
-    ContractPredicate getPredicate();
+    DataType getDataType();
 
-    Status getStatus();
-
-
-    enum Status {
-        OK,
-        VIOLATED_INCREASING,
-        VIOLATED_DECREASING,
-        REPAIRING;
-
-        public boolean isViolated() {
-            return this.equals(Status.VIOLATED_DECREASING) || this.equals(Status.VIOLATED_INCREASING);
-        }
-    }
+    Predicate<IContext> getPredicate();
 
 }

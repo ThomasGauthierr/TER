@@ -1,5 +1,8 @@
 package core.behavior.contract;
 
+
+import core.behavior.contract.builder.ArithmeticCondition;
+
 public enum ActionType {
 	INCREASE(0),
 	DECREASE(1),
@@ -28,4 +31,20 @@ public enum ActionType {
 			return NONE;
 		}
 	}
+
+    public static ActionType findFromId(String id) {
+        return findFromId(Integer.parseInt(id));
+    }
+
+    public static ActionType fromArithmeticCondition(ArithmeticCondition ac) {
+        switch (ac) {
+            case LOWER_THAN:
+            case LOWER_THAN_OR_EQUAL_TO:
+                return INCREASE;
+            case HIGHER_THAN:
+            case HIGHER_THAN_OR_EQUAL_TO:
+                return DECREASE;
+        }
+        return NONE;
+    }
 }

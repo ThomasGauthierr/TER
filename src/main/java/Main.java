@@ -96,7 +96,7 @@ public class Main {
                                 //Sensor
                                 if (ID.substring(0, 1).equals("0")) {
                                     DataType type = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
-                                    devices.add(new Sensor(ID, currSerialPort, outputStream, inputStream, 5, type));
+                                    devices.add(new Sensor(ID, currSerialPort, 5, type));
                                     System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + type);
 
@@ -104,7 +104,7 @@ public class Main {
                                 } else if (ID.substring(0, 1).equals("1")) {
                                     DataType dataType = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
                                     ActionType actionType = ActionType.values()[Integer.parseInt(ID.substring(2, 3))];
-                                    devices.add(new Actuator(ID, currSerialPort, outputStream, inputStream, dataType, actionType, IActuator.ResponseType.NUMERIC));
+                                    devices.add(new Actuator(ID, currSerialPort, dataType, actionType));
                                     System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + dataType + " || ActionType : " + actionType);
 
@@ -163,12 +163,12 @@ public class Main {
 
         //Closing the sensors
         for (ISensor sensor : app.getSensors()) {
-            sensor.close();
+            sensor.getSerialPort().close();
         }
 
         //Closing the actuators
         for (IActuator actuator : app.getActuators()) {
-            actuator.close();
+            actuator.getSerialPort().close();
         }
 
         System.out.println("Ports closed");

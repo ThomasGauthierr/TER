@@ -1,84 +1,138 @@
 package core;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-
+import core.behavior.context.IContext;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
-
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Annuaire {
-	
+
+	/* Singleton instance */
 	private static Annuaire instance;
+	private Map<String, Information> annuaire;
+
+	/* Private constructor */
+	private Annuaire() {
+		this.annuaire = new HashMap<>();
+	}
+
+	/* Singleton consistency */
 	public static Annuaire getInstance(){
 		if(instance==null)
 			instance = new Annuaire();
 		return instance;
 	}
-	
-	private HashMap<String, Information> annuaire;
 
-	public class Information{
-		private int dataType;
-		private boolean isActuator;
-		private int actionType;
-		
-		private Information(int dataType, int actionType){
-			this.dataType=dataType;
-			this.actionType=actionType;
-			isActuator = actionType!=-1;
-		}
-		
-		private Information(long dataType, long actionType) {
-			this.dataType=Integer.parseInt(Long.toString(dataType));
-			this.actionType=Integer.parseInt(Long.toString(actionType));
-			isActuator = actionType!=-1;
-		}
-
-		public DataType getDataType() {
-			return DataType.findFromId(dataType);
-		}
-		public boolean isActuator() {
-			return isActuator;
-		}
-		public ActionType getActionType() {
-			return ActionType.findFromId(actionType);
-		}
-		
-	}
-	
-	private Annuaire(){
-		annuaire = new HashMap<>();
-		updateAnnuaire();
-	}
-	
-	public Information getInfo(String ID){
-		return annuaire.get(ID);
+	public Information getInformationAbout(String id) {
+		return annuaire.get(id);
 	}
 
-	public void updateAnnuaire() {
-		annuaire.clear();
+	public void addSensor(ISensor sensor, IContext context) {
+		if (!context.getSensors().contains(sensor))
+			return;
+
+		annuaire.put(sensor.getID(), new Information(sensor.getID(), context.getIdentifier(), sensor.getDataType(), null));
+	}
+
+	public void addActuator(IActuator actuator, IContext context) {
+		if (!context.getActuators().contains(actuator))
+			return;
+
+		annuaire.put(actuator.getID(), new Information(actuator.getID(), context.getIdentifier(), actuator.getDataType(), actuator.getActionType()));
+	}
+
+	public void populateFromFile(String fileName) {
 		JSONParser parser = new JSONParser();
 		try {
-			JSONObject tmp = (org.json.simple.JSONObject) parser.parse(new FileReader("Annuaire.json"));
-			JSONArray a = (JSONArray) tmp.get("device");
-
-			  for (Object o : a)
-			  {
-			    JSONObject information = (JSONObject) o;
-			    annuaire.put((String) information.get("ID"), new Information((long) information.get("dataType")
-			    		, (long) information.get("actionType")));
-			    
-			  }
+			Object obj = parser.parse(new FileReader(fileName));
+			JSONArray annuaireList = (JSONArray) ((JSONObject) obj).get("devices");
+			System.out.println(annuaireList);
+			annuaireList.forEach(v -> parseDeviceObject((JSONObject) v));
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	private void parseDeviceObject(JSONObject device) {
+		//JSONObject deviceObject = (JSONObject) device.get("device");
+
+		String id = (String) device.get("ID");
+
+		String contextName = (String) device.get("contextName");
+
+		String dataType = (String) device.get("dataType");
+
+		String actionType = (String) device.get("actionType");
+
+		annuaire.put(id, new Information(
+				id,
+				contextName,
+				dataType,
+				actionType.equals("-1") ? null : actionType
+		));
+	}
+
+	public void saveToFile(String fineName) {
+		// TODO
+	}
+
+
+	public class Information{
+
+		private DataType dataType;
+		private ActionType actionType;
+		private String id;
+		private String contextName;
+
+		private Information(String id, String contextName, DataType dataType, ActionType actionType) {
+			this.id = id;
+			this.contextName = contextName;
+			this.dataType = dataType;
+			this.actionType = actionType;
+		}
+
+		private Information(String id, String contextName, String dataType, String actionType) {
+			this.id = id;
+			this.contextName = contextName;
+			this.dataType = DataType.findFromId(dataType);
+			this.actionType = actionType == null ? null : ActionType.findFromId(actionType);
+		}
+
+		private Information(String id, String contextName, Integer dataType, Integer actionType) {
+			this.id = id;
+			this.contextName = contextName;
+			this.dataType = DataType.findFromId(dataType);
+			this.actionType = actionType == null ? null : ActionType.findFromId(actionType);
+		}
+
+		public DataType getDataType() {
+			return dataType;
+		}
+
+		public ActionType getActionType() {
+			return actionType;
+		}
+
+		public String getId() {
+			return id;
+		}
+
+		public String getContextName() {
+			return contextName;
+		}
+
+		public boolean isActuator() {
+			return actionType == null;
+		}
+	}
 }

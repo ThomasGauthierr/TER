@@ -7,6 +7,7 @@ import core.device.sensor.ISensor;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
@@ -76,6 +77,12 @@ public class ContextImpl implements IContext {
         return getActuatorsOf(sensor.getDataType())
                 .stream().filter(a -> a.isActivated() && a.getActionType().equals(ActionType.INCREASE))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OptionalDouble getValueOf(DataType dt) {
+        // TODO: remove the get 0 ...
+        return getSensorsOf(dt).stream().mapToInt(v -> v.getData().get(0).getValue()).average();
     }
 
     @Override

@@ -1,23 +1,22 @@
 package core.device.actuator;
 
 import core.behavior.contract.ActionType;
+import core.device.DataType;
 import core.device.IDevice;
 
-import java.io.IOException;
-import java.util.Observer;
-
-public interface IActuator extends IDevice, Observer {
-    void sendState(State state);
-    void activate(State state);
-    void deactivate();
-    boolean isActivated();
-
-    ActionType getActionType();
-
-    void verifyState() throws IOException, IncorrectStateException;
-    void askState();
+public interface IActuator extends IDevice {
 
     State getState();
+
+    void setState(State state);
+
+    void activate();
+    void deactivate();
+
+    boolean isActivated();
+
+    DataType getDataType();
+    ActionType getActionType();
 
     enum State {
         HIGH,
@@ -25,11 +24,6 @@ public interface IActuator extends IDevice, Observer {
         MEDLOW,
         LOW,
         OFF
-    }
-
-    enum ResponseType {
-        NUMERIC,
-        ANALOGIC
     }
 
 }

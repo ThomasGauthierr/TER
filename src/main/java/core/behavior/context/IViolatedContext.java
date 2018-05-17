@@ -12,6 +12,7 @@ public interface IViolatedContext extends IContext {
     List<ISensor> getWitnesses();
 
     ActionType getActionType();
-    int[] values();
+
+    int[] getViolatingValues();
 
 }

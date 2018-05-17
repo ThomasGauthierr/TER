@@ -1,13 +1,15 @@
 {
-	"device":[
+	"devices": [
 		{
-			"ID": "TEST1",
-			"dataType": 1,
-			"actionType": -1
+			"ID": "01WindowSen",
+			"dataType": "0",
+			"actionType": "-1",
+			"contextName": "classroom1"
 		},{
 			"ID": "TEST2",
-			"dataType": 0,
-			"actionType": 0
+			"dataType": "0",
+			"actionType": "0",
+			"contextName": "classroom1"
 		}
 	]
 }

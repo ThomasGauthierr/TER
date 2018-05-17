@@ -23,4 +23,8 @@ public enum DataType {
 		}
 		return null;
 	}
+
+    public static DataType findFromId(String id) {
+        return findFromId(Integer.parseInt(id));
+    }
 }

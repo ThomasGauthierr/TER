@@ -7,28 +7,20 @@ import core.device.Device;
 import core.utils.Utils;
 import gnu.io.SerialPort;
 
-import javax.xml.crypto.Data;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
-public class Sensor extends Observable implements ISensor {
+public class Sensor extends Device implements ISensor {
 
     protected Queue<Message> queue;
-    int bufferSize;
-    protected String ID;
-    protected SerialPort serialPort;
-    protected OutputStream outputStream;
-    protected InputStream inputStream;
-    protected DataType dataType;
+    protected int bufferSize;
+    private DataType dataType;
 
-    public Sensor(String ID, SerialPort serialPort, OutputStream outputStream, InputStream inputStream, int bufferSize, DataType dataType) {
+    public Sensor(String ID, SerialPort sp, int bufferSize, DataType dataType) {
+        super(ID, sp);
         this.bufferSize = bufferSize;
-        this.ID = ID;
-        this.serialPort = serialPort;
-        this.outputStream = outputStream;
-        this.inputStream = inputStream;
         this.dataType = dataType;
         this.queue = EvictingQueue.create(bufferSize);
     }
@@ -56,9 +48,6 @@ public class Sensor extends Observable implements ISensor {
                     )
             );
         }
-
-        setChanged();
-        notifyObservers(this);
     }
 
     @Override
@@ -67,51 +56,7 @@ public class Sensor extends Observable implements ISensor {
     }
 
     @Override
-    public String getID() {
-        return ID;
+    public DataType getDataType() {
+        return this.dataType;
     }
-
-    @Override
-    public DataType getDataType() { return dataType; }
-
-    @Override
-    public SerialPort getSerialPort() {
-        return serialPort;
-    }
-
-    @Override
-    public OutputStream getOutputStream() {
-        return outputStream;
-    }
-
-    @Override
-    public InputStream getInputStream() {
-        return inputStream;
-    }
-
-    @Override
-    public void close() {
-        try {
-            outputStream.close();
-            inputStream.close();
-            serialPort.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void writeString(String s) {
-        try {
-            outputStream.write((s + "\n").getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void writeInt(int i) {
-        writeString(Integer.toString(i));
-    }
-
 }
