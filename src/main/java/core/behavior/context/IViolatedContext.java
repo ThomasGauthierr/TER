@@ -1,5 +1,6 @@
 package core.behavior.context;
 
+import core.behavior.contract.ActionType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 
@@ -9,6 +10,8 @@ public interface IViolatedContext extends IContext {
 
     List<IActuator> getResponsibleList();
     List<ISensor> getWitnesses();
+
+    ActionType getActionType();
     int[] values();
 
 }

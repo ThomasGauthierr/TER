@@ -1,6 +1,12 @@
 package core;
 
-import core.behavior.contract.*;
+import core.behavior.context.ContextImpl;
+import core.behavior.contract.ActionType;
+import core.behavior.contract.ContractImpl;
+import core.behavior.contract.IContract;
+import core.behavior.contract.builder.ArithmeticCondition;
+import core.behavior.contract.builder.ContractStepBuilder;
+import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 import core.device.sensor.Sensor;
@@ -9,9 +15,7 @@ import gnu.io.SerialPortEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 import java.util.TooManyListenersException;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Application {
@@ -25,6 +29,7 @@ public class Application {
         actuators = new ArrayList<>();
         contracts = new ArrayList<>();
 
+        ContractStepBuilder.newBuilder().name("test").on(new ContextImpl()).where(DataType.TEMPERATURE).is(ArithmeticCondition.EQUAL)
         // BASIC IMPL WITH 1 MANAGER and contract
 
         // The predicate tests that the value is < 700 so the actiontype is decrease because when it is violated it means the value has decreased
