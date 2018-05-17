@@ -27,17 +27,20 @@ public class Annuaire {
 		private int dataType;
 		private boolean isActuator;
 		private int actionType;
+		private int priority;
 		
 		private Information(int dataType, int actionType){
 			this.dataType=dataType;
 			this.actionType=actionType;
 			isActuator = actionType!=-1;
+			priority=0;
 		}
 		
 		private Information(long dataType, long actionType) {
 			this.dataType=Integer.parseInt(Long.toString(dataType));
 			this.actionType=Integer.parseInt(Long.toString(actionType));
 			isActuator = actionType!=-1;
+			priority=0;
 		}
 
 		public DataType getDataType() {
@@ -48,6 +51,10 @@ public class Annuaire {
 		}
 		public ActionType getActionType() {
 			return ActionType.findFromId(actionType);
+		}
+
+		public int getPriority() {
+			return priority;
 		}
 		
 	}
