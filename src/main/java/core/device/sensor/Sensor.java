@@ -30,6 +30,7 @@ public class Sensor extends Observable implements ISensor {
         this.outputStream = outputStream;
         this.inputStream = inputStream;
         this.dataType = dataType;
+        this.queue = EvictingQueue.create(bufferSize);
     }
 
 
@@ -46,7 +47,7 @@ public class Sensor extends Observable implements ISensor {
             return;
         }
 
-        queue = EvictingQueue.create(bufferSize);
+        queue.clear();
         for(String strValueTimestamp : values){
             queue.add(
                     new Message(strValueTimestamp.split(" ")[0],

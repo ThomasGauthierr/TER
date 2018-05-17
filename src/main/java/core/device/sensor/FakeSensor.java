@@ -32,8 +32,8 @@ public class FakeSensor extends Sensor {
         System.out.println("i collected fake data " + message);
     }
 
-    public void setFakeMessageStrategyBehavior(IFakeValueStrategy fakeValueStrategy){
-        fakeMessageStrategy.setFakeValueStrategy(fakeValueStrategy);
+    public void setFakeMessageStrategyBehavior(int value, double delta){
+        fakeMessageStrategy.setFakeValueStrategy(value, delta);
     }
 
     @Override

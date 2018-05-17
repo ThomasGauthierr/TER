@@ -1,6 +1,7 @@
 package core.behavior.context;
 
 import core.behavior.contract.IContract;
+import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 
@@ -43,6 +44,16 @@ public class ViolatedContext implements IViolatedContext {
     @Override
     public List<IActuator> getActuators() {
         return source.getContext().getActuators();
+    }
+
+    @Override
+    public List<ISensor> getSensorsOf(DataType dt) {
+        return source.getContext().getSensorsOf(dt);
+    }
+
+    @Override
+    public List<IActuator> getActuatorsOf(DataType dt) {
+        return source.getContext().getActuatorsOf(dt);
     }
 
     @Override
