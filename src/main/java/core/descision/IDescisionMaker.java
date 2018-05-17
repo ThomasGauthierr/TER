@@ -1,9 +1,9 @@
 package core.descision;
 
-import core.behavior.context.IContext;;
+import core.behavior.context.IViolatedContext;;
 
 public interface IDescisionMaker {
 
-	public Action solve(IContext ctx);
+	public Action solve(IViolatedContext ctx);
 	
 }
