@@ -6,18 +6,21 @@ import core.device.IDevice;
 public class FakeMessageStrategy {
 
     IDevice device;
-    IFakeValueStrategy fakeValueStrategy;
+    int value;
+    double delta;
 
     public FakeMessageStrategy(IDevice device){
         this.device = device;
-        this.fakeValueStrategy = new WeatherStrategy(20, 2);
+        value = 20;
+        delta = 1.5;
     }
 
     public Message getNextMessage() {
-        return new Message(device.getID(), fakeValueStrategy.getNextValue(), System.currentTimeMillis());
+        return new Message(device.getID(), (int) ((value - delta) + Math.random() * (delta * 2)), System.currentTimeMillis());
     }
 
-    public void setFakeValueStrategy(IFakeValueStrategy fakeValueStrategy) {
-        this.fakeValueStrategy = fakeValueStrategy;
+    public void setFakeValueStrategy(int value, double delta) {
+        this.value = value;
+        this.delta = delta;
     }
 }

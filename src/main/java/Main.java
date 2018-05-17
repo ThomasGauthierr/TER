@@ -1,5 +1,4 @@
 import core.Application;
-import core.behavior.context.WeatherStrategy;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
@@ -157,7 +156,7 @@ public class Main {
             ((FakeSerialPort) fsp).triggerDataAvailable();
             String[] params = line.split(" ");
             if(params[0].equalsIgnoreCase("w") && params.length == 3) {
-                fakeSensor.setFakeMessageStrategyBehavior(new WeatherStrategy(Integer.parseInt(params[1]), Double.parseDouble(params[2])));
+                fakeSensor.setFakeMessageStrategyBehavior(Integer.parseInt(params[1]), Double.parseDouble(params[2]));
             }
 
         }
