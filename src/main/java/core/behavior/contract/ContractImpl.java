@@ -5,6 +5,9 @@ import core.behavior.context.IContext;
 import core.behavior.context.IViolatedContext;
 import core.behavior.context.ViolatedContext;
 import core.behavior.contract.predicate.SensorContractPredicate;
+import core.descision.Action;
+import core.descision.IDescisionMaker;
+import core.descision.SimplePriorityDescision;
 import core.device.DataType;
 import core.device.sensor.ISensor;
 
@@ -44,7 +47,9 @@ public class ContractImpl implements IContract {
     @Override
     public void onViolatedContext(IViolatedContext violatedContext) {
         System.out.println("[IContract](" + this.getName() + ") triggered onViolatedContext event");
-        
+        IDescisionMaker descisionMaker = new SimplePriorityDescision();
+        Action decisions = descisionMaker.solve(violatedContext);
+        System.out.println(decisions);
     }
 
     @Override
