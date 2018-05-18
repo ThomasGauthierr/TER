@@ -90,7 +90,7 @@ public class SimplePriorityDescision implements IDescisionMaker {
 			for(int i = 0;i<responsible.size();i++) {
 				action.getActionTypes().add(ActionType.INCREASE);
 			}
-		}else if(aT==ActionType.DECREASE) {
+		}else {
 			for(int i = 0;i<responsible.size();i++) {
 				action.getActionTypes().add(ActionType.DECREASE);
 			}
