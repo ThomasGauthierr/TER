@@ -86,13 +86,11 @@ public class SimplePriorityDescision implements IDescisionMaker {
 			}
 		});
 		action.actuators.addAll(responsible);
-		if(aT==ActionType.INCREASE) {
-			for(int i = 0;i<responsible.size();i++) {
-				action.getActionTypes().add(ActionType.INCREASE);
-			}
-		}else {
-			for(int i = 0;i<responsible.size();i++) {
-				action.getActionTypes().add(ActionType.DECREASE);
+		for(IActuator a : action.actuators){
+			if(a.getActionType()==aT) {
+				action.states.add(IActuator.State.HIGH);
+			}else {
+				action.states.add(IActuator.State.OFF);
 			}
 		}
 		
