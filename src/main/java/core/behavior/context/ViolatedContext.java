@@ -1,5 +1,6 @@
 package core.behavior.context;
 
+import core.Message;
 import core.behavior.contract.ActionType;
 import core.behavior.contract.IContract;
 import core.device.DataType;
@@ -14,13 +15,13 @@ public class ViolatedContext implements IViolatedContext {
     private IContract source;
     private List<IActuator> responsibleList;
     private List<ISensor> witnesses;
-    private int[] values;
+    private List<Message> messages;
 
-    public ViolatedContext(IContract source, List<IActuator> responsibleList, List<ISensor> witnesses, int[] values) {
+    public ViolatedContext(IContract source, List<IActuator> responsibleList, List<ISensor> witnesses, List<Message> messages) {
         this.source = source;
         this.responsibleList = responsibleList;
         this.witnesses = witnesses;
-        this.values = values;
+        this.messages = messages;
     }
 
     @Override
@@ -39,8 +40,8 @@ public class ViolatedContext implements IViolatedContext {
     }
 
     @Override
-    public int[] getViolatingValues() {
-        return values;
+    public List<Message> getViolatingMessages() {
+        return messages;
     }
 
     @Override
@@ -84,6 +85,16 @@ public class ViolatedContext implements IViolatedContext {
     }
 
     @Override
+    public List<IContextListener> getListeners() {
+        return source.getContext().getListeners();
+    }
+
+    @Override
+    public void addListener(IContextListener listener) {
+        source.getContext().addListener(listener);
+    }
+
+    @Override
     public OptionalDouble getValueOf(DataType dt) {
         return source.getContext().getValueOf(dt);
     }
@@ -91,5 +102,10 @@ public class ViolatedContext implements IViolatedContext {
     @Override
     public String getIdentifier() {
         return source.getContext().getIdentifier();
+    }
+
+    @Override
+    public void update(ISensor source, List<Message> messageList) {
+        // no idea what to do here
     }
 }

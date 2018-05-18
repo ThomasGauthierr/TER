@@ -1,5 +1,6 @@
 package core.behavior.context;
 
+import core.Message;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.actuator.IActuator;
@@ -16,11 +17,13 @@ public class ContextImpl implements IContext {
     private String identifier;
     private List<ISensor> sensors;
     private List<IActuator> actuators;
+    private List<IContextListener> listeners;
 
     public ContextImpl(String identifier) {
         this.identifier = identifier;
         this.sensors = new Vector<>();
         this.actuators = new Vector<>();
+        this.listeners = new Vector<>();
     }
 
     @Override
@@ -80,13 +83,31 @@ public class ContextImpl implements IContext {
     }
 
     @Override
+    public List<IContextListener> getListeners() {
+        return listeners;
+    }
+
+    @Override
+    public void addListener(IContextListener listener) {
+        this.listeners.add(listener);
+    }
+
+    @Override
+    @Deprecated
     public OptionalDouble getValueOf(DataType dt) {
         // TODO: remove the get 0 ...
-        return getSensorsOf(dt).stream().mapToInt(v -> v.getData().get(0).getValue()).average();
+        return getSensorsOf(dt).stream().mapToDouble(v -> v.getData().get(0).getValue()).average();
     }
 
     @Override
     public String getIdentifier() {
         return identifier;
+    }
+
+    @Override
+    public void update(ISensor source, List<Message> messageList) {
+        // Sensor notifies the context that notifies the contracts
+        System.out.println("[IContext](" + this.getIdentifier() + ") received update event from [ISensor](" + source.getID() + ") with value " + messageList.get(0).toString());
+        listeners.forEach(l -> l.update(this, source, messageList));
     }
 }

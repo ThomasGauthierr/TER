@@ -3,6 +3,9 @@ package core;
 import core.behavior.context.ContextImpl;
 import core.behavior.context.IContext;
 import core.behavior.contract.IContract;
+import core.behavior.contract.builder.ArithmeticCondition;
+import core.behavior.contract.builder.ContractStepBuilder;
+import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 import gnu.io.SerialPort;
@@ -44,13 +47,26 @@ public class Application {
             });
         }
 
+        /* New way of building contracts, a very simple way */
+        addContract(
+                ContractStepBuilder.newBuilder()
+                        .name("contract01")
+                        .on(contexts.get("classroom1"))
+                        .where(DataType.TEMPERATURE)
+                        .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
+                        .build()
+        );
     }
 
     public void addSensor(ISensor sensor) {
         String ctxName = annuaire.getInformationAbout(sensor.getID()).getContextName();
-        if (!contexts.containsKey(ctxName)) {
-            contexts.put(ctxName, new ContextImpl(ctxName));
+        IContext ctx = contexts.get(ctxName);
+        if (ctx == null) {
+            ctx = new ContextImpl(ctxName);
+            contexts.put(ctxName, ctx);
         }
+        sensor.addListener(ctx);
+        ctx.getSensors().add(sensor);
         this.sensors.put(sensor.getID(), sensor);
     }
 
@@ -60,9 +76,14 @@ public class Application {
 
     public void addActuator(IActuator actuator) {
         String ctxName = annuaire.getInformationAbout(actuator.getID()).getContextName();
-        if (!contexts.containsKey(ctxName)) {
-            contexts.put(ctxName, new ContextImpl(ctxName));
+        IContext ctx = contexts.get(ctxName);
+        if (ctx == null) {
+            ctx = new ContextImpl(ctxName);
+            contexts.put(ctxName, ctx);
         }
+
+        // sensor.addListener(ctx);
+        ctx.getActuators().add(actuator);
         this.actuators.put(actuator.getID(), actuator);
     }
 

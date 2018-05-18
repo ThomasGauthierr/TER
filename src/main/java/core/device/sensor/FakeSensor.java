@@ -20,9 +20,8 @@ public class FakeSensor extends Sensor {
         queue = EvictingQueue.create(bufferSize);
         Message message = fakeMessageStrategy.getNextMessage();
         queue.add(message);
-        setChanged();
-        notifyObservers(this);
-        System.out.println("i collected fake data " + message);
+
+        notifyListeners(this, getData());
     }
 
     public void setFakeMessageStrategyBehavior(int value, double delta){

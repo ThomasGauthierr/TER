@@ -2,16 +2,16 @@ package core;
 
 public class Message {
 	private String id;
-    private int value;
+    private double value;
     private long time;
 
-    public Message(String id, int value, long time) {
+    public Message(String id, double value, long time) {
         this.id = id;
         this.value = value;
         this.time = time;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 

@@ -153,12 +153,12 @@ public class Main {
         System.out.println("Control the fake data:");
         String line;
         while(!(line = sc.nextLine()).equalsIgnoreCase("q")) {
-            ((FakeSerialPort) fsp).triggerDataAvailable();
             String[] params = line.split(" ");
-            if(params[0].equalsIgnoreCase("w") && params.length == 3) {
+            if (params[0].equalsIgnoreCase("w") && params.length == 3) {
                 fakeSensor.setFakeMessageStrategyBehavior(Integer.parseInt(params[1]), Double.parseDouble(params[2]));
             }
 
+            ((FakeSerialPort) fsp).triggerDataAvailable();
         }
 
         //Closing the sensors

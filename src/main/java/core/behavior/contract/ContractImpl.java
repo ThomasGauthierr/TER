@@ -1,25 +1,29 @@
 package core.behavior.contract;
 
+import core.Message;
 import core.behavior.context.IContext;
 import core.behavior.context.IViolatedContext;
 import core.behavior.context.ViolatedContext;
+import core.behavior.contract.predicate.SensorContractPredicate;
 import core.device.DataType;
 import core.device.sensor.ISensor;
 
-import java.util.function.Predicate;
+import java.util.List;
 
 public class ContractImpl implements IContract {
 
     private String name;
     private IContext context;
     private DataType dataType;
-    private ArithmeticPredicate<IContext> predicate;
+    private SensorContractPredicate predicate;
 
-    public ContractImpl(String name, IContext context, DataType dataType, ArithmeticPredicate<IContext> predicate) {
+    public ContractImpl(String name, IContext context, DataType dataType, SensorContractPredicate predicate) {
         this.name = name;
         this.context = context;
         this.dataType = dataType;
         this.predicate = predicate;
+        // Linking to the context
+        context.addListener(this);
     }
 
     @Override
@@ -38,34 +42,38 @@ public class ContractImpl implements IContract {
     }
 
     @Override
-    public Predicate<IContext> getPredicate() {
-        return predicate.getPredicate();
-    }
-
-    @Override
     public void onViolatedContext(IViolatedContext violatedContext) {
-
+        System.out.println("[IContract](" + this.getName() + ") triggered onViolatedContext event");
+        
     }
 
     @Override
-    public void update(IContext context, ISensor source, int oldValue, int newValue) {
+    public void update(IContext context, ISensor source, List<Message> messageList) {
+
+        System.out.println("[IContract](" + this.getName() + ") received update event from [IContext](" + context.getIdentifier() + ")");
+
+        if (!source.getDataType().equals(this.dataType)) {
+            System.out.println(" ---> Not the same datatype (source:" + source.getDataType().name() + ", contract:" + dataType.name() + ") not checking.");
+            return;
+        }
 
         // context should be the same
-        if (!predicate.getPredicate().test(context)) {
+        if (!predicate.test(context, source, messageList)) {
+            System.out.println("Wrng");
             ActionType at = ActionType.fromArithmeticCondition(predicate.getArithmeticCondition());
             if (at.equals(ActionType.DECREASE)) {
                 onViolatedContext(new ViolatedContext(
                         this,
                         context.getActuatorsThatDecrease(source),
                         context.getSensorsOf(source.getDataType()),
-                        new int[]{newValue})
+                        messageList)
                 );
             } else if (at.equals(ActionType.INCREASE)) {
                 onViolatedContext(new ViolatedContext(
                         this,
                         context.getActuatorsThatIncrease(source),
                         context.getSensorsOf(source.getDataType()),
-                        new int[]{newValue})
+                        messageList)
                 );
             }
         } else {

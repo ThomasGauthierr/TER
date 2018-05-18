@@ -2,6 +2,7 @@ package core.device.sensor;
 
 import com.google.common.collect.EvictingQueue;
 import core.Message;
+import core.behavior.context.IContext;
 import core.device.DataType;
 import core.device.Device;
 import core.utils.Utils;
@@ -11,18 +12,21 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.Vector;
 
 public class Sensor extends Device implements ISensor {
 
     protected Queue<Message> queue;
     protected int bufferSize;
     private DataType dataType;
+    private List<IContext> listeners;
 
     public Sensor(String ID, SerialPort sp, int bufferSize, DataType dataType) {
         super(ID, sp);
         this.bufferSize = bufferSize;
         this.dataType = dataType;
         this.queue = EvictingQueue.create(bufferSize);
+        this.listeners = new Vector<>();
     }
 
 
@@ -48,6 +52,8 @@ public class Sensor extends Device implements ISensor {
                     )
             );
         }
+
+        notifyListeners(this, getData());
     }
 
     @Override
@@ -58,5 +64,16 @@ public class Sensor extends Device implements ISensor {
     @Override
     public DataType getDataType() {
         return this.dataType;
+    }
+
+    @Override
+    public void addListener(IContext context) {
+        this.listeners.add(context);
+    }
+
+    @Override
+    public void notifyListeners(ISensor sensor, List<Message> messages) {
+        System.out.println("[ISensor](" + this.getID() + ") updated data");
+        listeners.forEach(c -> c.update(sensor, messages));
     }
 }

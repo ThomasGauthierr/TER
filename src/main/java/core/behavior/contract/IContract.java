@@ -1,19 +1,15 @@
 package core.behavior.contract;
 
-import core.behavior.context.ContextObserver;
 import core.behavior.context.IContext;
+import core.behavior.context.IContextListener;
 import core.device.DataType;
 
-import java.util.function.Predicate;
-
-public interface IContract extends ContextObserver {
+public interface IContract extends IContextListener {
 
     String getName();
 
     IContext getContext();
 
     DataType getDataType();
-
-    Predicate<IContext> getPredicate();
 
 }

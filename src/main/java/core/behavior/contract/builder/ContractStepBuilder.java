@@ -1,12 +1,11 @@
 package core.behavior.contract.builder;
 
+import com.sun.istack.internal.NotNull;
 import core.behavior.context.IContext;
-import core.behavior.contract.ArithmeticPredicate;
 import core.behavior.contract.ContractImpl;
 import core.behavior.contract.IContract;
+import core.behavior.contract.predicate.SensorContractPredicate;
 import core.device.DataType;
-
-import java.util.OptionalDouble;
 
 public class ContractStepBuilder {
 
@@ -51,9 +50,8 @@ public class ContractStepBuilder {
 
         private String id;
         private IContext context;
-        private ArithmeticPredicate<IContext> predicate;
+        private SensorContractPredicate predicate;
         private DataType dt;
-        private ArithmeticCondition condition;
 
         @Override
         public IContract build() {
@@ -68,15 +66,15 @@ public class ContractStepBuilder {
 
         @Override
         public BuildStep is(ArithmeticCondition condition, double value) {
-            predicate = new ArithmeticPredicate<>(p -> {
-                OptionalDouble val = context.getValueOf(dt);
-                return val.isPresent() && condition.express(val.getAsDouble(), value);
-            }, condition);
+            predicate = new SensorContractPredicate(m -> condition.express(m.getValue(), value), condition);
             return this;
         }
 
         @Override
-        public PredicateContextStep on(IContext context) {
+        public PredicateContextStep on(@NotNull IContext context) {
+            if (context == null) {
+                throw new NullPointerException("The given context is null");
+            }
             this.context = context;
             return this;
         }

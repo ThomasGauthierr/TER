@@ -7,7 +7,7 @@ import core.device.sensor.ISensor;
 import java.util.List;
 import java.util.OptionalDouble;
 
-public interface IContext {
+public interface IContext extends ISensorListener {
 
     List<ISensor> getSensors();
     List<IActuator> getActuators();
@@ -22,6 +22,10 @@ public interface IContext {
     List<IActuator> getActuatorsThatDecrease(ISensor sensor);
 
     List<IActuator> getActuatorsThatIncrease(ISensor sensor);
+
+    List<IContextListener> getListeners();
+
+    void addListener(IContextListener listener);
 
     OptionalDouble getValueOf(DataType dt);
 
