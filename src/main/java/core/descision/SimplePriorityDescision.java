@@ -22,7 +22,7 @@ public class SimplePriorityDescision implements IDescisionMaker {
 		List<ISensor> witness = ctx.getWitnesses();
 		Action action = new Action();
 		ActionType aT = ctx.getActionType();
-		List<IActuator> needToUse = new ArrayList<>();
+		/*List<IActuator> needToUse = new ArrayList<>();
 		List<IActuator> needToOff = new ArrayList<>();
 		if(aT==ActionType.INCREASE) {
 			needToUse=ctx.getActuatorsThatIncrease(witness.get(0));
@@ -74,7 +74,28 @@ public class SimplePriorityDescision implements IDescisionMaker {
 			for(int i = 0;i<needToUse.size();i++) {
 				action.getActionTypes().add(ActionType.DECREASE);
 			}
+		}*/
+		List<IActuator> responsible = ctx.getResponsibleList();
+		responsible.sort(new Comparator<IActuator>() {
+
+			@Override
+			public int compare(IActuator o1, IActuator o2) {
+				Annuaire annuaire = Annuaire.getInstance();
+
+				return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
+			}
+		});
+		action.actuators.addAll(responsible);
+		if(aT==ActionType.INCREASE) {
+			for(int i = 0;i<responsible.size();i++) {
+				action.getActionTypes().add(ActionType.INCREASE);
+			}
+		}else if(aT==ActionType.DECREASE) {
+			for(int i = 0;i<responsible.size();i++) {
+				action.getActionTypes().add(ActionType.DECREASE);
+			}
 		}
+		
 		
 		return action;
 	}

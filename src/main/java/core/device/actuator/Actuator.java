@@ -7,9 +7,9 @@ import gnu.io.SerialPort;
 
 public class Actuator extends Device implements IActuator {
 
-    private DataType dataType;
-    private ActionType actionType;
-    private State state;
+    protected DataType dataType;
+    protected ActionType actionType;
+    protected State state;
 
 
     public Actuator(String ID, SerialPort serialPort, DataType dataType, ActionType actionType) {
@@ -26,11 +26,13 @@ public class Actuator extends Device implements IActuator {
 
     @Override
     public void activate() {
+        this.state = State.HIGH;
         // TODO: simple thing here
     }
 
     @Override
     public void deactivate() {
+        this.state = State.OFF;
         // TODO: simple thing here
     }
 
@@ -49,5 +51,15 @@ public class Actuator extends Device implements IActuator {
     @Override
     public State getState() {
         return state;
+    }
+
+    @Override
+    public String toString() {
+        return "Actuator{" +
+                "id=" + getID() +
+                ", dataType=" + dataType +
+                ", actionType=" + actionType +
+                ", state=" + state +
+                '}';
     }
 }
