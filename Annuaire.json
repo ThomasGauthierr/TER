@@ -10,6 +10,18 @@
 			"dataType": "0",
 			"actionType": "0",
 			"contextName": "classroom1"
+		},
+		{
+			"ID": "chauffage",
+			"dataType": "0",
+			"actionType": "0",
+			"contextName": "classroom1"
+		},
+		{
+			"ID": "clime",
+			"dataType": "0",
+			"actionType": "1",
+			"contextName": "classroom1"
 		}
 	]
 }
