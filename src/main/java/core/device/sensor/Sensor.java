@@ -76,4 +76,12 @@ public class Sensor extends Device implements ISensor {
         System.out.println("[ISensor](" + this.getID() + ") updated data");
         listeners.forEach(c -> c.update(sensor, messages));
     }
+
+    @Override
+    public String toString() {
+        return "Sensor{" +
+                "id=" + getID() +
+                ", dataType=" + dataType +
+                '}';
+    }
 }

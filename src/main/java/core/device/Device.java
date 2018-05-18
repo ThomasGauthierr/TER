@@ -32,4 +32,11 @@ public abstract class Device extends Observable implements IDevice {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "ID='" + ID + '\'' +
+                '}';
+    }
 }

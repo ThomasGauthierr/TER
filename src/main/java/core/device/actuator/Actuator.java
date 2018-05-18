@@ -52,4 +52,14 @@ public class Actuator extends Device implements IActuator {
     public State getState() {
         return state;
     }
+
+    @Override
+    public String toString() {
+        return "Actuator{" +
+                "id=" + getID() +
+                ", dataType=" + dataType +
+                ", actionType=" + actionType +
+                ", state=" + state +
+                '}';
+    }
 }
