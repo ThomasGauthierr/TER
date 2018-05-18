@@ -6,6 +6,7 @@ import core.behavior.contract.ActionType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,8 @@ public class SimplePriorityDescision implements IDescisionMaker {
 		List<ISensor> witness = ctx.getWitnesses();
 		Action action = new Action();
 		ActionType aT = ctx.getActionType();
-		List<IActuator> needToUse = null;
-		List<IActuator> needToOff = null;
+		List<IActuator> needToUse = new ArrayList<>();
+		List<IActuator> needToOff = new ArrayList<>();
 		if(aT==ActionType.INCREASE) {
 			needToUse=ctx.getActuatorsThatIncrease(witness.get(0));
 			needToOff=ctx.getActuatorsThatDecrease(witness.get(0));
@@ -35,25 +36,28 @@ public class SimplePriorityDescision implements IDescisionMaker {
 		}
 		if(needToUse != null) {
 			needToUse=needToUse.stream().filter(a -> (a.getState()!=IActuator.State.HIGH)).collect(Collectors.toList());
+		
+			needToUse.sort(new Comparator<IActuator>() {
+
+				@Override
+				public int compare(IActuator o1, IActuator o2) {
+					Annuaire annuaire = Annuaire.getInstance();
+
+					return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
+				}
+			});
 		}
-		needToUse.sort(new Comparator<IActuator>() {
+		if(needToOff != null) {
+			needToOff.sort(new Comparator<IActuator>() {
 
-			@Override
-			public int compare(IActuator o1, IActuator o2) {
-				Annuaire annuaire = Annuaire.getInstance();
+				@Override
+				public int compare(IActuator o1, IActuator o2) {
+					Annuaire annuaire = Annuaire.getInstance();
 
-                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
-			}
-		});
-		needToOff.sort(new Comparator<IActuator>() {
-
-			@Override
-			public int compare(IActuator o1, IActuator o2) {
-				Annuaire annuaire = Annuaire.getInstance();
-
-                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
-			}
-		});
+	                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
+				}
+			});
+		}
 		action.getActuators().addAll(needToOff);
 		action.getActuators().addAll(needToUse);
 		if(aT==ActionType.INCREASE) {
