@@ -143,7 +143,7 @@ public class Main {
         FakeSensor fakeSensor = new FakeSensor("01WindowSen", 25, DataType.TEMPERATURE, fsp);
         FakeActuator chauffage = new FakeActuator("chauffage", fsp, DataType.TEMPERATURE, ActionType.INCREASE);
         chauffage.activate();
-        FakeActuator clime = new FakeActuator("chauffage", fsp, DataType.TEMPERATURE, ActionType.DECREASE);
+        FakeActuator clime = new FakeActuator("clime", fsp, DataType.TEMPERATURE, ActionType.DECREASE);
         app.addSensor(fakeSensor);
         app.addActuator(chauffage);
         app.addActuator(clime);
