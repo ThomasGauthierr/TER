@@ -3,6 +3,7 @@ import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
 import core.device.actuator.Actuator;
+import core.device.actuator.FakeActuator;
 import core.device.actuator.IActuator;
 import core.device.sensor.FakeSensor;
 import core.device.sensor.ISensor;
@@ -140,7 +141,12 @@ public class Main {
 
         SerialPort fsp = new FakeSerialPort();
         FakeSensor fakeSensor = new FakeSensor("01WindowSen", 25, DataType.TEMPERATURE, fsp);
+        FakeActuator chauffage = new FakeActuator("chauffage", fsp, DataType.TEMPERATURE, ActionType.INCREASE);
+        chauffage.activate();
+        FakeActuator clime = new FakeActuator("chauffage", fsp, DataType.TEMPERATURE, ActionType.DECREASE);
         app.addSensor(fakeSensor);
+        app.addActuator(chauffage);
+        app.addActuator(clime);
 
         try {
             app.init();

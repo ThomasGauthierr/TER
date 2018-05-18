@@ -47,6 +47,8 @@ public class ContractImpl implements IContract {
     @Override
     public void onViolatedContext(IViolatedContext violatedContext) {
         System.out.println("[IContract](" + this.getName() + ") triggered onViolatedContext event");
+        System.out.println("Responsibles are : ");
+        violatedContext.getResponsibleList().forEach(System.out::println);
         IDescisionMaker descisionMaker = new SimplePriorityDescision();
         Action decisions = descisionMaker.solve(violatedContext);
         System.out.println(decisions);
@@ -64,7 +66,6 @@ public class ContractImpl implements IContract {
 
         // context should be the same
         if (!predicate.test(context, source, messageList)) {
-            System.out.println("Wrng");
             ActionType at = ActionType.fromArithmeticCondition(predicate.getArithmeticCondition());
             if (at.equals(ActionType.DECREASE)) {
                 onViolatedContext(new ViolatedContext(
