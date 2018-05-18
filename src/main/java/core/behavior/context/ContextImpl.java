@@ -52,7 +52,7 @@ public class ContextImpl implements IContext {
 
     @Override
     public List<ISensor> getSensorsDecreasedBy(IActuator actuator) {
-        if (actuator.isActivated() && actuator.getActionType().equals(ActionType.DECREASE)) {
+        if (actuator.getActionType().equals(ActionType.DECREASE)) {
             return getSensorsOf(actuator.getDataType());
         } else {
             return Collections.emptyList();
@@ -61,7 +61,7 @@ public class ContextImpl implements IContext {
 
     @Override
     public List<ISensor> getSensorsIncreasedBy(IActuator actuator) {
-        if (actuator.isActivated() && actuator.getActionType().equals(ActionType.INCREASE)) {
+        if (actuator.getActionType().equals(ActionType.INCREASE)) {
             return getSensorsOf(actuator.getDataType());
         } else {
             return Collections.emptyList();
@@ -71,14 +71,14 @@ public class ContextImpl implements IContext {
     @Override
     public List<IActuator> getActuatorsThatDecrease(ISensor sensor) {
         return getActuatorsOf(sensor.getDataType())
-                .stream().filter(a -> a.isActivated() && a.getActionType().equals(ActionType.DECREASE))
+                .stream().filter(a -> a.getActionType().equals(ActionType.DECREASE))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<IActuator> getActuatorsThatIncrease(ISensor sensor) {
         return getActuatorsOf(sensor.getDataType())
-                .stream().filter(a -> a.isActivated() && a.getActionType().equals(ActionType.INCREASE))
+                .stream().filter(a -> a.getActionType().equals(ActionType.INCREASE))
                 .collect(Collectors.toList());
     }
 
