@@ -1,4 +1,5 @@
 import core.Application;
+import core.FakeSerialPort;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.IDevice;
