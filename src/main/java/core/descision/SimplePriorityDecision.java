@@ -6,14 +6,12 @@ import core.behavior.contract.ActionType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class SimplePriorityDescision implements IDescisionMaker {
+public class SimplePriorityDecision implements IDescisionMaker {
 
-	public SimplePriorityDescision() {
+	public SimplePriorityDecision() {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -7,7 +7,7 @@ import core.behavior.context.ViolatedContext;
 import core.behavior.contract.predicate.SensorContractPredicate;
 import core.descision.Action;
 import core.descision.IDescisionMaker;
-import core.descision.SimplePriorityDescision;
+import core.descision.SimplePriorityDecision;
 import core.device.DataType;
 import core.device.sensor.ISensor;
 
@@ -49,7 +49,7 @@ public class ContractImpl implements IContract {
         System.out.println("[IContract](" + this.getName() + ") triggered onViolatedContext event");
         System.out.println("Responsibles are : ");
         violatedContext.getResponsibleList().forEach(System.out::println);
-        IDescisionMaker descisionMaker = new SimplePriorityDescision();
+        IDescisionMaker descisionMaker = new SimplePriorityDecision();
         Action decisions = descisionMaker.solve(violatedContext);
         System.out.println(decisions);
     }

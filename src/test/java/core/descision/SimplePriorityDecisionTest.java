@@ -1,13 +1,5 @@
 package core.descision;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import core.FakeSerialPort;
 import core.Message;
 import core.behavior.context.ContextImpl;
@@ -22,8 +14,15 @@ import core.device.actuator.FakeActuator;
 import core.device.actuator.IActuator;
 import core.device.sensor.FakeSensor;
 import core.device.sensor.ISensor;
+import org.junit.Before;
+import org.junit.Test;
 
-public class SimplePriorityDescisionTest {
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
+public class SimplePriorityDecisionTest {
 	
 	
 	ViolatedContext ctx;
@@ -51,7 +50,7 @@ public class SimplePriorityDescisionTest {
 	
 	@Test
 	public void decisionTest() {
-		 SimplePriorityDescision sDescision = new SimplePriorityDescision();
+		SimplePriorityDecision sDescision = new SimplePriorityDecision();
 		 Action a = sDescision.solve(ctx);
 		 assertEquals(IActuator.State.OFF,a.getActionTypes().get(0));
 	}
