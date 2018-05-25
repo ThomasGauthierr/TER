@@ -55,3 +55,27 @@ Optionnel:
 lorsque la décision est donnée, on étudie si elle est pertinente avec les données de learning :
 * ouvrir la fenêtre pour réduire un peu la chaleur alors qu'on est en hiver ? pas une très bonne idée
 * jsais pas, d'autres exemples quoi
+
+-------------------------------------------
+
+Refaire la structure de l'annuaire ?
+Un truc du style : est-il plus pertinent ?
+```json
+{"contexts": [
+    {"name": "couloirEst",
+     "sensors": [{"id": "s023", "datatype":"temperature"},{"id": "s025", "datatype":"light"},...],
+     "actuators": [{"id": "a2b", "datatype":"temperature", "actiontype":"increases"},{"id": "a8l7", "datatype":"light", "actiontype":"increases"},...]
+     },
+     {"name": "couloirOuest",
+      "sensors": [{"id": "a265", "datatype":"temperature"},{"id": "c32c", "datatype":"temperature"},...],
+      "actuators": [{"id": "a8l72", "datatype":"light", "actiontype":"increases"},...]
+      },
+      {"name": "amphiA4",
+      "sensors": [],
+      "actuators": [{"id": "a2b", "datatype":"temperature", "actiontype":"decreases"},{"id": "a8l7", "datatype":"light", "actiontype":"decreases"},...]
+      },
+    ]
+}
+```
+
+Faire les contrats de contrat dans le builder et proposer différentes options : empêcher l'oscillation, donner la prioriter, etc. trouver d'autres exemples
