@@ -51,6 +51,7 @@ public class Sensor extends Device implements ISensor {
                             Long.parseLong(strValueTimestamp.split(" ")[2])
                     )
             );
+            //influxHelper.insertSensorMeasurement(this, Integer.parseInt(strValueTimestamp.split(" ")[1]));
         }
 
         notifyListeners(this, getData());
