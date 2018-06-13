@@ -1,27 +1,28 @@
 {
-	"devices": [
+	"sensors": [
 		{
-			"ID": "01WindowSen",
-			"dataType": "0",
-			"actionType": "-1",
-			"contextName": "classroom1"
-		},{
-			"ID": "TEST2",
-			"dataType": "0",
-			"actionType": "0",
-			"contextName": "classroom1"
+			"ID": "temp1",
+			"dataType": "temperature",
+			"context": "couloirEst"
 		},
 		{
-			"ID": "chauffage",
-			"dataType": "0",
-			"actionType": "0",
-			"contextName": "classroom1"
+			"ID": "temp2",
+			"dataType": "temperature",
+			"contextName": "couloirEst"
+		}
+	],
+	"actuators": [
+		{
+			"ID": "clime1",
+			"dataType": "temperature",
+			"actionType": "decreases",
+			"contextName": "couloirEst"
 		},
 		{
-			"ID": "clime",
-			"dataType": "0",
-			"actionType": "1",
-			"contextName": "classroom1"
+			"ID": "chauffage1",
+			"dataType": "temperature",
+			"actionType": "increases",
+			"contextName": "couloirEst"
 		}
 	]
 }
