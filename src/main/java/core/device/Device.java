@@ -1,5 +1,6 @@
 package core.device;
 
+import core.influxdb.InfluxHelper;
 import gnu.io.SerialPort;
 
 import java.io.IOException;
@@ -8,10 +9,12 @@ import java.util.Observable;
 public abstract class Device extends Observable implements IDevice {
     private String ID;
     private SerialPort serialPort;
+    protected InfluxHelper influxHelper;
 
     public Device(String ID, SerialPort serialPort) {
         this.ID = ID;
         this.serialPort = serialPort;
+        //this.influxHelper = InfluxHelper.getInfluxHelper();
     }
 
     @Override

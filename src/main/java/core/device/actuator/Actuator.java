@@ -3,6 +3,7 @@ package core.device.actuator;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.Device;
+import core.influxdb.InfluxHelper;
 import gnu.io.SerialPort;
 
 public class Actuator extends Device implements IActuator {
@@ -27,12 +28,14 @@ public class Actuator extends Device implements IActuator {
     @Override
     public void activate() {
         this.state = State.HIGH;
+        //influxHelper.insertActuatorMeasurement(this);
         // TODO: simple thing here
     }
 
     @Override
     public void deactivate() {
         this.state = State.OFF;
+        //influxHelper.insertActuatorMeasurement(this);
         // TODO: simple thing here
     }
 
