@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.TooManyListenersException;
 
-public abstract class Device {
+public abstract class SerialPortDevice implements IDevice {
 
     private String identifier;
     private SerialPort serialPort;
 
-    public Device(String identifier, SerialPort serialPort) throws TooManyListenersException {
+    public SerialPortDevice(String identifier, SerialPort serialPort) throws TooManyListenersException {
         this.identifier = identifier;
         this.serialPort = serialPort;
 
@@ -33,7 +33,7 @@ public abstract class Device {
 
     protected abstract void onDataAvailable(String data);
 
-    protected String read() throws IOException {
+    public String read() throws IOException {
         StringBuilder data = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
         String line;
@@ -43,12 +43,16 @@ public abstract class Device {
         return data.toString();
     }
 
-    protected void write(String message) throws IOException {
+    public void write(String message) throws IOException {
         serialPort.getOutputStream().write((message + "\n").getBytes());
     }
 
     public String getIdentifier() {
         return identifier;
+    }
+
+    public void close() {
+        this.serialPort.close();
     }
 
 }

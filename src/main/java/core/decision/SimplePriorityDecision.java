@@ -1,15 +1,9 @@
-package core.descision;
+package core.decision;
 
-import core.Annuaire;
 import core.behavior.context.IViolatedContext;
 import core.behavior.contract.ActionType;
-import core.device.actuator.IActuator;
-import core.device.sensor.ISensor;
 
-import java.util.Comparator;
-import java.util.List;
-
-public class SimplePriorityDecision implements IDescisionMaker {
+public class SimplePriorityDecision implements IDecisionMaker {
 
 	public SimplePriorityDecision() {
 		// TODO Auto-generated constructor stub
@@ -17,7 +11,7 @@ public class SimplePriorityDecision implements IDescisionMaker {
 
 	@Override
 	public Action solve(IViolatedContext ctx) {
-		List<ISensor> witness = ctx.getWitnesses();
+		// List<ISensor> witness = ctx.getWitnesses();
 		Action action = new Action();
 		ActionType aT = ctx.getActionType();
 		/*List<IActuator> needToUse = new ArrayList<>();
@@ -56,8 +50,8 @@ public class SimplePriorityDecision implements IDescisionMaker {
 				}
 			});
 		}
-		action.getActuators().addAll(needToOff);
-		action.getActuators().addAll(needToUse);
+		action.getMonitoredActuators().addAll(needToOff);
+		action.getMonitoredActuators().addAll(needToUse);
 		if(aT==ActionType.INCREASE) {
 			for(int i = 0;i<needToOff.size();i++) {
 				action.getActionTypes().add(ActionType.DECREASE);
@@ -72,7 +66,7 @@ public class SimplePriorityDecision implements IDescisionMaker {
 			for(int i = 0;i<needToUse.size();i++) {
 				action.getActionTypes().add(ActionType.DECREASE);
 			}
-		}*/
+		}*//*
 		List<IActuator> responsible = ctx.getResponsibleList();
 		responsible.sort(new Comparator<IActuator>() {
 
@@ -80,7 +74,7 @@ public class SimplePriorityDecision implements IDescisionMaker {
 			public int compare(IActuator o1, IActuator o2) {
 				Annuaire annuaire = Annuaire.getInstance();
 
-				return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
+				return annuaire.getInformationAbout(o2.getIdentifier()).getPriority() - annuaire.getInformationAbout(o1.getIdentifier()).getPriority();
 			}
 		});
 		action.actuators.addAll(responsible);
@@ -90,7 +84,7 @@ public class SimplePriorityDecision implements IDescisionMaker {
 			}else {
 				action.states.add(IActuator.State.OFF);
 			}
-		}
+		}*/
 		
 		
 		return action;

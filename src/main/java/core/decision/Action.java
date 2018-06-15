@@ -1,6 +1,5 @@
-package core.descision;
+package core.decision;
 
-import core.behavior.contract.ActionType;
 import core.device.actuator.IActuator;
 
 import java.util.ArrayList;
@@ -10,18 +9,19 @@ public class Action {
 
 	protected List<IActuator> actuators;
 	protected List<IActuator.State> states;
-	
-	
-	public List<IActuator> getActuators() {
-		return actuators;
-	}
-	public List<IActuator.State> getActionTypes() {
-		return states;
-	}
-	
+
+
 	public Action() {
 		states = new ArrayList<>();
 		actuators = new ArrayList<>();
+	}
+
+	public List<IActuator> getActuators() {
+		return actuators;
+	}
+
+	public List<IActuator.State> getActionTypes() {
+		return states;
 	}
 
 	@Override

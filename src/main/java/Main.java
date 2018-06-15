@@ -1,28 +1,26 @@
 import core.Application;
-import core.FakeSerialPort;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
-import core.device.IDevice;
-import core.device.actuator.Actuator;
-import core.device.actuator.FakeActuator;
-import core.device.actuator.IActuator;
-import core.device.sensor.FakeSensor;
-import core.device.sensor.ISensor;
-import core.device.sensor.Sensor;
+import core.device.SerialPortDevice;
+import core.device.actuator.SerialPortActuator;
+import core.device.sensor.SerialPortSensor;
 import core.utils.Utils;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.TooManyListenersException;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     private static final String IDMessage = "i\n";
-
     private static final String portNames[] = {
             "/dev/tty.usbserial-A9007UX1", // Mac OS X
             "/dev/ttyACM0", // Raspberry Pi
@@ -35,10 +33,11 @@ public class Main {
             "COM5",
             "COM6"
     };
+    public static Logger logger = Logger.getLogger(Main.class);
 
-    private static List<IDevice> getDevices() {
+    private static List<SerialPortDevice> getDevices() {
 
-        List<IDevice> devices = new ArrayList<>();
+        List<SerialPortDevice> devices = new ArrayList<>();
 
         CommPortIdentifier portID;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
@@ -95,18 +94,18 @@ public class Main {
 
                             try {
 
-                                //Sensor
+                                //SerialPortSensor
                                 if (ID.substring(0, 1).equals("0")) {
                                     DataType type = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
-                                    devices.add(new Sensor(ID, currSerialPort, 5, type));
+                                    devices.add(new SerialPortSensor(ID, currSerialPort, 5, type));
                                     System.out.println("Adding sensor " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + type);
 
-                                //Actuator
+                                    //SerialPortActuator
                                 } else if (ID.substring(0, 1).equals("1")) {
                                     DataType dataType = DataType.values()[Integer.parseInt(ID.substring(1, 2))];
                                     ActionType actionType = ActionType.values()[Integer.parseInt(ID.substring(2, 3))];
-                                    devices.add(new Actuator(ID, currSerialPort, dataType, actionType));
+                                    devices.add(new SerialPortActuator(ID, currSerialPort, dataType, actionType));
                                     System.out.println("Adding actuator " + ID + " (port " + currPortId.getName() + ")");
                                     System.out.println("DataType : " + dataType + " || ActionType : " + actionType);
 
@@ -117,7 +116,9 @@ public class Main {
 
                             //Thrown when ID is wrongly defined
                             } catch (ArrayIndexOutOfBoundsException e) {
-                                System.out.println("Device [" + ID + "] ignored, illegal ID");
+                                System.out.println("SerialPortDevice [" + ID + "] ignored, illegal ID");
+                            } catch (TooManyListenersException e) {
+                                e.printStackTrace();
                             }
                         }
                     } catch (IOException e) {
@@ -133,13 +134,13 @@ public class Main {
 
         Application app = new Application();
 
-        for(IDevice device : getDevices()){
-            if(device instanceof ISensor)
-                app.addSensor((Sensor) device);
-            if(device instanceof IActuator)
-                app.addActuator((IActuator) device);
+        for (SerialPortDevice device : getDevices()) {
+            if (device instanceof SerialPortSensor)
+                app.addSensor((SerialPortSensor) device);
+            if (device instanceof SerialPortActuator)
+                app.addActuator((SerialPortActuator) device);
         }
-
+/*
         SerialPort fsp = new FakeSerialPort();
         FakeSensor fakeSensor = new FakeSensor("01WindowSen", 25, DataType.TEMPERATURE, fsp);
         FakeActuator chauffage = new FakeActuator("chauffage", fsp, DataType.TEMPERATURE, ActionType.INCREASE);
@@ -148,13 +149,13 @@ public class Main {
         app.addSensor(fakeSensor);
         app.addActuator(chauffage);
         app.addActuator(clime);
-
+*/
         try {
             app.init();
         } catch (TooManyListenersException e) {
             e.printStackTrace();
         }
-
+/*
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Control the fake data:");
@@ -167,16 +168,10 @@ public class Main {
 
             ((FakeSerialPort) fsp).triggerDataAvailable();
         }
-
+*/
         //Closing the sensors
-        for (ISensor sensor : app.getSensors()) {
-            sensor.getSerialPort().close();
-        }
-
-        //Closing the actuators
-        for (IActuator actuator : app.getActuators()) {
-            actuator.getSerialPort().close();
-        }
+        for (SerialPortDevice d : getDevices())
+            d.close();
 
         System.out.println("Ports closed");
     }

@@ -1,15 +1,11 @@
 package core.behavior.contract;
 
-import core.behavior.context.IContext;
-import core.behavior.context.IContextListener;
-import core.device.DataType;
+import core.behavior.context.IContextObserver;
+import core.behavior.context.MonitoredEntity;
 
-public interface IContract extends IContextListener {
+
+public interface IContract extends IContextObserver, MonitoredEntity {
 
     String getName();
-
-    IContext getContext();
-
-    DataType getDataType();
 
 }

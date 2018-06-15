@@ -11,13 +11,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class InfluxHelper {
-    private static InfluxHelper influxHelper;
-    private InfluxDB influxDB;
-
     private static final String DB_NAME = "test";
     private static final String DB_URL = "127.0.0.1:8086";
     private static final String MEASUREMENT_SENSORS = "sensors";
     private static final String MEASUREMENT_ACTUATORS = "actuators";
+    private static InfluxHelper influxHelper;
+    private InfluxDB influxDB;
 
     private InfluxHelper() {
         influxDB = InfluxDBFactory.connect(DB_URL, "admin", "admin");
@@ -39,7 +38,7 @@ public class InfluxHelper {
     }
 
     public void insertSensorMeasurement(ISensor sensor, int collectedValue) {
-        String ID = sensor.getID();
+        String ID = sensor.getIdentifier();
         String dataType = sensor.getDataType().toString();
 
         long currentTime = System.currentTimeMillis();
@@ -54,7 +53,7 @@ public class InfluxHelper {
     }
 
     public void insertActuatorMeasurement(IActuator actuator) {
-        String ID = actuator.getID();
+        String ID = actuator.getIdentifier();
         String actionType = actuator.getActionType().toString();
         String dataType = actuator.getDataType().toString();
         String state = actuator.getState().toString();

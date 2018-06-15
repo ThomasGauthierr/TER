@@ -1,6 +1,6 @@
 package core;
 
-import core.behavior.context.IContext;
+import core.behavior.context.ConcreteContext;
 import core.behavior.contract.ActionType;
 import core.device.DataType;
 import core.device.actuator.IActuator;
@@ -37,18 +37,18 @@ public class Annuaire {
 		return annuaire.get(id);
 	}
 
-	public void addSensor(ISensor sensor, IContext context) {
-		if (!context.getSensors().contains(sensor))
+	public void addSensor(ISensor sensor, ConcreteContext context) {
+		if (!context.getMonitoredEntities().contains(sensor))
 			return;
 
-		annuaire.put(sensor.getID(), new Information(sensor.getID(), context.getIdentifier(), sensor.getDataType(), null));
+		annuaire.put(sensor.getIdentifier(), new Information(sensor.getIdentifier(), context.getIdentifier(), sensor.getDataType(), null));
 	}
 
-	public void addActuator(IActuator actuator, IContext context) {
+	public void addActuator(IActuator actuator, ConcreteContext context) {
 		if (!context.getActuators().contains(actuator))
 			return;
 
-		annuaire.put(actuator.getID(), new Information(actuator.getID(), context.getIdentifier(), actuator.getDataType(), actuator.getActionType()));
+		annuaire.put(actuator.getIdentifier(), new Information(actuator.getIdentifier(), context.getIdentifier(), actuator.getDataType(), actuator.getActionType()));
 	}
 
 	public void populateFromFile(String fileName) {

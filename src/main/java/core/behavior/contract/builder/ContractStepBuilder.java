@@ -1,11 +1,15 @@
 package core.behavior.contract.builder;
 
 import com.sun.istack.internal.NotNull;
+import core.Message;
 import core.behavior.context.IContext;
-import core.behavior.contract.ContractImpl;
+import core.behavior.context.MetaContext;
+import core.behavior.contract.ConcreteContract;
 import core.behavior.contract.IContract;
-import core.behavior.contract.predicate.SensorContractPredicate;
+import core.behavior.contract.MetaContract;
 import core.device.DataType;
+
+import java.util.function.Predicate;
 
 public class ContractStepBuilder {
 
@@ -20,10 +24,22 @@ public class ContractStepBuilder {
         SubjectStep name(String id);
     }
 
+    public interface TypeStep {
+        MetaStep asMetaContract();
+
+        ConcreteStep asConcreteContract();
+    }
+
+    public interface MetaStep {
+
+    }
+
+    public interface ConcreteStep {
+
+    }
+
     public interface SubjectStep {
         PredicateContextStep on(IContext context);
-        // PredicateContractStep on(IContract contract);
-        // IMPL. Contract of contract later
     }
 
     public interface PredicateContextStep {
@@ -50,12 +66,16 @@ public class ContractStepBuilder {
 
         private String id;
         private IContext context;
-        private SensorContractPredicate predicate;
+        private Predicate<Message> predicate;
         private DataType dt;
+        private boolean concrete;
 
         @Override
         public IContract build() {
-            return new ContractImpl(id, context, dt, predicate);
+
+            if (concrete)
+                return new ConcreteContract(id, context, dt, predicate);
+            return new MetaContract(id, (MetaContext) context);
         }
 
         @Override
@@ -66,7 +86,7 @@ public class ContractStepBuilder {
 
         @Override
         public BuildStep is(ArithmeticCondition condition, double value) {
-            predicate = new SensorContractPredicate(m -> condition.express(m.getValue(), value), condition);
+            predicate = o -> condition.express(o.getValue(), value);
             return this;
         }
 
