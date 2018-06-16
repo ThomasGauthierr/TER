@@ -21,25 +21,17 @@ public class ContractStepBuilder {
     }
 
     public interface IdStep {
-        TypeStep name(String id);
+        SubjectStep name(String id);
     }
 
     public interface TypeStep {
-        SubjectStep asMetaContract();
+        BuildStep asMetaContract();
 
-        SubjectStep asConcreteContract();
-    }
-
-    public interface MetaStep {
-
-    }
-
-    public interface ConcreteStep {
-
+        PredicateContextStep asConcreteContract();
     }
 
     public interface SubjectStep {
-        PredicateContextStep on(IContext context);
+        TypeStep on(IContext context);
     }
 
     public interface PredicateContextStep {
@@ -62,7 +54,7 @@ public class ContractStepBuilder {
         IContract build();
     }
 
-    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep, TypeStep, MetaStep, ConcreteStep {
+    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep, TypeStep {
 
         private String id;
         private IContext context;
@@ -83,7 +75,7 @@ public class ContractStepBuilder {
         }
 
         @Override
-        public TypeStep name(String id) {
+        public SubjectStep name(String id) {
             this.id = id;
             return this;
         }
@@ -95,7 +87,7 @@ public class ContractStepBuilder {
         }
 
         @Override
-        public PredicateContextStep on(@NotNull IContext context) {
+        public TypeStep on(@NotNull IContext context) {
             if (context == null) {
                 throw new NullPointerException("The given context is null");
             }
@@ -110,13 +102,13 @@ public class ContractStepBuilder {
         }
 
         @Override
-        public SubjectStep asMetaContract() {
+        public BuildStep asMetaContract() {
             this.concrete = false;
             return this;
         }
 
         @Override
-        public SubjectStep asConcreteContract() {
+        public PredicateContextStep asConcreteContract() {
             this.concrete = true;
             return this;
         }

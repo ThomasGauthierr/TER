@@ -79,7 +79,7 @@ public class ConcreteContext implements IContext, ISensorObserver {
         this.lastUpdated = source;
         this.lastMessage = newMessage;
 
-        System.out.println("[ConcreteContext] received -> " + newMessage.toString());
+        System.out.println("[ConcreteContext] Context has changed : [Sensor] " + source.getIdentifier() + " send " + newMessage.toString());
         notifyObservers();
     }
 }

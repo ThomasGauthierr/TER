@@ -33,7 +33,7 @@ public class SerialPortSensor extends SerialPortDevice implements ISensor {
 
         // System.out.println("Received data : " + data);
 
-        lastMessage = new Message(values[0], Double.valueOf(values[1]), Long.valueOf(values[2]), this);
+        lastMessage = new Message(values[0], Double.valueOf(values[1]), Long.valueOf(values[2]), this, dataType);
         notifyObservers();
     }
 

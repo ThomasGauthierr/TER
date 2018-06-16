@@ -7,6 +7,8 @@ import core.behavior.context.IViolatedContext;
 import core.behavior.context.ViolatedContext;
 import core.device.DataType;
 
+import java.util.List;
+import java.util.Vector;
 import java.util.function.Predicate;
 
 /**
@@ -18,11 +20,17 @@ public class ConcreteContract implements IContract {
     private IContext observedContext;
     private DataType dataType;
     private Predicate<Message> predicate;
+    private Status status;
+    private List<IContractObserver> observers;
+    private IViolatedContext violatedContext;
 
     public ConcreteContract(String identifier, IContext observedContext, DataType dataType, Predicate<Message> predicate) {
         this.identifier = identifier;
         this.observedContext = observedContext;
         this.predicate = predicate;
+        this.status = Status.PASS;
+        this.dataType = dataType;
+        this.observers = new Vector<>();
     }
 
     @Override
@@ -38,19 +46,49 @@ public class ConcreteContract implements IContract {
         ConcreteContext concreteContext = (ConcreteContext) source;
         Message lastMessage = (Message) arg;
 
-        System.out.println("received a context update from " + source.getIdentifier());
+        System.out.println("[" + getName() + "] Context " + source.getIdentifier() + " has been updated");
 
-        if (predicate.test(lastMessage)) {
-            System.out.println("Not violated");
-        } else {
-            IViolatedContext violatedContext = new ViolatedContext(this, concreteContext, lastMessage.getSource(), lastMessage);
-            System.out.println("Violated !");
+        if (lastMessage.getDatatype().equals(dataType)) {
+            if (predicate.test(lastMessage)) {
+                System.out.println("-->Not violated");
+                if (status != Status.PASS) {
+                    this.status = Status.PASS;
+                    notifyObservers();
+                }
+
+            } else if (status != Status.VIOLATED) {
+                violatedContext = new ViolatedContext(this, concreteContext, lastMessage.getSource(), lastMessage);
+                this.status = Status.VIOLATED;
+                System.out.println("-->Violated !");
+                notifyObservers();
+            }
         }
+
 
     }
 
     @Override
     public String getName() {
         return identifier;
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
+
+    @Override
+    public void addObserver(IContractObserver observer) {
+        this.observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(IContractObserver observer) {
+        this.observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        observers.forEach(o -> o.update(this, violatedContext));
     }
 }

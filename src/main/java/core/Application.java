@@ -2,6 +2,7 @@ package core;
 
 import core.behavior.context.ConcreteContext;
 import core.behavior.context.IContext;
+import core.behavior.context.MetaContext;
 import core.behavior.contract.IContract;
 import core.behavior.contract.builder.ArithmeticCondition;
 import core.behavior.contract.builder.ContractStepBuilder;
@@ -38,13 +39,36 @@ public class Application {
             addContract(
                     ContractStepBuilder.newBuilder()
                             .name("contract01")
-                            .asConcreteContract()
                             .on(context)
+                            .asConcreteContract()
                             .where(DataType.TEMPERATURE)
                             .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
                             .build()
             );
+
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contract02")
+                            .on(context)
+                            .asConcreteContract()
+                            .where(DataType.LIGHT)
+                            .is(ArithmeticCondition.HIGHER_THAN, 50)
+                            .build()
+            );
+
+            IContext metaContext = new MetaContext("BatB");
+            metaContext.addObserver(contracts.get("contract01"));
+            metaContext.addObserver(contracts.get("contract02"));
+
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contrBat")
+                            .on(metaContext)
+                            .asMetaContract()
+                            .build()
+            );
         }
+
 
     }
 
