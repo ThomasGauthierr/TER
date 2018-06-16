@@ -14,6 +14,7 @@ public class SerialPortSensor extends SerialPortDevice implements ISensor {
     private DataType dataType;
     private Message lastMessage;
     private List<ISensorObserver> observers;
+    private Integer lastSentValue;
 
     public SerialPortSensor(String identifier, SerialPort serialPort, int bufferSize, DataType dataType) throws TooManyListenersException {
         super(identifier, serialPort);
@@ -35,6 +36,11 @@ public class SerialPortSensor extends SerialPortDevice implements ISensor {
 
         lastMessage = new Message(values[0], Double.valueOf(values[1]), Long.valueOf(values[2]), this, dataType);
         notifyObservers();
+        //if (lastSentValue == null || lastSentValue + 10 < Integer.valueOf(values[1]) || lastSentValue - 10 > Integer.valueOf(values[1])) {
+        //    lastSentValue = Integer.valueOf(values[1]);
+            helper.insertSensorMeasurement(this, Integer.valueOf(values[1]));
+        //    System.out.println("sent : " + lastSentValue);
+        //}
     }
 
     @Override

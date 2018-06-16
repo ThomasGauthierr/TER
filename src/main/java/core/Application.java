@@ -31,10 +31,8 @@ public class Application {
 
     public void init() throws TooManyListenersException {
 
-
-
         /* New way of building contracts, a very simple way */
-        IContext context = contexts.get("couloirEst");
+        IContext context = contexts.get("TD06");
         if (context != null) {
             addContract(
                     ContractStepBuilder.newBuilder()
@@ -52,13 +50,16 @@ public class Application {
                             .on(context)
                             .asConcreteContract()
                             .where(DataType.LIGHT)
-                            .is(ArithmeticCondition.HIGHER_THAN, 50)
+                            .is(ArithmeticCondition.HIGHER_THAN, 900)
                             .build()
             );
 
-            IContext metaContext = new MetaContext("BatB");
+            MetaContext metaContext = new MetaContext("BatB");
             metaContext.addObserver(contracts.get("contract01"));
             metaContext.addObserver(contracts.get("contract02"));
+
+            metaContext.addMonitoredEntity(contracts.get("contract01"));
+            metaContext.addMonitoredEntity(contracts.get("contract02"));
 
             addContract(
                     ContractStepBuilder.newBuilder()

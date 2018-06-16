@@ -48,6 +48,8 @@ public class SerialPortActuator extends SerialPortDevice implements IActuator {
             this.state = State.OFF;
             e.printStackTrace();
         }
+
+        helper.insertActuatorMeasurement(this);
     }
 
     @Override
@@ -63,6 +65,8 @@ public class SerialPortActuator extends SerialPortDevice implements IActuator {
             e.printStackTrace();
             this.state = State.ON;
         }
+
+        helper.insertActuatorMeasurement(this);
     }
 
     public DataType getDataType() {

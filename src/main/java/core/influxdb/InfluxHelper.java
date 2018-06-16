@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class InfluxHelper {
     private static final String DB_NAME = "test";
-    private static final String DB_URL = "127.0.0.1:8086";
+    private static final String DB_URL = "http://localhost:8086";
     private static final String MEASUREMENT_SENSORS = "sensors";
     private static final String MEASUREMENT_ACTUATORS = "actuators";
     private static InfluxHelper influxHelper;

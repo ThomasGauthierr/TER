@@ -41,6 +41,11 @@ public class MetaContext implements IContext, IContractObserver {
         this.observers.add(observer);
     }
 
+    public void addMonitoredEntity(IContract contract) {
+        monitoredContracts.add(contract);
+        contract.addObserver(this);
+    }
+
     @Override
     public void removeObserver(IContextObserver observer) {
         this.observers.remove(observer);

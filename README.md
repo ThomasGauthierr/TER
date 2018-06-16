@@ -35,6 +35,20 @@ Thrown when a young data arrive before an older one.
 ### PE : Parity error ###
 Results from irregular changes to data, as it is recorded when it is entered in memory.
 
+## InfluxDB/Grafana ##
+* InfluxDB :
+- [Téléchargez InfluxDB](https://portal.influxdata.com/downloads) puis dézipez-le
+- Lancez influxd.exe
+- Lancez influx.exe et faites la commande "CREATE DATABASE test"
+
+Installer Grafana :
+* Grafana :
+- [Téléchargez Grafana](https://grafana.com/grafana/download) puis dézipez-le
+- Lancez grafana-server.exe
+- Rendez-vous sur [http://127.0.0.1:3000](http://127.0.0.1:3000) et connectez-vous avec les ID "admin" et "admin" par défaut
+- Créez un datasource InfluxDB avec le port 8086 si vous ne l'avez pas modifié
+- Créez un dashboard avec nimporte quel composant et requête
+
 ## TODO:
 
 On pose un contrat sur un contexte

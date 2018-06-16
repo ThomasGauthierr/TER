@@ -1,9 +1,9 @@
 {
 	"sensors": [
 		{
-			"ID": "00LigSen",
-			"dataType": "temperature",
-			"contextName": "couloirEst"
+			"ID": "01LigSen",
+			"dataType": "light",
+			"contextName": "TD06"
 		},
 		{
 			"ID": "temp1",
@@ -15,6 +15,7 @@
 			"dataType": "temperature",
 			"contextName": "couloirEst"
 		}
+
 	],
 	"actuators": [
 		{
@@ -28,6 +29,12 @@
 			"dataType": "temperature",
 			"actionType": "increases",
 			"contextName": "couloirEst"
+		},
+		{
+			"ID": "1100LigAc",
+			"dataType": "light",
+			"actionType": "increase",
+			"contextName": "TD06"
 		}
 	]
 }
