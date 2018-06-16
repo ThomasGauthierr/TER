@@ -1,15 +1,14 @@
 package core;
 
-import core.behavior.context.ContextImpl;
+import core.behavior.context.ConcreteContext;
 import core.behavior.context.IContext;
+import core.behavior.context.MetaContext;
 import core.behavior.contract.IContract;
 import core.behavior.contract.builder.ArithmeticCondition;
 import core.behavior.contract.builder.ContractStepBuilder;
 import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
 
 import java.util.*;
 
@@ -32,42 +31,61 @@ public class Application {
 
     public void init() throws TooManyListenersException {
 
-        for (ISensor sensor : sensors.values()) {
 
-            SerialPort sp = sensor.getSerialPort();
-            sp.notifyOnDataAvailable(true);
-            sp.addEventListener(serialPortEvent -> {
-                switch (serialPortEvent.getEventType()) {
-                    case SerialPortEvent.DATA_AVAILABLE:
-                        sensor.collect();
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
 
         /* New way of building contracts, a very simple way */
-        addContract(
-                ContractStepBuilder.newBuilder()
-                        .name("contract01")
-                        .on(contexts.get("classroom1"))
-                        .where(DataType.TEMPERATURE)
-                        .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
-                        .build()
-        );
+        IContext context = contexts.get("couloirEst");
+        if (context != null) {
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contract01")
+                            .on(context)
+                            .asConcreteContract()
+                            .where(DataType.TEMPERATURE)
+                            .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
+                            .build()
+            );
+
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contract02")
+                            .on(context)
+                            .asConcreteContract()
+                            .where(DataType.LIGHT)
+                            .is(ArithmeticCondition.HIGHER_THAN, 50)
+                            .build()
+            );
+
+            IContext metaContext = new MetaContext("BatB");
+            metaContext.addObserver(contracts.get("contract01"));
+            metaContext.addObserver(contracts.get("contract02"));
+
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contrBat")
+                            .on(metaContext)
+                            .asMetaContract()
+                            .build()
+            );
+        }
+
+
     }
 
     public void addSensor(ISensor sensor) {
-        String ctxName = annuaire.getInformationAbout(sensor.getID()).getContextName();
-        IContext ctx = contexts.get(ctxName);
-        if (ctx == null) {
-            ctx = new ContextImpl(ctxName);
-            contexts.put(ctxName, ctx);
+        System.out.println("looking for " + sensor.getIdentifier());
+        Annuaire.Information infos = annuaire.getInformationAbout(sensor.getIdentifier());
+        if (infos == null) {
+            throw new NullPointerException("the given sensor is not in the list");
         }
-        sensor.addListener(ctx);
-        ctx.getSensors().add(sensor);
-        this.sensors.put(sensor.getID(), sensor);
+        IContext ctx = contexts.get(infos.getContextName());
+        if (ctx == null) {
+            ctx = new ConcreteContext(infos.getContextName());
+            contexts.put(infos.getContextName(), ctx);
+        }
+        // sensor.addListener(ctx);
+        ((ConcreteContext) ctx).addSensor(sensor);
+        this.sensors.put(sensor.getIdentifier(), sensor);
     }
 
     public void addSensors(List<ISensor> sensors) {
@@ -75,16 +93,16 @@ public class Application {
     }
 
     public void addActuator(IActuator actuator) {
-        String ctxName = annuaire.getInformationAbout(actuator.getID()).getContextName();
+        String ctxName = annuaire.getInformationAbout(actuator.getIdentifier()).getContextName();
         IContext ctx = contexts.get(ctxName);
         if (ctx == null) {
-            ctx = new ContextImpl(ctxName);
+            ctx = new ConcreteContext(ctxName);
             contexts.put(ctxName, ctx);
         }
 
         // sensor.addListener(ctx);
-        ctx.getActuators().add(actuator);
-        this.actuators.put(actuator.getID(), actuator);
+        ((ConcreteContext) ctx).addActuator(actuator);
+        this.actuators.put(actuator.getIdentifier(), actuator);
     }
 
     public void addActuators(List<IActuator> actuators) {

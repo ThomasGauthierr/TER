@@ -1,11 +1,15 @@
 package core.behavior.contract.builder;
 
 import com.sun.istack.internal.NotNull;
+import core.Message;
 import core.behavior.context.IContext;
-import core.behavior.contract.ContractImpl;
+import core.behavior.context.MetaContext;
+import core.behavior.contract.ConcreteContract;
 import core.behavior.contract.IContract;
-import core.behavior.contract.predicate.SensorContractPredicate;
+import core.behavior.contract.MetaContract;
 import core.device.DataType;
+
+import java.util.function.Predicate;
 
 public class ContractStepBuilder {
 
@@ -20,10 +24,14 @@ public class ContractStepBuilder {
         SubjectStep name(String id);
     }
 
+    public interface TypeStep {
+        BuildStep asMetaContract();
+
+        PredicateContextStep asConcreteContract();
+    }
+
     public interface SubjectStep {
-        PredicateContextStep on(IContext context);
-        // PredicateContractStep on(IContract contract);
-        // IMPL. Contract of contract later
+        TypeStep on(IContext context);
     }
 
     public interface PredicateContextStep {
@@ -46,16 +54,24 @@ public class ContractStepBuilder {
         IContract build();
     }
 
-    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep {
+    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep, TypeStep {
 
         private String id;
         private IContext context;
-        private SensorContractPredicate predicate;
+        private Predicate<Message> predicate;
         private DataType dt;
+        private boolean concrete;
 
         @Override
         public IContract build() {
-            return new ContractImpl(id, context, dt, predicate);
+            IContract c;
+            if (concrete) {
+                c = new ConcreteContract(id, context, dt, predicate);
+            } else {
+                c = new MetaContract(id, (MetaContext) context);
+            }
+            context.addObserver(c);
+            return c;
         }
 
         @Override
@@ -66,12 +82,12 @@ public class ContractStepBuilder {
 
         @Override
         public BuildStep is(ArithmeticCondition condition, double value) {
-            predicate = new SensorContractPredicate(m -> condition.express(m.getValue(), value), condition);
+            predicate = o -> condition.express(o.getValue(), value);
             return this;
         }
 
         @Override
-        public PredicateContextStep on(@NotNull IContext context) {
+        public TypeStep on(@NotNull IContext context) {
             if (context == null) {
                 throw new NullPointerException("The given context is null");
             }
@@ -82,6 +98,18 @@ public class ContractStepBuilder {
         @Override
         public PredicateConditionStep where(DataType dt) {
             this.dt = dt;
+            return this;
+        }
+
+        @Override
+        public BuildStep asMetaContract() {
+            this.concrete = false;
+            return this;
+        }
+
+        @Override
+        public PredicateContextStep asConcreteContract() {
+            this.concrete = true;
             return this;
         }
     }

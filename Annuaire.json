@@ -1,9 +1,14 @@
 {
 	"sensors": [
 		{
+			"ID": "00LigSen",
+			"dataType": "temperature",
+			"contextName": "couloirEst"
+		},
+		{
 			"ID": "temp1",
 			"dataType": "temperature",
-			"context": "couloirEst"
+			"contextName": "couloirEst"
 		},
 		{
 			"ID": "temp2",

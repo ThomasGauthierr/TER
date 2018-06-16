@@ -48,8 +48,8 @@ void loop() {
   }
 
   if(started){
-    LDRValue = analogRead(LDRPin);
-    Serial.println(ID + " " + String(LDRValue) + " " + millis());
+    // LDRValue = analogRead(LDRPin);
+    Serial.println(ID + " 24 " + millis());
     delay(currentDelayTime); 
   }
 }

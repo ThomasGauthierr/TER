@@ -15,10 +15,6 @@ public enum ActionType {
 		this.id = id;
 	}
 
-	public int getId() {
-		return id;
-	}
-	
 	public static ActionType findFromId(int id){
 		switch (id){
 		case 0:
@@ -33,7 +29,17 @@ public enum ActionType {
 	}
 
     public static ActionType findFromId(String id) {
-        return findFromId(Integer.parseInt(id));
+        switch (id) {
+            case "increases":
+                return INCREASE;
+            case "decreases":
+                return DECREASE;
+            case "none":
+                return NONE;
+            case "ok":
+                return OK;
+        }
+        return null;
     }
 
     public static ActionType fromArithmeticCondition(ArithmeticCondition ac) {
@@ -46,5 +52,9 @@ public enum ActionType {
                 return DECREASE;
         }
         return NONE;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -10,10 +10,6 @@ public enum DataType {
         this.id = id;
     }
 
-    public int getId() {
-        return id;
-    }
-    
 	public static DataType findFromId(int id){
 		switch (id){
 		case 0:
@@ -25,6 +21,16 @@ public enum DataType {
 	}
 
     public static DataType findFromId(String id) {
-        return findFromId(Integer.parseInt(id));
+        switch (id) {
+            case "temperature":
+                return TEMPERATURE;
+            case "light":
+                return LIGHT;
+        }
+        return null;
+    }
+
+    public int getId() {
+        return id;
     }
 }

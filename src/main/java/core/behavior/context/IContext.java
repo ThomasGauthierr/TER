@@ -1,35 +1,17 @@
 package core.behavior.context;
 
-import core.device.DataType;
-import core.device.actuator.IActuator;
-import core.device.sensor.ISensor;
-
 import java.util.List;
-import java.util.OptionalDouble;
 
-public interface IContext extends ISensorListener {
+public interface IContext {
 
-    List<ISensor> getSensors();
-    List<IActuator> getActuators();
+    List<? extends MonitoredEntity> getMonitoredEntities();
 
-    List<ISensor> getSensorsOf(DataType dt);
-    List<IActuator> getActuatorsOf(DataType dt);
+    void notifyObservers();
 
-    List<ISensor> getSensorsDecreasedBy(IActuator actuator);
+    void addObserver(IContextObserver observer);
 
-    List<ISensor> getSensorsIncreasedBy(IActuator actuator);
-
-    List<IActuator> getActuatorsThatDecrease(ISensor sensor);
-
-    List<IActuator> getActuatorsThatIncrease(ISensor sensor);
-
-    List<IContextListener> getListeners();
-
-    void addListener(IContextListener listener);
-
-    OptionalDouble getValueOf(DataType dt);
+    void removeObserver(IContextObserver observer);
 
     String getIdentifier();
-
 
 }

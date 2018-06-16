@@ -42,7 +42,7 @@ public final class Utils {
         try {
             serialPort = (SerialPort) portId.open(cl.getName(), 2000);
         } catch (PortInUseException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             return null;
         }
 

@@ -1,10 +1,16 @@
 package core.device;
 
-import gnu.io.SerialPort;
+import java.io.IOException;
 
+/**
+ * Created by Alexis Couvreur on 14/06/2018.
+ */
 public interface IDevice {
 
-    String getID();
-    SerialPort getSerialPort();
-    void writeString(String s);
+    String getIdentifier();
+
+    String read() throws IOException;
+
+    void write(String message) throws IOException;
+
 }

@@ -1,22 +1,13 @@
 package core.device.sensor;
 
 import core.Message;
-import core.behavior.context.IContext;
-import core.device.DataType;
+import core.behavior.context.MonitoredEntity;
 import core.device.IDevice;
+import core.device.TypedDevice;
 
-import java.util.List;
-
-public interface ISensor extends IDevice {
-
-    void collect();
-
-    List<Message> getData();
-
-    DataType getDataType();
-
-    void addListener(IContext context);
-
-    void notifyListeners(ISensor sensor, List<Message> messages);
-
+/**
+ * Created by Alexis Couvreur on 14/06/2018.
+ */
+public interface ISensor extends IDevice, TypedDevice, MonitoredEntity, IObservableSensor {
+    Message getLastMessage();
 }
