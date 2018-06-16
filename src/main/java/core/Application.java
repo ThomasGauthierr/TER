@@ -30,23 +30,34 @@ public class Application {
 
     public void init() throws TooManyListenersException {
 
+
+
         /* New way of building contracts, a very simple way */
-        addContract(
-                ContractStepBuilder.newBuilder()
-                        .name("contract01")
-                        .on(contexts.get("classroom1"))
-                        .where(DataType.TEMPERATURE)
-                        .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
-                        .build()
-        );
+        IContext context = contexts.get("couloirEst");
+        if (context != null) {
+            addContract(
+                    ContractStepBuilder.newBuilder()
+                            .name("contract01")
+                            .asConcreteContract()
+                            .on(context)
+                            .where(DataType.TEMPERATURE)
+                            .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
+                            .build()
+            );
+        }
+
     }
 
     public void addSensor(ISensor sensor) {
-        String ctxName = annuaire.getInformationAbout(sensor.getIdentifier()).getContextName();
-        IContext ctx = contexts.get(ctxName);
+        System.out.println("looking for " + sensor.getIdentifier());
+        Annuaire.Information infos = annuaire.getInformationAbout(sensor.getIdentifier());
+        if (infos == null) {
+            throw new NullPointerException("the given sensor is not in the list");
+        }
+        IContext ctx = contexts.get(infos.getContextName());
         if (ctx == null) {
-            ctx = new ConcreteContext(ctxName);
-            contexts.put(ctxName, ctx);
+            ctx = new ConcreteContext(infos.getContextName());
+            contexts.put(infos.getContextName(), ctx);
         }
         // sensor.addListener(ctx);
         ((ConcreteContext) ctx).addSensor(sensor);

@@ -34,12 +34,17 @@ public class ConcreteContract implements IContract {
     public void update(IContext source, Object arg) {
         // received context update from CONCRETE context
         // predicate.test(source)
+
         ConcreteContext concreteContext = (ConcreteContext) source;
         Message lastMessage = (Message) arg;
-        if (predicate.test(lastMessage)) {
 
+        System.out.println("received a context update from " + source.getIdentifier());
+
+        if (predicate.test(lastMessage)) {
+            System.out.println("Not violated");
         } else {
             IViolatedContext violatedContext = new ViolatedContext(this, concreteContext, lastMessage.getSource(), lastMessage);
+            System.out.println("Violated !");
         }
 
     }

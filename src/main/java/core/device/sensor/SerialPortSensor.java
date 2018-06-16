@@ -20,6 +20,7 @@ public class SerialPortSensor extends SerialPortDevice implements ISensor {
 
         this.dataType = dataType;
         observers = new Vector<>();
+        setReadDataWhenAvailable(true);
 
     }
 

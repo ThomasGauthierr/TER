@@ -12,10 +12,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.TooManyListenersException;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -53,6 +50,10 @@ public class Main {
 
                     portID = currPortId;
                     currSerialPort = Utils.initSerialPort(portID, Main.class);
+                    if (currSerialPort == null)
+                        continue;
+
+
                     inputStream = Utils.openInputStreams(currSerialPort);
                     outputStream = Utils.openOutputStreams(currSerialPort);
 
@@ -169,6 +170,9 @@ public class Main {
             ((FakeSerialPort) fsp).triggerDataAvailable();
         }
 */
+
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
         //Closing the sensors
         for (SerialPortDevice d : getDevices())
             d.close();

@@ -36,7 +36,7 @@ public class ConcreteContext implements IContext, ISensorObserver {
     @Override
     public void notifyObservers() {
         // observers.forEach(); TODO: notify
-        observers.forEach(o -> update(lastUpdated, lastMessage));
+        observers.forEach(o -> o.update(this, lastMessage));
     }
 
     //@Override
@@ -79,6 +79,7 @@ public class ConcreteContext implements IContext, ISensorObserver {
         this.lastUpdated = source;
         this.lastMessage = newMessage;
 
+        System.out.println("[ConcreteContext] received -> " + newMessage.toString());
         notifyObservers();
     }
 }

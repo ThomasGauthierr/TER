@@ -55,9 +55,12 @@ public class Annuaire {
 		JSONParser parser = new JSONParser();
 		try {
 			Object obj = parser.parse(new FileReader(fileName));
-			JSONArray annuaireList = (JSONArray) ((JSONObject) obj).get("devices");
-			System.out.println(annuaireList);
-			annuaireList.forEach(v -> parseDeviceObject((JSONObject) v));
+			JSONArray sensors = (JSONArray) ((JSONObject) obj).get("sensors");
+			JSONArray actuators = (JSONArray) ((JSONObject) obj).get("actuators");
+			System.out.println(sensors);
+			System.out.println(actuators);
+			sensors.forEach(v -> parseDeviceObject((JSONObject) v));
+			actuators.forEach(v -> parseDeviceObject((JSONObject) v));
 		} catch (IOException | ParseException e) {
 			e.printStackTrace();
 		}
@@ -74,11 +77,12 @@ public class Annuaire {
 
 		String actionType = (String) device.get("actionType");
 
+		System.out.println("put : " + id);
 		annuaire.put(id, new Information(
 				id,
 				contextName,
 				dataType,
-				actionType.equals("-1") ? null : actionType
+				actionType
 		));
 	}
 

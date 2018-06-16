@@ -34,13 +34,30 @@ public abstract class SerialPortDevice implements IDevice {
     protected abstract void onDataAvailable(String data);
 
     public String read() throws IOException {
-        StringBuilder data = new StringBuilder();
-        BufferedReader br = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder();
+
         String line;
-        while ((line = br.readLine()) != null) {
-            data.append(line);
+        try {
+
+            br = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+        } catch (IOException e) {
+
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return data.toString();
+
+        return sb.toString();
     }
 
     public void write(String message) throws IOException {

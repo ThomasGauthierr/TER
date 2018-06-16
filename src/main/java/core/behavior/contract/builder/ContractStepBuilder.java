@@ -21,13 +21,13 @@ public class ContractStepBuilder {
     }
 
     public interface IdStep {
-        SubjectStep name(String id);
+        TypeStep name(String id);
     }
 
     public interface TypeStep {
-        MetaStep asMetaContract();
+        SubjectStep asMetaContract();
 
-        ConcreteStep asConcreteContract();
+        SubjectStep asConcreteContract();
     }
 
     public interface MetaStep {
@@ -62,7 +62,7 @@ public class ContractStepBuilder {
         IContract build();
     }
 
-    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep {
+    private static class ContractSteps implements IdStep, SubjectStep, PredicateContextStep, PredicateConditionStep, BuildStep, TypeStep, MetaStep, ConcreteStep {
 
         private String id;
         private IContext context;
@@ -72,14 +72,18 @@ public class ContractStepBuilder {
 
         @Override
         public IContract build() {
-
-            if (concrete)
-                return new ConcreteContract(id, context, dt, predicate);
-            return new MetaContract(id, (MetaContext) context);
+            IContract c;
+            if (concrete) {
+                c = new ConcreteContract(id, context, dt, predicate);
+            } else {
+                c = new MetaContract(id, (MetaContext) context);
+            }
+            context.addObserver(c);
+            return c;
         }
 
         @Override
-        public SubjectStep name(String id) {
+        public TypeStep name(String id) {
             this.id = id;
             return this;
         }
@@ -102,6 +106,18 @@ public class ContractStepBuilder {
         @Override
         public PredicateConditionStep where(DataType dt) {
             this.dt = dt;
+            return this;
+        }
+
+        @Override
+        public SubjectStep asMetaContract() {
+            this.concrete = false;
+            return this;
+        }
+
+        @Override
+        public SubjectStep asConcreteContract() {
+            this.concrete = true;
             return this;
         }
     }
