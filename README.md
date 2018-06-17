@@ -2,9 +2,18 @@
 
 ## Configuration
 
-1. Installation de la librairie __RXTX__ :
-    * télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java) ;
-    *
+1. Installation de la librairie __RXTX sous Windows__ :
+    * Télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java)
+    * Copier RXTXcomm.jar dans <Path_To_JDK>\jre\lib\ext
+    * Copier rxtxSerial.dll dans <Path_To_JDK>\jre\bin
+    * Copier rxtxParallel.dll dans <Path_To_JDK>\jre\bin
+
+2. Installation de la librairie __RXTX sous Linux__ :
+    * Télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java)
+    * Copier RXTXcomm.jar dans <Path_To_JDK>/jre/lib/ext
+    * Copier rxtxSerial.dll dans <Path_To_JDK>/jre/lib/i386
+    * Copier rxtxParallel.dll dans <Path_To_JDK>/jre/lib/i386
+Note : Pour une installation sur une architecture x86_64, il suffit d'uniquement changer les i386 par des x86_64 dans les deux chemins précédents.
 
 ## Dataset ##
 [Cliquer ici](https://public.opendatasoft.com/explore/dataset/donnees-synop-essentielles-omm/export/?q=nice)
