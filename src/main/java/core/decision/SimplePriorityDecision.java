@@ -12,6 +12,7 @@ import core.behavior.context.ViolatedContext;
 import core.behavior.contract.ActionType;
 import core.behavior.contract.ConcreteContract;
 import core.behavior.contract.IContract;
+import core.behavior.contract.builder.ArithmeticCondition;
 import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
@@ -35,10 +36,11 @@ public class SimplePriorityDecision implements IDecisionMaker {
 		}
 			
 		
-		
+		ctx.getViolatingMessage().getValue();
 		List<IActuator> responsible = new ArrayList<>();
 		ctx.getMonitoredEntities();
-		boolean toohigh = violatedContract.getPredicate().negate().test(new Message("test", 1000, 0, null, dT));
+		boolean toohigh = violatedContract.getArithmeticCondition()==ArithmeticCondition.LOWER_THAN 
+				||violatedContract.getArithmeticCondition()==ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO;
 		for(IActuator a : source.getActuators()){
 			if(a.getDataType()==dT){
 				responsible.add(a);
