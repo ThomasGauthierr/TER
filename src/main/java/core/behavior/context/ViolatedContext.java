@@ -66,4 +66,10 @@ public class ViolatedContext implements IViolatedContext {
         return source.getIdentifier();
     }
 
+	public IContext getSource() {
+		return source;
+	}
+    
+    
+
 }

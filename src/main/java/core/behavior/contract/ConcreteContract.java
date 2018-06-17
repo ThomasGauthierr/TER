@@ -32,6 +32,10 @@ public class ConcreteContract implements IContract {
         this.dataType = dataType;
         this.observers = new Vector<>();
     }
+    
+    public Predicate<Message> getPredicate(){
+		return predicate;
+    }
 
     @Override
     public IContext getObservedContext() {

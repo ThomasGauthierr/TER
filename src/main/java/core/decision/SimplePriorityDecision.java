@@ -1,7 +1,20 @@
 package core.decision;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import core.Annuaire;
+import core.Message;
+import core.behavior.context.ConcreteContext;
 import core.behavior.context.IViolatedContext;
+import core.behavior.context.ViolatedContext;
 import core.behavior.contract.ActionType;
+import core.behavior.contract.ConcreteContract;
+import core.behavior.contract.IContract;
+import core.device.DataType;
+import core.device.actuator.IActuator;
+import core.device.sensor.ISensor;
 
 public class SimplePriorityDecision implements IDecisionMaker {
 
@@ -10,64 +23,27 @@ public class SimplePriorityDecision implements IDecisionMaker {
 	}
 
 	@Override
-	public Action solve(IViolatedContext ctx) {
-		// List<ISensor> witness = ctx.getWitnesses();
+	public Action solve(IViolatedContext vx) {
+		ViolatedContext ctx = (ViolatedContext) vx;
+		ISensor witness = ctx.getWitness();
+		ConcreteContext source = (ConcreteContext) ctx.getSource();
 		Action action = new Action();
-		ActionType aT = ctx.getActionType();
-		/*List<IActuator> needToUse = new ArrayList<>();
-		List<IActuator> needToOff = new ArrayList<>();
-		if(aT==ActionType.INCREASE) {
-			needToUse=ctx.getActuatorsThatIncrease(witness.get(0));
-			needToOff=ctx.getActuatorsThatDecrease(witness.get(0));
-			needToOff=needToOff.stream().filter(a -> (a.getState()!=IActuator.State.OFF)).collect(Collectors.toList());
+		DataType dT = witness.getDataType();
+		ConcreteContract violatedContract = null;
+		if(ctx.getViolatedContract() instanceof ConcreteContract){
+			violatedContract = (ConcreteContract) ctx.getViolatedContract();
+		}
 			
-		}else if(aT==ActionType.DECREASE) {
-			needToUse=ctx.getActuatorsThatDecrease(witness.get(0));
-			needToOff=ctx.getActuatorsThatIncrease(witness.get(0));
-			needToOff=needToOff.stream().filter(a -> (a.getState()!=IActuator.State.OFF)).collect(Collectors.toList());
-		}
-		if(needToUse != null) {
-			needToUse=needToUse.stream().filter(a -> (a.getState()!=IActuator.State.HIGH)).collect(Collectors.toList());
 		
-			needToUse.sort(new Comparator<IActuator>() {
-
-				@Override
-				public int compare(IActuator o1, IActuator o2) {
-					Annuaire annuaire = Annuaire.getInstance();
-
-					return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
-				}
-			});
+		
+		List<IActuator> responsible = new ArrayList<>();
+		ctx.getMonitoredEntities();
+		boolean toohigh = violatedContract.getPredicate().negate().test(new Message("test", 1000, 0, null, dT));
+		for(IActuator a : source.getActuators()){
+			if(a.getDataType()==dT){
+				responsible.add(a);
+			}
 		}
-		if(needToOff != null) {
-			needToOff.sort(new Comparator<IActuator>() {
-
-				@Override
-				public int compare(IActuator o1, IActuator o2) {
-					Annuaire annuaire = Annuaire.getInstance();
-
-	                return annuaire.getInformationAbout(o2.getID()).getPriority() - annuaire.getInformationAbout(o1.getID()).getPriority();
-				}
-			});
-		}
-		action.getMonitoredActuators().addAll(needToOff);
-		action.getMonitoredActuators().addAll(needToUse);
-		if(aT==ActionType.INCREASE) {
-			for(int i = 0;i<needToOff.size();i++) {
-				action.getActionTypes().add(ActionType.DECREASE);
-			}
-			for(int i = 0;i<needToUse.size();i++) {
-				action.getActionTypes().add(ActionType.INCREASE);
-			}
-		}else if(aT==ActionType.DECREASE) {
-			for(int i = 0;i<needToOff.size();i++) {
-				action.getActionTypes().add(ActionType.INCREASE);
-			}
-			for(int i = 0;i<needToUse.size();i++) {
-				action.getActionTypes().add(ActionType.DECREASE);
-			}
-		}*//*
-		List<IActuator> responsible = ctx.getResponsibleList();
 		responsible.sort(new Comparator<IActuator>() {
 
 			@Override
@@ -79,12 +55,14 @@ public class SimplePriorityDecision implements IDecisionMaker {
 		});
 		action.actuators.addAll(responsible);
 		for(IActuator a : action.actuators){
-			if(a.getActionType()==aT) {
-				action.states.add(IActuator.State.HIGH);
-			}else {
+			if(a.getActionType().equals(ActionType.INCREASE) && toohigh) {
 				action.states.add(IActuator.State.OFF);
+			}else if(a.getActionType().equals(ActionType.DECREASE) && !toohigh){
+				action.states.add(IActuator.State.OFF);
+			}else{
+				action.states.add(IActuator.State.ON);
 			}
-		}*/
+		}
 		
 		
 		return action;
