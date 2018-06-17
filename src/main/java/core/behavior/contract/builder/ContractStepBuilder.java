@@ -61,12 +61,13 @@ public class ContractStepBuilder {
         private Predicate<Message> predicate;
         private DataType dt;
         private boolean concrete;
+        private ArithmeticCondition condition;
 
         @Override
         public IContract build() {
             IContract c;
             if (concrete) {
-                c = new ConcreteContract(id, context, dt, predicate);
+                c = new ConcreteContract(id, context, dt, predicate, condition);
             } else {
                 c = new MetaContract(id, (MetaContext) context);
             }
@@ -82,6 +83,7 @@ public class ContractStepBuilder {
 
         @Override
         public BuildStep is(ArithmeticCondition condition, double value) {
+            this.condition = condition;
             predicate = o -> condition.express(o.getValue(), value);
             return this;
         }

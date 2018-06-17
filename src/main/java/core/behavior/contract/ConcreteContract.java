@@ -5,6 +5,7 @@ import core.behavior.context.ConcreteContext;
 import core.behavior.context.IContext;
 import core.behavior.context.IViolatedContext;
 import core.behavior.context.ViolatedContext;
+import core.behavior.contract.builder.ArithmeticCondition;
 import core.device.DataType;
 
 import java.util.List;
@@ -20,17 +21,19 @@ public class ConcreteContract implements IContract {
     private IContext observedContext;
     private DataType dataType;
     private Predicate<Message> predicate;
+    private ArithmeticCondition condition;
     private Status status;
     private List<IContractObserver> observers;
     private IViolatedContext violatedContext;
 
-    public ConcreteContract(String identifier, IContext observedContext, DataType dataType, Predicate<Message> predicate) {
+    public ConcreteContract(String identifier, IContext observedContext, DataType dataType, Predicate<Message> predicate, ArithmeticCondition condition) {
         this.identifier = identifier;
         this.observedContext = observedContext;
         this.predicate = predicate;
         this.status = Status.PASS;
         this.dataType = dataType;
         this.observers = new Vector<>();
+        this.condition = condition;
     }
     
     public Predicate<Message> getPredicate(){
@@ -94,5 +97,9 @@ public class ConcreteContract implements IContract {
     @Override
     public void notifyObservers() {
         observers.forEach(o -> o.update(this, violatedContext));
+    }
+
+    public ArithmeticCondition getArithmeticCondition() {
+        return condition;
     }
 }
