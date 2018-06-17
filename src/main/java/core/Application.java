@@ -50,13 +50,11 @@ public class Application {
                             .on(context)
                             .asConcreteContract()
                             .where(DataType.LIGHT)
-                            .is(ArithmeticCondition.HIGHER_THAN, 900)
+                            .is(ArithmeticCondition.HIGHER_THAN, 850)
                             .build()
             );
 
             MetaContext metaContext = new MetaContext("BatB");
-            metaContext.addObserver(contracts.get("contract01"));
-            metaContext.addObserver(contracts.get("contract02"));
 
             metaContext.addMonitoredEntity(contracts.get("contract01"));
             metaContext.addMonitoredEntity(contracts.get("contract02"));
@@ -118,7 +116,7 @@ public class Application {
         return actuators.values();
     }
 
-    public void addContract(IContract contract) {
+    private void addContract(IContract contract) {
         this.contracts.put(contract.getName(), contract);
     }
 
