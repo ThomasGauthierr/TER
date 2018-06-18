@@ -26,9 +26,10 @@ public class MetaContract implements IContract, IContextObserver {
     }
 
     public void update(IContext source, Object arg) {
-        // Proviens uniquement de MetaContext
+        // Provient uniquement de MetaContext
         System.out.println("[MetaContract] A monitored context has been updated : " + source.getIdentifier());
-        // Faire qqchose ...
+
+        notifyObservers();
     }
 
     @Override

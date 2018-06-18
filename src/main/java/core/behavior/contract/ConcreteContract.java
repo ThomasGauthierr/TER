@@ -6,7 +6,10 @@ import core.behavior.context.IContext;
 import core.behavior.context.IViolatedContext;
 import core.behavior.context.ViolatedContext;
 import core.behavior.contract.builder.ArithmeticCondition;
+import core.decision.Action;
+import core.decision.SimplePriorityDecision;
 import core.device.DataType;
+import core.device.actuator.IActuator;
 
 import java.util.List;
 import java.util.Vector;
@@ -25,6 +28,7 @@ public class ConcreteContract implements IContract {
     private Status status;
     private List<IContractObserver> observers;
     private IViolatedContext violatedContext;
+    private SimplePriorityDecision decisionMaker;
 
     public ConcreteContract(String identifier, IContext observedContext, DataType dataType, Predicate<Message> predicate, ArithmeticCondition condition) {
         this.identifier = identifier;
@@ -34,6 +38,7 @@ public class ConcreteContract implements IContract {
         this.dataType = dataType;
         this.observers = new Vector<>();
         this.condition = condition;
+        decisionMaker = new SimplePriorityDecision();
     }
     
     public Predicate<Message> getPredicate(){
@@ -67,6 +72,18 @@ public class ConcreteContract implements IContract {
                 violatedContext = new ViolatedContext(this, concreteContext, lastMessage.getSource(), lastMessage);
                 this.status = Status.VIOLATED;
                 System.out.println("-->Violated !");
+                Action action = decisionMaker.solve(violatedContext);
+
+                for (int i = 0; i < action.getActuators().size(); i++) {
+                    if (action.getActionTypes().get(i) == IActuator.State.ON) {
+                        action.getActuators().get(i).activate();
+                        //System.out.println("activating actuator " + action.getActuators().get(i).getIdentifier());
+                    } else {
+                        action.getActuators().get(i).deactivate();
+                        //System.out.println("deactivating actuator " + action.getActuators().get(i).getIdentifier());
+                    }
+                }
+
                 notifyObservers();
             }
         }

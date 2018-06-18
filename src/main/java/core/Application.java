@@ -6,6 +6,7 @@ import core.behavior.context.MetaContext;
 import core.behavior.contract.IContract;
 import core.behavior.contract.builder.ArithmeticCondition;
 import core.behavior.contract.builder.ContractStepBuilder;
+import core.decision.SimplePriorityDecision;
 import core.device.DataType;
 import core.device.actuator.IActuator;
 import core.device.sensor.ISensor;
@@ -19,6 +20,7 @@ public class Application {
     private Map<String, ISensor> sensors;
     private Map<String, IActuator> actuators;
     private Annuaire annuaire;
+    private SimplePriorityDecision decisionMaker = new SimplePriorityDecision();
 
     public Application() {
         sensors = new HashMap<>();
@@ -39,8 +41,8 @@ public class Application {
                             .name("contract01")
                             .on(context)
                             .asConcreteContract()
-                            .where(DataType.TEMPERATURE)
-                            .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 21)
+                            .where(DataType.LIGHT)
+                            .is(ArithmeticCondition.LOWER_THAN_OR_EQUAL_TO, 650)
                             .build()
             );
 
@@ -50,11 +52,12 @@ public class Application {
                             .on(context)
                             .asConcreteContract()
                             .where(DataType.LIGHT)
-                            .is(ArithmeticCondition.HIGHER_THAN, 850)
+                            .is(ArithmeticCondition.HIGHER_THAN, 50)
                             .build()
             );
 
-            MetaContext metaContext = new MetaContext("BatB");
+
+            MetaContext metaContext = new MetaContext("TD06");
 
             metaContext.addMonitoredEntity(contracts.get("contract01"));
             metaContext.addMonitoredEntity(contracts.get("contract02"));

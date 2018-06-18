@@ -119,7 +119,7 @@ public class Main {
                             } catch (ArrayIndexOutOfBoundsException e) {
                                 System.out.println("SerialPortDevice [" + ID + "] ignored, illegal ID");
                             } catch (TooManyListenersException e) {
-                                e.printStackTrace();
+//                                e.printStackTrace();
                             }
                         }
                     } catch (IOException e) {
