@@ -1,10 +1,33 @@
 # TER
 
-## Configuration
+## RXTX ##
 
-1. Installation de la librairie __RXTX__ :
-    * télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java) ;
-    *
+1. Installation de la librairie __RXTX sous Windows__ :
+    * Télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java)
+    * Copier RXTXcomm.jar dans <Path_To_JDK>\jre\lib\ext
+    * Copier rxtxSerial.dll dans <Path_To_JDK>\jre\bin
+    * Copier rxtxParallel.dll dans <Path_To_JDK>\jre\bin
+
+2. Installation de la librairie __RXTX sous Linux__ :
+    * Télécharger l'archive [ici](http://fizzed.com/oss/rxtx-for-java)
+    * Copier RXTXcomm.jar dans <Path_To_JDK>/jre/lib/ext
+    * Copier rxtxSerial.dll dans <Path_To_JDK>/jre/lib/i386
+    * Copier rxtxParallel.dll dans <Path_To_JDK>/jre/lib/i386
+    * Note : Pour une installation sur une architecture x86_64, il suffit d'uniquement changer les i386 par des x86_64 dans les deux chemins précédents.
+
+## InfluxDB/Grafana ##
+* InfluxDB :
+- [Téléchargez InfluxDB](https://portal.influxdata.com/downloads) puis dézipez-le
+- Lancez influxd.exe
+- Lancez influx.exe et faites la commande "CREATE DATABASE test"
+
+Installer Grafana :
+* Grafana :
+- [Téléchargez Grafana](https://grafana.com/grafana/download) puis dézipez-le
+- Lancez grafana-server.exe
+- Rendez-vous sur [http://127.0.0.1:3000](http://127.0.0.1:3000) et connectez-vous avec les ID "admin" et "admin" par défaut
+- Créez un datasource InfluxDB avec le port 8086 si vous ne l'avez pas modifié
+- Créez un dashboard avec nimporte quel composant et requête
 
 ## Dataset ##
 [Cliquer ici](https://public.opendatasoft.com/explore/dataset/donnees-synop-essentielles-omm/export/?q=nice)
@@ -34,6 +57,7 @@ Thrown when a young data arrive before an older one.
 
 ### PE : Parity error ###
 Results from irregular changes to data, as it is recorded when it is entered in memory.
+
 
 ## TODO:
 

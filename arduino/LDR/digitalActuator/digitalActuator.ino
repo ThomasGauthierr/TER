@@ -18,7 +18,7 @@
  *     --> 1 : Analogic
  *  - Id : you can put whatever you want here.
 **/
-const String ID = "1000LigAc";
+const String ID = "1100LigAc";
 
 String intensity;
 int ledPin = 9;

@@ -11,7 +11,7 @@
  *  - Id : you can put whatever you want here.
 **/
 
-const String ID = "00LigSen";
+const String ID = "01LigSen";
 
 bool started;
 bool DEBUG = false;
@@ -48,8 +48,8 @@ void loop() {
   }
 
   if(started){
-    // LDRValue = analogRead(LDRPin);
-    Serial.println(ID + " 24 " + millis());
+    LDRValue = analogRead(LDRPin);
+    Serial.println(ID + " " + String(LDRValue) + " " + millis());
     delay(currentDelayTime); 
   }
 }

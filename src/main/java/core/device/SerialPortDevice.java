@@ -1,5 +1,6 @@
 package core.device;
 
+import core.influxdb.InfluxHelper;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 
@@ -12,6 +13,7 @@ public abstract class SerialPortDevice implements IDevice {
 
     private String identifier;
     private SerialPort serialPort;
+    protected InfluxHelper helper;
 
     public SerialPortDevice(String identifier, SerialPort serialPort) throws TooManyListenersException {
         this.identifier = identifier;
@@ -25,6 +27,8 @@ public abstract class SerialPortDevice implements IDevice {
                     e.printStackTrace();
                 }
         });
+
+        helper = InfluxHelper.getInfluxHelper();
     }
 
     public void setReadDataWhenAvailable(boolean readDataWhenAvailable) {
