@@ -103,3 +103,4 @@ Un truc du style : est-il plus pertinent ?
 ```
 
 Faire les contrats de contrat dans le builder et proposer différentes options : empêcher l'oscillation, donner la prioriter, etc. trouver d'autres exemples
+
